@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { differenceInDays, differenceInHours, differenceInMinutes, differenceInSeconds } from 'date-fns';
 
 interface TimeLeft {
   days: number;
@@ -10,51 +11,51 @@ interface TimeLeft {
 }
 
 const CountdownTimer = () => {
-  // Initial time left - fixed at 52 days
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
-    days: 52,
+    days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0
   });
 
   useEffect(() => {
-    // Update seconds every second
-    const timer = setTimeout(() => {
-      setTimeLeft(prev => {
-        const newSeconds = (prev.seconds + 1) % 60;
-        
-        // If seconds reset to 0, update minutes
-        if (newSeconds === 0) {
-          const newMinutes = (prev.minutes + 1) % 60;
-          
-          // If minutes reset to 0, update hours
-          if (newMinutes === 0) {
-            const newHours = (prev.hours + 1) % 24;
-            return {
-              ...prev,
-              seconds: newSeconds,
-              minutes: newMinutes,
-              hours: newHours
-            };
-          }
-          
-          return {
-            ...prev,
-            seconds: newSeconds,
-            minutes: newMinutes
-          };
-        }
-        
-        return {
-          ...prev,
-          seconds: newSeconds
-        };
-      });
+    // Check if target date exists in localStorage
+    let targetDate = localStorage.getItem('sylonowTargetDate');
+    
+    // If no target date exists, create one 52 days from now
+    if (!targetDate) {
+      const now = new Date();
+      const future = new Date(now);
+      future.setDate(now.getDate() + 52);
+      targetDate = future.toISOString();
+      localStorage.setItem('sylonowTargetDate', targetDate);
+    }
+    
+    const target = new Date(targetDate);
+    
+    // Update countdown timer every second
+    const timer = setInterval(() => {
+      const now = new Date();
+      
+      // If current date is past target date, stop the timer
+      if (now >= target) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        clearInterval(timer);
+        return;
+      }
+      
+      // Calculate time left
+      const days = differenceInDays(target, now);
+      const hours = differenceInHours(target, now) % 24;
+      const minutes = differenceInMinutes(target, now) % 60;
+      const seconds = differenceInSeconds(target, now) % 60;
+      
+      setTimeLeft({ days, hours, minutes, seconds });
     }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [timeLeft]);
+    
+    // Clean up interval on component unmount
+    return () => clearInterval(timer);
+  }, []);
 
   const timeUnits = [
     { label: 'Days', value: timeLeft.days },
