@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface TimeLeft {
   days: number;
@@ -9,27 +10,47 @@ interface TimeLeft {
 }
 
 const CountdownTimer = () => {
-  const calculateTimeLeft = (): TimeLeft => {
-    // Fixed 52 days countdown
-    return {
-      days: 52,
-      hours: Math.floor(Math.random() * 24),
-      minutes: Math.floor(Math.random() * 60),
-      seconds: Math.floor(Math.random() * 60)
-    };
-  };
-
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft());
+  // Initial time left - fixed at 52 days
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+    days: 52,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
 
   useEffect(() => {
+    // Update seconds every second
     const timer = setTimeout(() => {
-      // Update only hours, minutes, and seconds, keeping days at 52
-      setTimeLeft(prev => ({
-        days: 52,
-        hours: Math.floor(Math.random() * 24),
-        minutes: Math.floor(Math.random() * 60),
-        seconds: Math.floor(Math.random() * 60)
-      }));
+      setTimeLeft(prev => {
+        const newSeconds = (prev.seconds + 1) % 60;
+        
+        // If seconds reset to 0, update minutes
+        if (newSeconds === 0) {
+          const newMinutes = (prev.minutes + 1) % 60;
+          
+          // If minutes reset to 0, update hours
+          if (newMinutes === 0) {
+            const newHours = (prev.hours + 1) % 24;
+            return {
+              ...prev,
+              seconds: newSeconds,
+              minutes: newMinutes,
+              hours: newHours
+            };
+          }
+          
+          return {
+            ...prev,
+            seconds: newSeconds,
+            minutes: newMinutes
+          };
+        }
+        
+        return {
+          ...prev,
+          seconds: newSeconds
+        };
+      });
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -113,16 +134,18 @@ const CountdownTimer = () => {
                 ease: "easeInOut"
               }}
             >
-              <motion.span 
-                className="text-4xl font-bold bg-gradient-to-r from-sylonow-purple to-sylonow-gold bg-clip-text text-transparent"
-                key={`${unit.label}-${unit.value}`}
-                variants={numberVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-              >
-                {unit.value.toString().padStart(2, '0')}
-              </motion.span>
+              <AnimatePresence mode="wait">
+                <motion.span 
+                  className="text-4xl font-bold bg-gradient-to-r from-sylonow-purple to-sylonow-gold bg-clip-text text-transparent"
+                  key={`${unit.label}-${unit.value}`}
+                  variants={numberVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                >
+                  {unit.value.toString().padStart(2, '0')}
+                </motion.span>
+              </AnimatePresence>
             </motion.div>
           </motion.div>
           <motion.span 
