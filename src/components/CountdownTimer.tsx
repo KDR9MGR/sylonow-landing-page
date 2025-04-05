@@ -125,7 +125,7 @@ const CountdownTimer = () => {
             }}
           >
             <motion.div
-              className="bg-sylonow-dark/80 backdrop-blur-md shadow-inner rounded-lg w-24 h-24 flex items-center justify-center border border-sylonow-purple/30"
+              className="bg-white/80 backdrop-blur-md shadow-inner rounded-lg w-24 h-24 flex items-center justify-center"
               animate={{
                 boxShadow: ["inset 0 0 10px rgba(139, 92, 246, 0.1)", "inset 0 0 20px rgba(139, 92, 246, 0.3)", "inset 0 0 10px rgba(139, 92, 246, 0.1)"],
               }}
@@ -137,7 +137,7 @@ const CountdownTimer = () => {
             >
               <AnimatePresence mode="wait">
                 <motion.span 
-                  className="text-4xl font-bold gradient-text"
+                  className="text-4xl font-bold bg-gradient-to-r from-sylonow-purple to-sylonow-gold bg-clip-text text-transparent"
                   key={`${unit.label}-${unit.value}`}
                   variants={numberVariants}
                   initial="initial"
@@ -150,7 +150,7 @@ const CountdownTimer = () => {
             </motion.div>
           </motion.div>
           <motion.span 
-            className="text-sm mt-2 font-medium text-gray-300"
+            className="text-sm mt-2 font-medium text-gray-700"
             whileHover={{ color: "#8B5CF6", scale: 1.05 }}
           >
             {unit.label}
