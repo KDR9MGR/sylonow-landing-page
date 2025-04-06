@@ -85,6 +85,7 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [isInteractionDisabled, setIsInteractionDisabled] = useState(false);
   const [showTextReveal, setShowTextReveal] = useState(false);
+  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   
   // Prevent scrolling when component mounts
   useEffect(() => {
@@ -102,24 +103,26 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
   }, []);
   
   useEffect(() => {
-    if (isOpened) {
-      // Show confetti when box opens
+    if (isOpened && !isAnimationComplete) {
       setShowConfetti(true);
-      // Remove blur effect after box is fully opened
       const timer = setTimeout(() => {
         setIsBlurred(false);
         setIsInteractionDisabled(false);
-        // Show text reveal after box animation completes
         setTimeout(() => {
           setShowTextReveal(true);
-          if (onAnimationComplete) {
-            onAnimationComplete();
-          }
         }, 500);
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [isOpened, onAnimationComplete]);
+  }, [isOpened, isAnimationComplete]);
+
+  const handleTextRevealComplete = () => {
+    setShowTextReveal(false);
+    setIsAnimationComplete(true);
+    if (onAnimationComplete) {
+      onAnimationComplete();
+    }
+  };
 
   const handleInteraction = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault(); // Prevent any default touch/click behavior
@@ -171,167 +174,178 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
   ));
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={false}
-        animate={{
-          backdropFilter: isBlurred ? 'blur(10px)' : 'blur(0px)',
-          WebkitBackdropFilter: isBlurred ? 'blur(10px)' : 'blur(0px)',
-        }}
-        transition={{ 
-          duration: 1,
-          ease: "easeInOut"
-        }}
-        className="fixed inset-0 z-40 pointer-events-none"
-      />
-
-      {/* Confetti animation */}
-      {showConfetti && confettiParticles}
-
-      {/* Text Reveal Animation */}
-      {showTextReveal && <TextRevealAnimation />}
-
-      {!isOpened ? (
-        <div className="fixed inset-0 flex items-center justify-center bg-[#FF7B7B] z-50 overflow-hidden">
-          <div className="relative w-full h-full flex items-center justify-center">
-            {/* Background pattern */}
-            <motion.div 
-              className="absolute inset-0"
-              animate={{
-                opacity: bowDropped ? 0 : 0.2,
-              }}
-              transition={{ duration: 0.5 }}
-              style={{
-                backgroundImage: 'url(/gift-pattern.svg)',
-                backgroundSize: '200px',
-              }}
-            />
-
-            {/* Shimmer overlay */}
-            <motion.div
-              className="absolute inset-0"
-              variants={shimmerVariants}
-              animate="animate"
-              style={{
-                background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%)',
-                backgroundSize: '200% 100%',
-                opacity: bowDropped ? 0 : 0.5,
-              }}
-              transition={{ duration: 0.5 }}
-            />
-
-            {/* Interactive bow area */}
-            <motion.div
-              className="absolute w-[200px] h-[200px] cursor-pointer select-none"
-              style={{
-                touchAction: 'none',
-                WebkitTapHighlightColor: 'transparent',
-              }}
-              animate={bowDropped ? {
-                y: window.innerHeight,
-                rotate: 720,
-                scale: 0.8,
-                transition: {
-                  duration: 1.2,
-                  ease: [0.33, 1, 0.68, 1],
-                  scale: { duration: 0.3, ease: "easeInOut" }
-                }
-              } : {}}
-              whileHover={{
-                scale: 1.1,
-                filter: "brightness(1.1)",
-                transition: { duration: 0.3 }
-              }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleInteraction}
-              onTouchStart={handleInteraction}
-              role="button"
-              tabIndex={0}
-              aria-label="Open gift box"
-            >
-              <img 
-                src="/bow.png" 
-                alt="Gift Bow" 
-                className="w-full h-full pointer-events-none"
-                draggable="false"
-                style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5))" }}
-              />
-            </motion.div>
-
-            {/* Instruction text */}
-            <motion.div
-              className="absolute top-[20%] left-1/2 -translate-x-1/2 text-center"
-              animate={{
-                scale: [1, 1.05, 1],
-                opacity: bowDropped ? 0 : 1
-              }}
-              transition={{
-                scale: { duration: 2, repeat: Infinity, ease: "easeInOut" },
-                opacity: { duration: 0.5 }
-              }}
-            >
-              <motion.h2 
-                className="text-white text-2xl md:text-3xl font-bold tracking-wider"
-                style={{ textShadow: "0 0 10px rgba(255,255,255,0.5)" }}
-              >
-                {isInteractionDisabled ? "Opening..." : "Tap the bow to reveal"}
-              </motion.h2>
-            </motion.div>
-          </div>
-        </div>
-      ) : (
+    <AnimatePresence mode="wait">
+      {!isAnimationComplete ? (
         <>
-          {/* Light beams when opened */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.7, 0] }}
-            transition={{ duration: 1.5, times: [0, 0.2, 1] }}
-            className="fixed inset-0 z-45 pointer-events-none"
-            style={{
-              background: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)',
+            initial={false}
+            animate={{
+              backdropFilter: isBlurred ? 'blur(10px)' : 'blur(0px)',
+              WebkitBackdropFilter: isBlurred ? 'blur(10px)' : 'blur(0px)',
             }}
-          />
-          
-          {/* Top half */}
-          <motion.div
-            initial={{ y: 0, rotateX: 0 }}
-            animate={{ y: '-100%', rotateX: 60 }}
             transition={{ 
-              duration: 2,
-              ease: [0.4, 0, 0.2, 1],
-              rotateX: {
-                duration: 1.5,
-                ease: "easeOut"
-              }
+              duration: 1,
+              ease: "easeInOut"
             }}
-            style={{
-              transformOrigin: 'bottom',
-              perspective: 1000,
-              boxShadow: '0 0 30px rgba(255,123,123,0.8)'
-            }}
-            className="fixed top-0 left-0 w-full h-1/2 bg-[#FF7B7B] z-50"
+            className="fixed inset-0 z-40 pointer-events-none"
           />
-          
-          {/* Bottom half */}
-          <motion.div
-            initial={{ y: 0, rotateX: 0 }}
-            animate={{ y: '100%', rotateX: -60 }}
-            transition={{ 
-              duration: 2,
-              ease: [0.4, 0, 0.2, 1],
-              rotateX: {
-                duration: 1.5,
-                ease: "easeOut"
-              }
-            }}
-            style={{
-              transformOrigin: 'top',
-              perspective: 1000,
-              boxShadow: '0 0 30px rgba(255,123,123,0.8)'
-            }}
-            className="fixed bottom-0 left-0 w-full h-1/2 bg-[#FF7B7B] z-50"
-          />
+
+          {/* Confetti animation */}
+          {showConfetti && confettiParticles}
+
+          {/* Text Reveal Animation */}
+          {showTextReveal && <TextRevealAnimation onComplete={handleTextRevealComplete} />}
+
+          {!isOpened ? (
+            <div className="fixed inset-0 flex items-center justify-center bg-[#FF7B7B] z-50 overflow-hidden">
+              <div className="relative w-full h-full flex items-center justify-center">
+                {/* Background pattern */}
+                <motion.div 
+                  className="absolute inset-0"
+                  animate={{
+                    opacity: bowDropped ? 0 : 0.2,
+                  }}
+                  transition={{ duration: 0.5 }}
+                  style={{
+                    backgroundImage: 'url(/gift-pattern.svg)',
+                    backgroundSize: '200px',
+                  }}
+                />
+
+                {/* Shimmer overlay */}
+                <motion.div
+                  className="absolute inset-0"
+                  variants={shimmerVariants}
+                  animate="animate"
+                  style={{
+                    background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%)',
+                    backgroundSize: '200% 100%',
+                    opacity: bowDropped ? 0 : 0.5,
+                  }}
+                  transition={{ duration: 0.5 }}
+                />
+
+                {/* Interactive bow area */}
+                <motion.div
+                  className="absolute w-[200px] h-[200px] cursor-pointer select-none"
+                  style={{
+                    touchAction: 'none',
+                    WebkitTapHighlightColor: 'transparent',
+                  }}
+                  animate={bowDropped ? {
+                    y: window.innerHeight,
+                    rotate: 720,
+                    scale: 0.8,
+                    transition: {
+                      duration: 1.2,
+                      ease: [0.33, 1, 0.68, 1],
+                      scale: { duration: 0.3, ease: "easeInOut" }
+                    }
+                  } : {}}
+                  whileHover={{
+                    scale: 1.1,
+                    filter: "brightness(1.1)",
+                    transition: { duration: 0.3 }
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleInteraction}
+                  onTouchStart={handleInteraction}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Open gift box"
+                >
+                  <img 
+                    src="/bow.png" 
+                    alt="Gift Bow" 
+                    className="w-full h-full pointer-events-none"
+                    draggable="false"
+                    style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5))" }}
+                  />
+                </motion.div>
+
+                {/* Instruction text */}
+                <motion.div
+                  className="absolute top-[20%] left-1/2 -translate-x-1/2 text-center"
+                  animate={{
+                    scale: [1, 1.05, 1],
+                    opacity: bowDropped ? 0 : 1
+                  }}
+                  transition={{
+                    scale: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+                    opacity: { duration: 0.5 }
+                  }}
+                >
+                  <motion.h2 
+                    className="text-white text-2xl md:text-3xl font-bold tracking-wider"
+                    style={{ textShadow: "0 0 10px rgba(255,255,255,0.5)" }}
+                  >
+                    {isInteractionDisabled ? "Opening..." : "Tap the bow to reveal"}
+                  </motion.h2>
+                </motion.div>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Light beams when opened */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 0.7, 0] }}
+                transition={{ duration: 1.5, times: [0, 0.2, 1] }}
+                className="fixed inset-0 z-45 pointer-events-none"
+                style={{
+                  background: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)',
+                }}
+              />
+              
+              {/* Top half */}
+              <motion.div
+                initial={{ y: 0, rotateX: 0 }}
+                animate={{ y: '-100%', rotateX: 60 }}
+                transition={{ 
+                  duration: 2,
+                  ease: [0.4, 0, 0.2, 1],
+                  rotateX: {
+                    duration: 1.5,
+                    ease: "easeOut"
+                  }
+                }}
+                style={{
+                  transformOrigin: 'bottom',
+                  perspective: 1000,
+                  boxShadow: '0 0 30px rgba(255,123,123,0.8)'
+                }}
+                className="fixed top-0 left-0 w-full h-1/2 bg-[#FF7B7B] z-50"
+              />
+              
+              {/* Bottom half */}
+              <motion.div
+                initial={{ y: 0, rotateX: 0 }}
+                animate={{ y: '100%', rotateX: -60 }}
+                transition={{ 
+                  duration: 2,
+                  ease: [0.4, 0, 0.2, 1],
+                  rotateX: {
+                    duration: 1.5,
+                    ease: "easeOut"
+                  }
+                }}
+                style={{
+                  transformOrigin: 'top',
+                  perspective: 1000,
+                  boxShadow: '0 0 30px rgba(255,123,123,0.8)'
+                }}
+                className="fixed bottom-0 left-0 w-full h-1/2 bg-[#FF7B7B] z-50"
+              />
+            </>
+          )}
         </>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="w-full h-full"
+        />
       )}
     </AnimatePresence>
   );
