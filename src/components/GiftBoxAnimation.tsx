@@ -82,34 +82,45 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
   const [bowDropped, setBowDropped] = useState(false);
   const [isBlurred, setIsBlurred] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isInteractionDisabled, setIsInteractionDisabled] = useState(false);
   
   useEffect(() => {
     if (isOpened) {
       // Show confetti when box opens
       setShowConfetti(true);
       // Remove blur effect after box is fully opened
-      const timer = setTimeout(() => setIsBlurred(false), 1500);
+      const timer = setTimeout(() => {
+        setIsBlurred(false);
+        setIsInteractionDisabled(false);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [isOpened]);
 
-  const handleClick = () => {
+  const handleInteraction = () => {
+    if (isInteractionDisabled || bowDropped) return;
+    
+    setIsInteractionDisabled(true);
     setBowDropped(true);
+    
     // Start blur effect slightly before box opens
     setTimeout(() => setIsBlurred(true), 800);
+    
     // Start the box opening animation after bow drops
     setTimeout(() => {
       setIsOpened(true);
-      setTimeout(onAnimationComplete, 2000);
+      if (onAnimationComplete) {
+        setTimeout(onAnimationComplete, 2000);
+      }
     }, 1200);
   };
 
-  // Shimmer animation variants with enhanced effect
+  // Shimmer animation variants
   const shimmerVariants = {
     animate: {
       backgroundPosition: ['0% 0%', '200% 0%'],
       transition: {
-        duration: 2,
+        duration: 3,
         ease: "linear",
         repeat: Infinity
       }
@@ -156,7 +167,7 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
       {showConfetti && confettiParticles}
 
       {!isOpened ? (
-        <div className="fixed inset-0 flex items-center justify-center bg-[#FF7B7B] z-50 overflow-hidden">
+        <div className="fixed inset-0 flex items-center justify-center bg-[#FF7B7B] z-50 overflow-hidden touch-none">
           <div className="relative w-full h-full">
             {/* Ripple effects */}
             <Ripple delay={0} />
@@ -182,11 +193,12 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
               variants={shimmerVariants}
               animate="animate"
               style={{
-                background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)',
+                background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%)',
                 backgroundSize: '200% 100%',
-                opacity: bowDropped ? 0 : 0.7,
+                opacity: bowDropped ? 0 : 0.5,
                 mixBlendMode: 'overlay',
               }}
+              transition={{ duration: 0.5 }}
             />
             
             {/* Additional radial glow behind pattern */}
@@ -226,7 +238,7 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
                 className="text-white text-2xl md:text-3xl font-bold tracking-wider"
                 style={{ textShadow: "0 0 10px rgba(255,255,255,0.5)" }}
               >
-                Click the bow to reveal
+                {isInteractionDisabled ? "Opening..." : "Tap the bow to reveal"}
               </motion.h2>
             </motion.div>
             
@@ -257,16 +269,17 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
               }}
             />
             
-            {/* Clickable bow */}
+            {/* Clickable/tappable bow */}
             <motion.div
-              className="fixed"
+              className="fixed cursor-pointer select-none"
               style={{
                 top: '50%',
                 left: '50%',
                 x: '-50%',
                 y: '-50%',
                 width: '180px',
-                height: '180px'
+                height: '180px',
+                touchAction: 'none',
               }}
               animate={bowDropped ? {
                 y: ['-50%', window.innerHeight],
@@ -301,12 +314,16 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
                 scale: 0.95,
                 transition: { duration: 0.1 }
               }}
-              onClick={handleClick}
+              onClick={handleInteraction}
+              onTouchStart={handleInteraction}
+              role="button"
+              tabIndex={0}
+              aria-label="Open gift box"
             >
               <img 
                 src="/bow.png" 
                 alt="Gift Bow" 
-                className="w-full h-full cursor-pointer"
+                className="w-full h-full pointer-events-none"
                 draggable="false"
                 style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5))" }}
               />
