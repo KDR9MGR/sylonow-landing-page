@@ -291,8 +291,9 @@ const About = () => {
             className="bg-black/20 backdrop-blur-md rounded-xl p-8 max-w-3xl mx-auto"
           >
             <div className="text-center mb-8">
-              <div className="w-20 h-20 bg-gradient-to-r from-sylonow-purple to-sylonow-gold rounded-full flex items-center justify-center mx-auto mb-6">
-                <Star className="h-10 w-10 text-white" />
+              <div className="w-40 h-40 bg-gradient-to-r from-sylonow-purple to-sylonow-gold rounded-full flex items-center justify-center mx-auto mb-6">
+                {/* Image of investor */}
+                <img src="/investor.jpg" alt="Najil Hameed" className="w-full h-full object-cover rounded-full" />
               </div>
               <h3 className="text-2xl font-bold font-montserrat mb-2">{investor.name}</h3>
               <p className="text-sylonow-gold">{investor.role}</p>
