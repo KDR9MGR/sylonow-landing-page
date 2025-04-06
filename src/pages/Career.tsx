@@ -11,6 +11,7 @@ import Navbar from '@/components/Navbar';
 import { useToast } from "@/components/ui/use-toast";
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Helmet } from 'react-helmet';
+import { supabase } from '@/integrations/supabase/client';
 
 const roles = {
   main: ['Company All - Rounder'],
@@ -99,7 +100,6 @@ const Career = () => {
   };
 
   const handleNext = () => {
-    // Validate current step before proceeding
     if (currentStep === 0 && (!formData.fullName || !formData.contact || !formData.email)) {
       toast({
         title: "Required Fields",
@@ -126,7 +126,6 @@ const Career = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Validate all required fields
     const requiredFields = {
       fullName: 'Full Name',
       contact: 'Contact Number',
@@ -158,50 +157,60 @@ const Career = () => {
     }
 
     try {
-      const response = await fetch('https://formspree.io/f/xbjnkzrw', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ...formData,
-          _subject: `New Career Application from ${formData.fullName}`,
-          _replyto: formData.email
-        })
-      });
+      const { error } = await supabase
+        .from('career_form_submissions')
+        .insert([{
+          full_name: formData.fullName,
+          contact: formData.contact,
+          email: formData.email,
+          interested_role: formData.interestedRole,
+          description: formData.description,
+          passion: formData.passion,
+          skills: formData.skills,
+          challenges: formData.challenges,
+          motivation: formData.motivation,
+          opportunity: formData.opportunity,
+          life_challenge: formData.lifeChallenge,
+          industry_change: formData.industryChange,
+          time_commitment: formData.timeCommitment,
+          direct_entry: formData.directEntry,
+          passion_meaning: formData.passionMeaning,
+          innovation: formData.innovation
+        }]);
 
-      if (response.ok) {
-        toast({
-          title: "Application Submitted Successfully! 🎉",
-          description: "Thank you for applying. We'll review your application and get back to you soon.",
-          duration: 6000,
-        });
-        
-        // Reset form and go back to first step
-        setFormData({
-          fullName: '',
-          contact: '',
-          email: '',
-          interestedRole: '',
-          description: '',
-          passion: '',
-          skills: '',
-          challenges: 'Yes',
-          motivation: '',
-          opportunity: 'Yes',
-          lifeChallenge: '',
-          industryChange: '',
-          timeCommitment: '',
-          directEntry: 'Yes',
-          passionMeaning: '',
-          innovation: ''
-        });
-        setCurrentStep(0);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        throw new Error('Submission failed');
+      if (error) {
+        console.error("Error storing form data:", error);
+        throw new Error(error.message);
       }
+
+      toast({
+        title: "Application Submitted Successfully! 🎉",
+        description: "Thank you for applying. We'll review your application and get back to you soon.",
+        duration: 6000,
+      });
+      
+      setFormData({
+        fullName: '',
+        contact: '',
+        email: '',
+        interestedRole: '',
+        description: '',
+        passion: '',
+        skills: '',
+        challenges: 'Yes',
+        motivation: '',
+        opportunity: 'Yes',
+        lifeChallenge: '',
+        industryChange: '',
+        timeCommitment: '',
+        directEntry: 'Yes',
+        passionMeaning: '',
+        innovation: ''
+      });
+      setCurrentStep(0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
+      console.error("Submission error:", error);
       toast({
         title: "Submission Failed",
         description: "There was an error submitting your application. Please try again or contact us directly at jobs.sylonow@gmail.com",
@@ -220,7 +229,6 @@ const Career = () => {
     transition: { duration: 0.3 }
   };
 
-  // Form step components
   const BasicInfoStep = () => (
     <div className="space-y-4">
       <div className="grid md:grid-cols-2 gap-4">
@@ -470,28 +478,24 @@ const Career = () => {
         <meta name="description" content="Join Sylonow's Talent Accelerator Program. We value passion over qualifications. Build your career in AI-powered celebration technology and innovation." />
         <meta name="keywords" content="career opportunities, talent program, Sylonow careers, tech jobs, celebration industry, AI technology jobs" />
         
-        {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://sylonow.com/career" />
         <meta property="og:title" content="Join Our Team - Talent Accelerator Program | Sylonow" />
         <meta property="og:description" content="Join Sylonow's Talent Accelerator Program. We value passion over qualifications. Build your career in AI-powered celebration technology and innovation." />
         <meta property="og:image" content="/career-og-image.jpg" />
         
-        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://sylonow.com/career" />
         <meta name="twitter:title" content="Join Our Team - Talent Accelerator Program | Sylonow" />
         <meta name="twitter:description" content="Join Sylonow's Talent Accelerator Program. We value passion over qualifications. Build your career in AI-powered celebration technology and innovation." />
         <meta name="twitter:image" content="/career-twitter-image.jpg" />
         
-        {/* Additional SEO tags */}
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://sylonow.com/career" />
       </Helmet>
       <div className="min-h-screen bg-gradient-to-b from-[#121212] to-[#2a1a5e] text-white">
         <Navbar />
         <div className="max-w-6xl mx-auto px-4 pt-20 pb-20">
-          {/* Header Section */}
           <motion.div 
             className="text-center mb-10"
             initial={{ opacity: 0, y: 20 }}
@@ -509,14 +513,12 @@ const Career = () => {
             </p>
           </motion.div>
 
-          {/* Application Form */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="bg-white/5 rounded-xl border border-purple-500/20 overflow-hidden"
           >
-            {/* Progress Bar */}
             <div className="p-4 border-b border-purple-500/20">
               <div className="flex items-center justify-between mb-2">
                 <h2 className="text-xl font-medium">Application Form</h2>
@@ -570,7 +572,6 @@ const Career = () => {
             </form>
           </motion.div>
 
-          {/* Roles Section */}
           <motion.div 
             className="mt-12 bg-white/5 p-6 rounded-xl border border-purple-500/20"
             initial={{ opacity: 0, y: 20 }}

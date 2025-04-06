@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Phone, MapPin, Send, Gift, PartyPopper } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -54,15 +55,20 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      // Store the data - In a real application, this would be an API call
-      console.log("Storing user data:", values);
-      
-      // Simulate storage delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // Store data in localStorage for demo purposes
-      const existingMessages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
-      localStorage.setItem('contactMessages', JSON.stringify([...existingMessages, values]));
+      // Store the data in Supabase
+      const { error } = await supabase
+        .from('contact_form_submissions')
+        .insert([{
+          name: values.name,
+          email: values.email,
+          phone: values.phone || null,
+          message: values.message
+        }]);
+
+      if (error) {
+        console.error("Error storing contact form data:", error);
+        throw new Error(error.message);
+      }
       
       toast({
         title: "Message sent successfully!",
@@ -86,7 +92,6 @@ const Contact = () => {
     }
   };
 
-  // Contact Details
   const contactInfo = [
     { icon: <Mail className="h-5 w-5" />, label: 'Email', value: 'info@sylonow.com' },
     
@@ -331,4 +336,4 @@ const Contact = () => {
   );
 };
 
-export default Contact; 
+export default Contact;

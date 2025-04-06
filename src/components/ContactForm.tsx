@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +8,7 @@ import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { supabase } from '@/integrations/supabase/client';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -30,15 +32,18 @@ const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      // Store the data - In a real application, this would be an API call
-      console.log("Storing user data:", values);
-      
-      // Simulate storage delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // Store data in localStorage for demo purposes
-      const existingUsers = JSON.parse(localStorage.getItem('waitlistUsers') || '[]');
-      localStorage.setItem('waitlistUsers', JSON.stringify([...existingUsers, values]));
+      // Store the data in Supabase
+      const { error } = await supabase
+        .from('waitlist_submissions')
+        .insert([{
+          name: values.name,
+          email: values.email
+        }]);
+
+      if (error) {
+        console.error("Error storing waitlist data:", error);
+        throw new Error(error.message);
+      }
       
       toast({
         title: "Success!",
