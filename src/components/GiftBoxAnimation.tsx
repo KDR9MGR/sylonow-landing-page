@@ -86,7 +86,19 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
   const [isInteractionDisabled, setIsInteractionDisabled] = useState(false);
   const [showTextReveal, setShowTextReveal] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Handle touch move to prevent default scrolling
   useEffect(() => {
     if (!isAnimationComplete) {
@@ -245,30 +257,55 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
           {!isOpened ? (
             <div className="fixed inset-0 flex items-center justify-center bg-[#FF7B7B] z-50 overflow-hidden">
               <div className="relative w-full h-full flex items-center justify-center">
-                {/* Background pattern */}
+                {/* Background pattern - Updated to use pattern.svg */}
                 <motion.div 
                   className="absolute inset-0"
                   animate={{
-                    opacity: bowDropped ? 0 : 0.2,
+                    opacity: bowDropped ? 0 : 0.15,
+                    scale: bowDropped ? 1.1 : 1,
                   }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: 0.8 }}
                   style={{
-                    backgroundImage: 'url(/gift-pattern.svg)',
-                    backgroundSize: '200px',
+                    backgroundImage: 'url(/pattern.svg)',
+                    backgroundSize: '500px',
+                    backgroundRepeat: 'repeat',
+                    filter: 'brightness(1.2)',
                   }}
                 />
 
-                {/* Shimmer overlay */}
+                {/* Enhanced shimmer overlay */}
                 <motion.div
                   className="absolute inset-0"
                   variants={shimmerVariants}
                   animate="animate"
                   style={{
-                    background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%)',
+                    background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)',
                     backgroundSize: '200% 100%',
-                    opacity: bowDropped ? 0 : 0.5,
+                    opacity: bowDropped ? 0 : 0.6,
+                    mixBlendMode: 'overlay'
                   }}
                   transition={{ duration: 0.5 }}
+                />
+
+                {/* Pattern glow effect */}
+                <motion.div
+                  className="absolute inset-0"
+                  animate={{
+                    opacity: [0.3, 0.5, 0.3],
+                    scale: [1, 1.02, 1],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  style={{
+                    backgroundImage: 'url(/pattern.svg)',
+                    backgroundSize: '300px',
+                    backgroundRepeat: 'repeat',
+                    filter: 'blur(20px) brightness(1.5)',
+                    mixBlendMode: 'overlay'
+                  }}
                 />
 
                 {/* Interactive bow area - updated for better mobile handling */}
@@ -281,18 +318,29 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
                   }}
                   animate={bowDropped ? {
                     y: window.innerHeight,
-                    rotate: 720,
+                    rotate: 360,
                     scale: 0.8,
                     transition: {
-                      duration: 1.2,
-                      ease: [0.33, 1, 0.68, 1],
-                      scale: { duration: 0.3, ease: "easeInOut" }
+                      duration: 2,
+                      ease: [0.2, 0.8, 0.2, 1],
+                      y: {
+                        duration: 5,
+                        ease: [0.2, 0.8, 0.2, 1]
+                      },
+                      rotate: {
+                        duration: 5,
+                        ease: [0.2, 0.8, 0.2, 1]
+                      },
+                      scale: {
+                        duration: 1.0,
+                        ease: "easeInOut"
+                      }
                     }
                   } : {}}
                   whileHover={{
                     scale: 1.1,
                     filter: "brightness(1.1)",
-                    transition: { duration: 0.3 }
+                    transition: { duration: 0.5 }
                   }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleInteraction}
@@ -348,45 +396,93 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
                 }}
               />
               
-              {/* Top half */}
-              <motion.div
-                initial={{ y: 0, rotateX: 0 }}
-                animate={{ y: '-100%', rotateX: 60 }}
-                transition={{ 
-                  duration: 2,
-                  ease: [0.4, 0, 0.2, 1],
-                  rotateX: {
-                    duration: 1.5,
-                    ease: "easeOut"
-                  }
-                }}
-                style={{
-                  transformOrigin: 'bottom',
-                  perspective: 1000,
-                  boxShadow: '0 0 30px rgba(255,123,123,0.8)'
-                }}
-                className="fixed top-0 left-0 w-full h-1/2 bg-[#FF7B7B] z-50"
-              />
-              
-              {/* Bottom half */}
-              <motion.div
-                initial={{ y: 0, rotateX: 0 }}
-                animate={{ y: '100%', rotateX: -60 }}
-                transition={{ 
-                  duration: 2,
-                  ease: [0.4, 0, 0.2, 1],
-                  rotateX: {
-                    duration: 1.5,
-                    ease: "easeOut"
-                  }
-                }}
-                style={{
-                  transformOrigin: 'top',
-                  perspective: 1000,
-                  boxShadow: '0 0 30px rgba(255,123,123,0.8)'
-                }}
-                className="fixed bottom-0 left-0 w-full h-1/2 bg-[#FF7B7B] z-50"
-              />
+              {isMobile ? (
+                // Mobile Animation (Top/Bottom)
+                <>
+                  {/* Top half */}
+                  <motion.div
+                    initial={{ y: 0, rotateX: 0 }}
+                    animate={{ y: '-100%', rotateX: 60 }}
+                    transition={{ 
+                      duration: 2,
+                      ease: [0.4, 0, 0.2, 1],
+                      rotateX: {
+                        duration: 1.5,
+                        ease: "easeOut"
+                      }
+                    }}
+                    style={{
+                      transformOrigin: 'bottom',
+                      perspective: 1000,
+                      boxShadow: '0 0 30px rgba(255,123,123,0.8)'
+                    }}
+                    className="fixed top-0 left-0 w-full h-1/2 bg-[#FF7B7B] z-50"
+                  />
+                  
+                  {/* Bottom half */}
+                  <motion.div
+                    initial={{ y: 0, rotateX: 0 }}
+                    animate={{ y: '100%', rotateX: -60 }}
+                    transition={{ 
+                      duration: 2,
+                      ease: [0.4, 0, 0.2, 1],
+                      rotateX: {
+                        duration: 1.5,
+                        ease: "easeOut"
+                      }
+                    }}
+                    style={{
+                      transformOrigin: 'top',
+                      perspective: 1000,
+                      boxShadow: '0 0 30px rgba(255,123,123,0.8)'
+                    }}
+                    className="fixed bottom-0 left-0 w-full h-1/2 bg-[#FF7B7B] z-50"
+                  />
+                </>
+              ) : (
+                // Desktop Animation (Left/Right)
+                <>
+                  {/* Left half */}
+                  <motion.div
+                    initial={{ x: 0, rotateY: 0 }}
+                    animate={{ x: '-100%', rotateY: -60 }}
+                    transition={{ 
+                      duration: 2,
+                      ease: [0.4, 0, 0.2, 1],
+                      rotateY: {
+                        duration: 1.5,
+                        ease: "easeOut"
+                      }
+                    }}
+                    style={{
+                      transformOrigin: 'right',
+                      perspective: 1000,
+                      boxShadow: '0 0 30px rgba(255,123,123,0.8)'
+                    }}
+                    className="fixed top-0 left-0 w-1/2 h-full bg-[#FF7B7B] z-50"
+                  />
+                  
+                  {/* Right half */}
+                  <motion.div
+                    initial={{ x: 0, rotateY: 0 }}
+                    animate={{ x: '100%', rotateY: 60 }}
+                    transition={{ 
+                      duration: 2,
+                      ease: [0.4, 0, 0.2, 1],
+                      rotateY: {
+                        duration: 1.5,
+                        ease: "easeOut"
+                      }
+                    }}
+                    style={{
+                      transformOrigin: 'left',
+                      perspective: 1000,
+                      boxShadow: '0 0 30px rgba(255,123,123,0.8)'
+                    }}
+                    className="fixed top-0 right-0 w-1/2 h-full bg-[#FF7B7B] z-50"
+                  />
+                </>
+              )}
             </>
           )}
         </>

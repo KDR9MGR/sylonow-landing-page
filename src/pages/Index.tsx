@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Footer from '@/components/Footer';
 import { Gift, Sparkles, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import CountdownTimer from '@/components/CountdownTimer';
 
 // Text reveal animation component
 const AnimatedText = ({ text, className, delay = 0 }: { text: string; className?: string; delay?: number }) => {
@@ -152,13 +153,28 @@ const Index = () => {
               <p className="text-lg lg:text-xl text-gray-300 mb-8">
                 Experience the joy of giving with our curated surprise boxes, making every celebration unforgettable.
               </p>
-              <Link to="/contact">
-                <Button 
-                  className="bg-gradient-to-r from-sylonow-purple to-sylonow-gold hover:opacity-90 text-white px-8 py-6 rounded-full text-lg"
-                >
-                  Special Invite <ArrowRight className="ml-2" />
-                </Button>
-              </Link>
+              <div className="space-y-6 ">
+                <div >
+                  <motion.p 
+                    className="text-lg font-medium mb-4"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                  >
+                    Launching in
+                  </motion.p>
+                  <CountdownTimer />
+                </div>
+              </div>
+                <div className='mt-4'>
+                  <Link to="/contact">
+                    <Button 
+                    className="bg-gradient-to-r from-sylonow-purple to-sylonow-gold hover:opacity-90 text-white px-8 py-6 rounded-full text-lg"
+                  >
+                    Special Invite <ArrowRight className="ml-2" />
+                  </Button>
+                </Link>
+              </div>
             </motion.div>
 
             {/* Right Content - Gift Box Image */}
