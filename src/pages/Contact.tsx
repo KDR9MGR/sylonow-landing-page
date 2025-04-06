@@ -109,7 +109,7 @@ const Contact = () => {
               Get In <span className="text-sylonow-gold">Touch</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-12 font-poppins">
-              Have questions about Sylonow? Want to join our waitlist? We'd love to hear from you!
+              Have questions about Sylonow? We'd love to hear from you!
             </p>
           </motion.div>
         </div>
@@ -128,7 +128,7 @@ const Contact = () => {
               <div className="bg-white/5 backdrop-blur-md rounded-xl p-8 border border-purple-500/10 h-full">
                 <h2 className="text-2xl font-bold mb-6 font-montserrat">Contact Information</h2>
                 
-                <div className="space-y-6 mb-10">
+                <div className="space-y-6">
                   {contactInfo.map((item, index) => (
                     <motion.div 
                       key={index}
@@ -146,21 +146,6 @@ const Contact = () => {
                       </div>
                     </motion.div>
                   ))}
-                </div>
-                
-                <div className="mt-auto">
-                  <h3 className="text-xl font-semibold mb-4 font-montserrat">Special Invitation</h3>
-                  <p className="text-gray-300 mb-6">
-                    Join our exclusive waitlist and be among the first to experience Sylonow's revolutionary celebration platform.
-                  </p>
-                  
-                  <motion.div
-                    className="flex items-center gap-2 text-sylonow-gold"
-                    whileHover={{ x: 5 }}
-                  >
-                    <Gift className="h-5 w-5" />
-                    <span className="font-medium">Early access perks awaiting you!</span>
-                  </motion.div>
                 </div>
               </div>
             </motion.div>
