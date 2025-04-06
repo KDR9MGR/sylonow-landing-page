@@ -1,5 +1,4 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,44 +6,74 @@
 
 @layer base {
   :root {
-    --background: 250 33% 99%;
-    --foreground: 260 25% 11%;
+    --background: 260 15% 10%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 260 25% 11%;
+    --card: 260 15% 15%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 260 25% 11%;
+    --popover: 260 15% 12%;
+    --popover-foreground: 210 40% 98%;
 
     --primary: 262 83% 58%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 262 83% 92%;
-    --secondary-foreground: 262 83% 58%;
+    --secondary: 262 83% 25%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 260 15% 20%;
+    --muted-foreground: 215 20% 65%;
 
     --accent: 270 95% 75%;
-    --accent-foreground: 260 25% 11%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border: 260 15% 20%;
+    --input: 260 15% 20%;
     --ring: 262 83% 58%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 260 15% 12%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 260 15% 20%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 260 15% 25%;
+    --sidebar-ring: 262 83% 58%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
   }
 }
 
@@ -54,11 +83,19 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-display leading-tight;
+  }
+  
+  .font-montserrat {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
   }
 }
 
@@ -88,4 +125,127 @@
     0%, 100% { opacity: 0.3; }
     50% { opacity: 0.6; }
   }
+  
+  .hover\:shadow-glow:hover {
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.5);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .gift-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .gift-shimmer::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      to bottom right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    animation: shimmer 3s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { transform: translateX(-100%) rotate(30deg); }
+    100% { transform: translateX(100%) rotate(30deg); }
+  }
+
+  /* 3D Gift Box styles */
+  .gift-box-3d {
+    @apply relative w-full h-full;
+  }
+
+  .gift-box-3d canvas {
+    @apply rounded-xl shadow-2xl;
+    background: radial-gradient(circle at center, rgba(139, 92, 246, 0.1), transparent 70%);
+  }
+
+  .gift-box-3d::before {
+    content: '';
+    @apply absolute inset-0 rounded-xl pointer-events-none;
+    background: linear-gradient(
+      45deg,
+      rgba(139, 92, 246, 0.1) 0%,
+      rgba(212, 175, 55, 0.1) 100%
+    );
+    filter: blur(20px);
+    z-index: -1;
+  }
+
+  .gift-box-3d::after {
+    content: '';
+    @apply absolute -inset-1 rounded-xl pointer-events-none;
+    background: linear-gradient(
+      to right,
+      rgba(139, 92, 246, 0.2),
+      rgba(212, 175, 55, 0.2)
+    );
+    filter: blur(15px);
+    z-index: -2;
+  }
+
+  /* Enhanced shimmer effect */
+  .gift-shimmer-3d {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gift-shimmer-3d::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      to bottom right,
+      rgba(139, 92, 246, 0) 0%,
+      rgba(139, 92, 246, 0.2) 50%,
+      rgba(212, 175, 55, 0.2) 51%,
+      rgba(212, 175, 55, 0) 100%
+    );
+    transform: rotate(30deg);
+    animation: shimmer-3d 6s linear infinite;
+  }
+
+  @keyframes shimmer-3d {
+    0% {
+      transform: translateX(-100%) rotate(30deg);
+      opacity: 0;
+    }
+    20% {
+      opacity: 0.5;
+    }
+    80% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateX(100%) rotate(30deg);
+      opacity: 0;
+    }
+  }
+}
+
+/* Animation styles */
+.gift-box-animation {
+  perspective: 1000px;
+}
+
+.gift-box-animation * {
+  backface-visibility: hidden;
+}
+
+/* Smooth transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
 }

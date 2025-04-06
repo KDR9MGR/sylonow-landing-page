@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -75,7 +74,7 @@ const ContactForm = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
         >
-          Get Early Access
+          Special Invite
         </motion.h2>
         <motion.p 
           className="text-gray-600 text-center mb-6"
@@ -83,7 +82,7 @@ const ContactForm = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}
         >
-          Join our waitlist to get exclusive early access to the Sylonow platform when we launch.
+          Join our exclusive waitlist to get special early access when we launch.
         </motion.p>
         
         <Form {...form}>
@@ -145,7 +144,7 @@ const ContactForm = () => {
                 className="w-full bg-gradient-to-r from-sylonow-purple to-sylonow-gold hover:opacity-90 transition-all"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Processing..." : "Join Waitlist"}
+                {isSubmitting ? "Processing..." : "Get Invitation"}
               </Button>
             </motion.div>
           </form>
