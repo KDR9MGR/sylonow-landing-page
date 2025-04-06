@@ -9,7 +9,7 @@ export const metadata = {
     siteName: 'Sylonow',
     images: [
       {
-        url: '/og-image.jpg', // Make sure to add this image to your public folder
+        url: '/og-image.png', // Make sure to add this image to your public folder
         width: 1200,
         height: 630,
         alt: 'Sylonow - Celebration & Surprise Services'
@@ -22,7 +22,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Sylonow - Make Every Moment Special',
     description: 'Transform your celebrations with personalized surprise services. Creating unforgettable moments through curated experiences.',
-    images: ['/og-image.jpg'],
+    images: ['/og-image.png'],
   },
   icons: {
     icon: '/favicon.ico',
