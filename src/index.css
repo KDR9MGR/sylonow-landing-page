@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -75,19 +75,20 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
 
   body {
     @apply bg-background text-foreground;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display leading-tight;
+  /* Updated typography styles */
+  h1 {
+    @apply font-montserrat font-bold leading-tight;
+    letter-spacing: -0.02em;
+  }
+
+  h2, h3, h4, h5, h6 {
+    @apply font-space-grotesk leading-tight;
+    letter-spacing: -0.01em;
   }
   
   .font-montserrat {
@@ -96,6 +97,10 @@
   
   .font-poppins {
     font-family: 'Poppins', sans-serif;
+  }
+
+  .font-space-grotesk {
+    font-family: 'Space Grotesk', sans-serif;
   }
 }
 
@@ -232,6 +237,73 @@
       opacity: 0;
     }
   }
+
+  /* Hero section mobile sequence styles */
+  @media (max-width: 768px) {
+    .hero-section {
+      @apply flex flex-col gap-8;
+    }
+
+    .hero-heading {
+      @apply order-1 text-4xl md:text-5xl font-bold;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .hero-subtitle {
+      @apply order-2 text-lg md:text-xl text-gray-300;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .hero-gift-box {
+      @apply order-3 w-full max-w-[300px] mx-auto;
+    }
+
+    .hero-timer {
+      @apply order-4 w-full;
+    }
+
+    .hero-special-invite {
+      @apply order-5 w-full;
+    }
+
+    /* Enhanced mobile typography */
+    .mobile-heading {
+      font-size: clamp(2rem, 8vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .mobile-subtitle {
+      font-size: clamp(1rem, 4vw, 1.25rem);
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+    }
+  }
+
+  /* Enhanced text animations for mobile */
+  .text-reveal-mobile {
+    @apply opacity-0;
+    animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: var(--delay, 0s);
+  }
+
+  @keyframes slideUpFade {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Smooth transitions */
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
 }
 
 /* Animation styles */
@@ -241,22 +313,6 @@
 
 .gift-box-animation * {
   backface-visibility: hidden;
-}
-
-/* Smooth transitions */
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 50%;
-  }
-  100% {
-    background-position: -200% 50%;
-  }
 }
 
 /* Text reveal animation styles */
@@ -286,3 +342,4 @@
   -webkit-text-fill-color: transparent;
   animation: shimmer 3s linear infinite;
 }
+
