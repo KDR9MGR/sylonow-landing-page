@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import TextRevealAnimation from './TextRevealAnimation';
 
@@ -87,20 +87,64 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
   const [showTextReveal, setShowTextReveal] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   
-  // Prevent scrolling when component mounts
+  // Handle touch move to prevent default scrolling
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.height = '100%';
+    if (!isAnimationComplete) {
+      const handleTouchMove = (e: TouchEvent) => {
+        if (!isAnimationComplete) {
+          e.preventDefault();
+        }
+      };
 
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.height = '';
-    };
-  }, []);
+      // Add touch-action: none to the root element
+      document.documentElement.style.setProperty('touch-action', 'none');
+      document.body.style.setProperty('touch-action', 'none');
+      
+      // Add the event listener with passive: false
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      
+      return () => {
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.documentElement.style.removeProperty('touch-action');
+        document.body.style.removeProperty('touch-action');
+      };
+    }
+  }, [isAnimationComplete]);
+
+  // Prevent scrolling only during the animation
+  useEffect(() => {
+    if (!isAnimationComplete) {
+      const originalStyles = {
+        overflow: document.body.style.overflow,
+        position: document.body.style.position,
+        width: document.body.style.width,
+        height: document.body.style.height,
+        top: document.body.style.top,
+        left: document.body.style.left
+      };
+
+      // Store current scroll position
+      const scrollY = window.scrollY;
+
+      // Apply styles to prevent scrolling
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100%';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = '0px';
+
+      return () => {
+        // Restore original styles
+        Object.entries(originalStyles).forEach(([key, value]) => {
+          document.body.style[key as any] = value;
+        });
+        
+        // Restore scroll position
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isAnimationComplete]);
   
   useEffect(() => {
     if (isOpened && !isAnimationComplete) {
@@ -116,16 +160,20 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
     }
   }, [isOpened, isAnimationComplete]);
 
-  const handleTextRevealComplete = () => {
+  const handleTextRevealComplete = useCallback(() => {
     setShowTextReveal(false);
     setIsAnimationComplete(true);
+    
+    // Remove touch-action restrictions
+    document.documentElement.style.removeProperty('touch-action');
+    document.body.style.removeProperty('touch-action');
+    
     if (onAnimationComplete) {
       onAnimationComplete();
     }
-  };
+  }, [onAnimationComplete]);
 
-  const handleInteraction = (e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault(); // Prevent any default touch/click behavior
+  const handleInteraction = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (isInteractionDisabled || bowDropped) return;
     
     setIsInteractionDisabled(true);
@@ -138,7 +186,7 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
     setTimeout(() => {
       setIsOpened(true);
     }, 1200);
-  };
+  }, [isInteractionDisabled, bowDropped]);
 
   // Shimmer animation variants
   const shimmerVariants = {
@@ -183,11 +231,9 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
               backdropFilter: isBlurred ? 'blur(10px)' : 'blur(0px)',
               WebkitBackdropFilter: isBlurred ? 'blur(10px)' : 'blur(0px)',
             }}
-            transition={{ 
-              duration: 1,
-              ease: "easeInOut"
-            }}
-            className="fixed inset-0 z-40 pointer-events-none"
+            transition={{ duration: 1, ease: "easeInOut" }}
+            className="fixed inset-0 z-40"
+            style={{ pointerEvents: isAnimationComplete ? 'none' : 'auto' }}
           />
 
           {/* Confetti animation */}
@@ -225,12 +271,13 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
                   transition={{ duration: 0.5 }}
                 />
 
-                {/* Interactive bow area */}
+                {/* Interactive bow area - updated for better mobile handling */}
                 <motion.div
                   className="absolute w-[200px] h-[200px] cursor-pointer select-none"
                   style={{
-                    touchAction: 'none',
+                    touchAction: 'manipulation',
                     WebkitTapHighlightColor: 'transparent',
+                    zIndex: 55
                   }}
                   animate={bowDropped ? {
                     y: window.innerHeight,
@@ -249,7 +296,7 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
                   }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleInteraction}
-                  onTouchStart={handleInteraction}
+                  onTouchEnd={handleInteraction}
                   role="button"
                   tabIndex={0}
                   aria-label="Open gift box"
@@ -257,9 +304,13 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
                   <img 
                     src="/bow.png" 
                     alt="Gift Bow" 
-                    className="w-full h-full pointer-events-none"
+                    className="w-full h-full select-none"
                     draggable="false"
-                    style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5))" }}
+                    style={{ 
+                      filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5))",
+                      pointerEvents: 'none',
+                      touchAction: 'manipulation'
+                    }}
                   />
                 </motion.div>
 
@@ -345,6 +396,7 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
           className="w-full h-full"
+          style={{ pointerEvents: 'none' }}
         />
       )}
     </AnimatePresence>
