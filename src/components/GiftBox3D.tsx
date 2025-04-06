@@ -25,57 +25,53 @@ function GiftBoxModel() {
 }
 
 const GiftBox3D = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   return (
     <div 
-      className="h-[400px] md:h-[500px] w-full relative overflow-hidden"
+      ref={containerRef}
+      className="h-[400px] md:h-[500px] w-full relative"
       style={{ 
-        touchAction: 'pan-x pan-y',
-        pointerEvents: 'none'
+        touchAction: 'auto',
+        userSelect: 'none',
+        WebkitUserSelect: 'none'
       }}
     >
-      <div 
-        className="absolute inset-0"
-        style={{ 
-          pointerEvents: 'auto',
-          touchAction: 'none'
+      <Canvas
+        shadows
+        dpr={[1, 2]}
+        camera={{ 
+          position: [0, 0, 5],
+          fov: 45,
+          near: 0.1,
+          far: 1000
         }}
+        style={{ 
+          touchAction: 'none',
+          outline: 'none',
+          WebkitTapHighlightColor: 'transparent'
+        }}
+        eventSource={containerRef}
+        eventPrefix="client"
       >
-        <Canvas
-          shadows
-          dpr={[1, 2]}
-          camera={{ 
-            position: [0, 0, 5],
-            fov: 45,
-            near: 0.1,
-            far: 1000
-          }}
-          style={{ 
-            touchAction: 'none',
-            outline: 'none'
-          }}
-          eventSource={document.documentElement}
-          eventPrefix="client"
+        <Stage
+          environment="city"
+          intensity={0.7}
+          shadows={false}
+          adjustCamera={false}
+          preset="rembrandt"
         >
-          <Stage
-            environment="city"
-            intensity={0.7}
-            shadows={false}
-            adjustCamera={false}
-            preset="rembrandt"
-          >
-            <GiftBoxModel />
-          </Stage>
-          <OrbitControls
-            enableZoom={false}
-            enablePan={false}
-            enableRotate={true}
-            minPolarAngle={Math.PI / 2}
-            maxPolarAngle={Math.PI / 2}
-            makeDefault
-            domElement={document.documentElement}
-          />
-        </Canvas>
-      </div>
+          <GiftBoxModel />
+        </Stage>
+        <OrbitControls
+          enableZoom={false}
+          enablePan={false}
+          enableRotate={true}
+          minPolarAngle={Math.PI / 2}
+          maxPolarAngle={Math.PI / 2}
+          makeDefault
+        />
+      </Canvas>
     </div>
   );
 };
