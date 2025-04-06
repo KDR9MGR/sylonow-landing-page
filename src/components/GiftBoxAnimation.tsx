@@ -5,7 +5,7 @@ interface GiftBoxAnimationProps {
   onAnimationComplete: () => void;
 }
 
-// Ripple component
+// Ripple component s
 const Ripple = ({ delay = 0 }: { delay?: number }) => {
   return (
     <motion.div
