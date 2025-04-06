@@ -249,3 +249,40 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
 }
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 50%;
+  }
+  100% {
+    background-position: -200% 50%;
+  }
+}
+
+/* Text reveal animation styles */
+.text-reveal-container {
+  @apply fixed inset-0 bg-black z-[60] flex items-center justify-center overflow-hidden;
+}
+
+.text-reveal {
+  @apply text-2xl md:text-4xl font-light tracking-wider text-center px-4;
+}
+
+.shimmer-text {
+  background: linear-gradient(
+    to right,
+    #ffffff 20%,
+    #a855f7 30%,
+    #ffffff 40%,
+    #ffffff 50%,
+    #a855f7 60%,
+    #ffffff 70%
+  );
+  background-size: 200% auto;
+  color: #000;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}

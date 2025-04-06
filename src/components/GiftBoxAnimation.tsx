@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import TextRevealAnimation from './TextRevealAnimation';
 
 interface GiftBoxAnimationProps {
   onAnimationComplete: () => void;
@@ -83,6 +84,22 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
   const [isBlurred, setIsBlurred] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [isInteractionDisabled, setIsInteractionDisabled] = useState(false);
+  const [showTextReveal, setShowTextReveal] = useState(false);
+  
+  // Prevent scrolling when component mounts
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.height = '100%';
+
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+    };
+  }, []);
   
   useEffect(() => {
     if (isOpened) {
@@ -92,12 +109,20 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
       const timer = setTimeout(() => {
         setIsBlurred(false);
         setIsInteractionDisabled(false);
+        // Show text reveal after box animation completes
+        setTimeout(() => {
+          setShowTextReveal(true);
+          if (onAnimationComplete) {
+            onAnimationComplete();
+          }
+        }, 500);
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [isOpened]);
+  }, [isOpened, onAnimationComplete]);
 
-  const handleInteraction = () => {
+  const handleInteraction = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault(); // Prevent any default touch/click behavior
     if (isInteractionDisabled || bowDropped) return;
     
     setIsInteractionDisabled(true);
@@ -109,9 +134,6 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
     // Start the box opening animation after bow drops
     setTimeout(() => {
       setIsOpened(true);
-      if (onAnimationComplete) {
-        setTimeout(onAnimationComplete, 2000);
-      }
     }, 1200);
   };
 
@@ -166,28 +188,26 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
       {/* Confetti animation */}
       {showConfetti && confettiParticles}
 
-      {!isOpened ? (
-        <div className="fixed inset-0 flex items-center justify-center bg-[#FF7B7B] z-50 overflow-hidden touch-none">
-          <div className="relative w-full h-full">
-            {/* Ripple effects */}
-            <Ripple delay={0} />
-            <Ripple delay={0.5} />
-            <Ripple delay={1} />
+      {/* Text Reveal Animation */}
+      {showTextReveal && <TextRevealAnimation />}
 
-            {/* Background gift pattern with enhanced glow */}
+      {!isOpened ? (
+        <div className="fixed inset-0 flex items-center justify-center bg-[#FF7B7B] z-50 overflow-hidden">
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Background pattern */}
             <motion.div 
               className="absolute inset-0"
-              variants={patternGlowVariants}
-              animate="animate"
+              animate={{
+                opacity: bowDropped ? 0 : 0.2,
+              }}
+              transition={{ duration: 0.5 }}
               style={{
                 backgroundImage: 'url(/gift-pattern.svg)',
                 backgroundSize: '200px',
-                opacity: bowDropped ? 0 : 0.3,
-                mixBlendMode: 'soft-light',
               }}
             />
 
-            {/* Enhanced shimmer overlay */}
+            {/* Shimmer overlay */}
             <motion.div
               className="absolute inset-0"
               variants={shimmerVariants}
@@ -196,124 +216,33 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
                 background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%)',
                 backgroundSize: '200% 100%',
                 opacity: bowDropped ? 0 : 0.5,
-                mixBlendMode: 'overlay',
               }}
               transition={{ duration: 0.5 }}
             />
-            
-            {/* Additional radial glow behind pattern */}
-            <motion.div
-              className="absolute inset-0"
-              animate={{
-                opacity: [0.4, 0.6, 0.4]
-              }}
-              transition={{
-                duration: 2,
-                ease: "easeInOut",
-                repeat: Infinity
-              }}
-              style={{
-                background: 'radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%)',
-                mixBlendMode: 'overlay'
-              }}
-            />
 
-            {/* Pulsing text */}
+            {/* Interactive bow area */}
             <motion.div
-              className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center"
-              animate={{
-                scale: [1, 1.05, 1],
-                opacity: bowDropped ? 0 : 1
-              }}
-              transition={{
-                scale: {
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                },
-                opacity: { duration: 0.5 }
-              }}
-            >
-              <motion.h2 
-                className="text-white text-2xl md:text-3xl font-bold tracking-wider"
-                style={{ textShadow: "0 0 10px rgba(255,255,255,0.5)" }}
-              >
-                {isInteractionDisabled ? "Opening..." : "Tap the bow to reveal"}
-              </motion.h2>
-            </motion.div>
-            
-            {/* Glow effect behind bow */}
-            <motion.div
-              className="fixed rounded-full"
+              className="absolute w-[200px] h-[200px] cursor-pointer select-none"
               style={{
-                top: '50%',
-                left: '50%',
-                x: '-50%',
-                y: '-50%',
-                width: '200px',
-                height: '200px',
-                background: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)',
-              }}
-              animate={bowDropped ? {
-                opacity: 0,
-                scale: 2,
-                transition: { duration: 0.5 }
-              } : {
-                scale: [1, 1.1, 1],
-                opacity: [0.6, 0.8, 0.6]
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-            
-            {/* Clickable/tappable bow */}
-            <motion.div
-              className="fixed cursor-pointer select-none"
-              style={{
-                top: '50%',
-                left: '50%',
-                x: '-50%',
-                y: '-50%',
-                width: '180px',
-                height: '180px',
                 touchAction: 'none',
+                WebkitTapHighlightColor: 'transparent',
               }}
               animate={bowDropped ? {
-                y: ['-50%', window.innerHeight],
-                rotate: [0, 720],
-                scale: [1, 0.8],
+                y: window.innerHeight,
+                rotate: 720,
+                scale: 0.8,
                 transition: {
                   duration: 1.2,
                   ease: [0.33, 1, 0.68, 1],
-                  times: [0, 1],
-                  scale: {
-                    duration: 0.3,
-                    ease: "easeInOut"
-                  }
+                  scale: { duration: 0.3, ease: "easeInOut" }
                 }
               } : {}}
               whileHover={{
                 scale: 1.1,
-                rotate: [0, 10, -10, 0],
                 filter: "brightness(1.1)",
-                transition: {
-                  rotate: {
-                    duration: 1,
-                    ease: "easeInOut",
-                    repeat: Infinity
-                  },
-                  scale: {
-                    duration: 0.3
-                  }
-                }
+                transition: { duration: 0.3 }
               }}
-              whileTap={{
-                scale: 0.95,
-                transition: { duration: 0.1 }
-              }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleInteraction}
               onTouchStart={handleInteraction}
               role="button"
@@ -327,6 +256,26 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
                 draggable="false"
                 style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5))" }}
               />
+            </motion.div>
+
+            {/* Instruction text */}
+            <motion.div
+              className="absolute top-[20%] left-1/2 -translate-x-1/2 text-center"
+              animate={{
+                scale: [1, 1.05, 1],
+                opacity: bowDropped ? 0 : 1
+              }}
+              transition={{
+                scale: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+                opacity: { duration: 0.5 }
+              }}
+            >
+              <motion.h2 
+                className="text-white text-2xl md:text-3xl font-bold tracking-wider"
+                style={{ textShadow: "0 0 10px rgba(255,255,255,0.5)" }}
+              >
+                {isInteractionDisabled ? "Opening..." : "Tap the bow to reveal"}
+              </motion.h2>
             </motion.div>
           </div>
         </div>
