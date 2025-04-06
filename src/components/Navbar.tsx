@@ -4,6 +4,13 @@ import { motion } from "framer-motion";
 import { Menu, X, Gift } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+const navigation = [
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/about' },
+  { name: 'Career', href: '/career' },
+  { name: 'Contact', href: '/contact' }
+];
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
