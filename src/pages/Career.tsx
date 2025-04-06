@@ -6,6 +6,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Rocket, Star, Brain, Target, Gift, Users, Sparkles } from 'lucide-react';
+import Navbar from '@/components/Navbar';
+import { useToast } from "@/components/ui/use-toast";
 
 const roles = {
   main: ['Company All - Rounder'],
@@ -40,6 +42,8 @@ const roles = {
 };
 
 const Career = () => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     contact: '',
@@ -47,16 +51,80 @@ const Career = () => {
     description: '',
     passion: '',
     skills: '',
-    challenges: '',
+    challenges: 'Yes',
     motivation: '',
-    opportunity: '',
+    opportunity: 'Yes',
     lifeChallenge: '',
     industryChange: '',
     timeCommitment: '',
-    directEntry: '',
+    directEntry: 'Yes',
     passionMeaning: '',
     innovation: ''
   });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('https://formspree.io/f/jobs.sylonow@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...formData,
+          _subject: `New Career Application from ${formData.fullName}`,
+        })
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Application Submitted!",
+          description: "Thank you for applying. We'll get back to you soon!",
+          duration: 5000,
+        });
+        
+        // Reset form
+        setFormData({
+          fullName: '',
+          contact: '',
+          email: '',
+          description: '',
+          passion: '',
+          skills: '',
+          challenges: 'Yes',
+          motivation: '',
+          opportunity: 'Yes',
+          lifeChallenge: '',
+          industryChange: '',
+          timeCommitment: '',
+          directEntry: 'Yes',
+          passionMeaning: '',
+          innovation: ''
+        });
+      } else {
+        throw new Error('Failed to submit form');
+      }
+    } catch (error) {
+      toast({
+        title: "Submission Failed",
+        description: "Please try again or contact us directly.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
@@ -66,7 +134,8 @@ const Career = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#121212] to-[#2a1a5e] text-white">
-      <div className="max-w-6xl mx-auto px-4 py-20">
+      <Navbar />
+      <div className="max-w-6xl mx-auto px-4 pt-24 pb-20">
         {/* Header Section */}
         <motion.div 
           className="text-center mb-16"
@@ -185,35 +254,44 @@ const Career = () => {
             Apply Now <span className="text-sylonow-gold">🚀</span>
           </h2>
           
-          <form className="space-y-8 max-w-3xl mx-auto">
+          <form onSubmit={handleSubmit} className="space-y-8 max-w-3xl mx-auto">
             {/* Basic Information */}
             <div className="space-y-4">
               <h3 className="text-xl font-semibold mb-4">Basic Information</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="fullName">Full Name</Label>
+                  <Label htmlFor="fullName">Full Name *</Label>
                   <Input
                     id="fullName"
+                    value={formData.fullName}
+                    onChange={handleInputChange}
                     placeholder="Your full name"
                     className="bg-white/5 border-purple-500/20"
+                    required
                   />
                 </div>
                 <div>
-                  <Label htmlFor="contact">Contact Number</Label>
+                  <Label htmlFor="contact">Contact Number *</Label>
                   <Input
                     id="contact"
+                    value={formData.contact}
+                    onChange={handleInputChange}
                     placeholder="Your contact number"
                     className="bg-white/5 border-purple-500/20"
+                    required
                   />
                 </div>
               </div>
               <div>
-                <Label htmlFor="email">Email ID</Label>
+                <Label htmlFor="email">Email ID *</Label>
                 <Input
                   id="email"
                   type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                   placeholder="Your email address"
                   className="bg-white/5 border-purple-500/20"
+                  required
                 />
               </div>
             </div>
@@ -222,27 +300,115 @@ const Career = () => {
             <div className="space-y-4">
               <h3 className="text-xl font-semibold mb-4">About You</h3>
               <div>
-                <Label htmlFor="description">Describe yourself in ONE powerful sentence</Label>
+                <Label htmlFor="description">Describe yourself in ONE powerful sentence *</Label>
                 <Textarea
                   id="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
                   placeholder="Include your passion and talent"
                   className="bg-white/5 border-purple-500/20"
+                  required
                 />
               </div>
               <div>
-                <Label htmlFor="passion">What makes you passionate about joining Sylonow?</Label>
+                <Label htmlFor="passion">What makes you passionate about joining Sylonow? *</Label>
                 <Textarea
                   id="passion"
+                  value={formData.passion}
+                  onChange={handleInputChange}
                   className="bg-white/5 border-purple-500/20"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="skills">What skills do you have that can help us build something incredible? *</Label>
+                <Textarea
+                  id="skills"
+                  value={formData.skills}
+                  onChange={handleInputChange}
+                  className="bg-white/5 border-purple-500/20"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="motivation">What is the one thing that keeps you motivated every day? *</Label>
+                <Textarea
+                  id="motivation"
+                  value={formData.motivation}
+                  onChange={handleInputChange}
+                  className="bg-white/5 border-purple-500/20"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Psychological & Emotional Connection */}
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold mb-4">Psychological & Emotional Connection</h3>
+              <div>
+                <Label htmlFor="lifeChallenge">What is one challenge in your life that you overcame and what did you learn from it? *</Label>
+                <Textarea
+                  id="lifeChallenge"
+                  value={formData.lifeChallenge}
+                  onChange={handleInputChange}
+                  className="bg-white/5 border-purple-500/20"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="industryChange">If you could change one thing about the celebration industry, what would it be and why? *</Label>
+                <Textarea
+                  id="industryChange"
+                  value={formData.industryChange}
+                  onChange={handleInputChange}
+                  className="bg-white/5 border-purple-500/20"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Commitment & Future Vision */}
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold mb-4">Commitment & Future Vision</h3>
+              <div>
+                <Label htmlFor="timeCommitment">How much time can you dedicate to Sylonow per week? *</Label>
+                <Input
+                  id="timeCommitment"
+                  value={formData.timeCommitment}
+                  onChange={handleInputChange}
+                  placeholder="e.g., 20 hours per week"
+                  className="bg-white/5 border-purple-500/20"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="passionMeaning">What does "passion" mean to you in one sentence? *</Label>
+                <Textarea
+                  id="passionMeaning"
+                  value={formData.passionMeaning}
+                  onChange={handleInputChange}
+                  className="bg-white/5 border-purple-500/20"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="innovation">What's one thing you would love to create or innovate at Sylonow? *</Label>
+                <Textarea
+                  id="innovation"
+                  value={formData.innovation}
+                  onChange={handleInputChange}
+                  className="bg-white/5 border-purple-500/20"
+                  required
                 />
               </div>
             </div>
 
             <Button 
               type="submit"
-              className="w-full md:w-auto bg-gradient-to-r from-sylonow-purple to-sylonow-gold hover:opacity-90"
+              disabled={isSubmitting}
+              className="w-full md:w-auto bg-gradient-to-r from-sylonow-purple to-sylonow-gold hover:opacity-90 disabled:opacity-50"
             >
-              Submit Application
+              {isSubmitting ? 'Submitting...' : 'Submit Application'}
             </Button>
           </form>
         </motion.div>

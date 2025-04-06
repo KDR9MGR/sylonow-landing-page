@@ -47,30 +47,20 @@ const Navbar = () => {
       
       {/* Desktop Menu */}
       <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Link to="/" className="text-white hover:text-sylonow-gold transition-colors">
-            Home
-          </Link>
-        </motion.div>
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Link to="/about" className="text-white hover:text-sylonow-gold transition-colors">
-            About
-          </Link>
-        </motion.div>
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Link to="/contact" className="text-white hover:text-sylonow-gold transition-colors">
-            Contact
-          </Link>
-        </motion.div>
+        {navigation.map((item) => (
+          <motion.div
+            key={item.name}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Link 
+              to={item.href} 
+              className="text-white hover:text-sylonow-gold transition-colors"
+            >
+              {item.name}
+            </Link>
+          </motion.div>
+        ))}
       </div>
       
       {/* Mobile Menu Button */}
@@ -113,15 +103,16 @@ const Navbar = () => {
           transition={{ duration: 0.3 }}
         >
           <div className="flex flex-col space-y-4">
-            <Link to="/" className="text-white hover:text-sylonow-gold py-2 px-4 rounded-lg hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>
-              Home
-            </Link>
-            <Link to="/about" className="text-white hover:text-sylonow-gold py-2 px-4 rounded-lg hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>
-              About
-            </Link>
-            <Link to="/contact" className="text-white hover:text-sylonow-gold py-2 px-4 rounded-lg hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>
-              Contact
-            </Link>
+            {navigation.map((item) => (
+              <Link 
+                key={item.name}
+                to={item.href} 
+                className="text-white hover:text-sylonow-gold py-2 px-4 rounded-lg hover:bg-white/5 transition-colors" 
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
             <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>
               <Button className="bg-gradient-to-r from-sylonow-purple to-sylonow-gold hover:opacity-90 transition-all w-full mt-2 rounded-lg font-poppins">
                 <Gift className="h-4 w-4 mr-2" /> Special Invite
