@@ -29,7 +29,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center space-y-8">
           {/* Logo */}
-          <img src="/logo.png" alt="Sylonow Logo" className="h-12" />
+          <img src="/lovable-uploads/logo.png" alt="Sylonow Logo" className="h-12" />
           
           {/* Social Links */}
           <div className="flex space-x-6">
