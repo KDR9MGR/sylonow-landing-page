@@ -88,8 +88,8 @@ const Contact = () => {
 
   // Contact Details
   const contactInfo = [
-    { icon: <Mail className="h-5 w-5" />, label: 'Email', value: 'hello@sylonow.com' },
-    { icon: <Phone className="h-5 w-5" />, label: 'Phone', value: '+91 9876543210' },
+    { icon: <Mail className="h-5 w-5" />, label: 'Email', value: 'info@sylonow.com' },
+    
     { icon: <MapPin className="h-5 w-5" />, label: 'Address', value: 'Bengaluru, Karnataka, India' },
   ];
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { Calendar, MapPin, Users, Globe, Star } from 'lucide-react';
+import { Calendar, MapPin, Users, Globe, Star, Building2, Globe2, Eye, Target, Lightbulb, UserCircle, Award } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const About = () => {
@@ -50,11 +50,27 @@ const About = () => {
     }
   };
 
-  const companyDetails = [
-    { icon: <Calendar className="h-5 w-5" />, label: 'Launch Date', value: 'May 2025' },
-    { icon: <MapPin className="h-5 w-5" />, label: 'Headquarters', value: 'Bengaluru, Karnataka, India' },
-    { icon: <Users className="h-5 w-5" />, label: 'Founders', value: '3 Visionary Co-Founders' },
-    { icon: <Globe className="h-5 w-5" />, label: 'Service Areas', value: 'Launching in Bengaluru, expanding across India' },
+  const companyInfo = [
+    {
+      title: "Launch Date",
+      value: "March 2024",
+      icon: <Calendar className="w-6 h-6" />
+    },
+    {
+      title: "Headquarters",
+      value: "Bengaluru, Karnataka",
+      icon: <Building2 className="w-6 h-6" />
+    },
+    {
+      title: "Founders",
+      value: "Team Sylonow",
+      icon: <Users className="w-6 h-6" />
+    },
+    {
+      title: "Service Area",
+      value: "Pan India",
+      icon: <Globe2 className="w-6 h-6" />
+    }
   ];
 
   const founders = [
@@ -85,105 +101,166 @@ const About = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#121212] to-[#2a1a5e] text-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#121212] to-[#2a1a5e]">
       <Navbar />
-      
-      {/* Hero Section */}
-      <section className="pt-20 pb-16 px-6 md:px-10">
-        <div className="max-w-5xl mx-auto text-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        {/* Company Overview */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">
+            About <span className="gradient-text">Sylonow</span>
+          </h1>
+          <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
+            Transforming celebrations into unforgettable experiences through personalized surprise services.
+          </p>
+        </motion.div>
+
+        {/* Company Info Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+        >
+          {companyInfo.map((info, index) => (
+            <motion.div
+              key={info.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 * index }}
+              className="bg-black/20 backdrop-blur-md rounded-xl p-6 flex flex-col items-center text-center"
+            >
+              <div className="bg-gradient-to-br from-sylonow-purple to-sylonow-gold p-3 rounded-lg mb-4">
+                {info.icon}
+              </div>
+              <h3 className="text-lg font-semibold mb-2">{info.title}</h3>
+              <p className="text-gray-300">{info.value}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Vision & Mission */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="bg-black/20 backdrop-blur-md rounded-xl p-8"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 font-montserrat tracking-tight">
-              <span className="text-sylonow-gold">About</span> Sylonow
-            </h1>
-            <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-12 font-poppins">
-              We're on a mission to redefine how people celebrate life's special moments, 
-              creating unforgettable memories through personalized surprises and experiences.
+            <h2 className="text-2xl font-bold mb-4 flex items-center gap-3">
+              <Eye className="w-6 h-6 text-sylonow-purple" />
+              Our Vision
+            </h2>
+            <p className="text-gray-300">
+              To revolutionize the celebration industry by creating a seamless platform that brings joy and surprise to every special moment.
             </p>
           </motion.div>
-          
+
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12"
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="bg-black/20 backdrop-blur-md rounded-xl p-8"
           >
-            {companyDetails.map((detail, index) => (
-              <motion.div 
-                key={index} 
-                className="flex items-start gap-4 p-5 bg-white/5 backdrop-blur-md rounded-lg border border-white/10 hover:border-sylonow-purple/30 transition-all"
-                variants={fadeInUp}
-                whileHover={{ scale: 1.02 }}
-              >
-                <div className="p-2 bg-sylonow-purple/20 rounded-full text-sylonow-gold">
-                  {detail.icon}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-white">{detail.label}</h3>
-                  <p className="text-gray-300">{detail.value}</p>
-                </div>
-              </motion.div>
-            ))}
+            <h2 className="text-2xl font-bold mb-4 flex items-center gap-3">
+              <Target className="w-6 h-6 text-sylonow-gold" />
+              Our Mission
+            </h2>
+            <p className="text-gray-300">
+              To deliver exceptional personalized celebration experiences that create lasting memories for our customers through innovative surprise services.
+            </p>
           </motion.div>
         </div>
-      </section>
-      
-      {/* Founders Section */}
-      <section className="py-16 px-6 md:px-10 bg-black/20 backdrop-blur-sm">
-        <div className="max-w-5xl mx-auto">
+
+        {/* Values Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="text-center"
+        >
+          <h2 className="text-3xl font-bold mb-8">Our Values</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                title: "Innovation",
+                description: "Constantly pushing boundaries to create unique celebration experiences",
+                icon: <Lightbulb className="w-6 h-6" />
+              },
+              {
+                title: "Personalization",
+                description: "Tailoring every experience to match individual preferences",
+                icon: <UserCircle className="w-6 h-6" />
+              },
+              {
+                title: "Quality",
+                description: "Maintaining the highest standards in every service we deliver",
+                icon: <Award className="w-6 h-6" />
+              }
+            ].map((value, index) => (
+              <motion.div
+                key={value.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 + (index * 0.1) }}
+                className="bg-black/20 backdrop-blur-md rounded-xl p-6"
+              >
+                <div className="bg-gradient-to-br from-sylonow-purple to-sylonow-gold p-3 rounded-lg mb-4 mx-auto w-fit">
+                  {value.icon}
+                </div>
+                <h3 className="text-xl font-semibold mb-3">{value.title}</h3>
+                <p className="text-gray-300">{value.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Founders Section */}
+        <section className="mt-24 mb-24">
           <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 font-display">
-              Meet Our <span className="text-sylonow-gold">Founders</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+              Meet Our <span className="gradient-text">Founders</span>
             </h2>
-            <p className="text-gray-300 max-w-3xl mx-auto">
+            <p className="text-gray-300 max-w-3xl mx-auto text-lg">
               The visionaries behind Sylonow who are passionate about creating memorable experiences 
               and redefining the celebration industry.
             </p>
           </motion.div>
-          
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-          >
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {founders.map((founder, index) => (
               <motion.div
-                key={index}
-                custom={index}
-                variants={giftVariants}
-                initial="hidden"
-                animate="visible"
-                whileHover="hover"
-                className="bg-gradient-to-br from-[#2a1a5e]/80 to-[#1a0938]/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-xl border border-purple-500/10"
+                key={founder.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
+                className="bg-black/20 backdrop-blur-md rounded-xl overflow-hidden"
               >
-                <div className="h-48 bg-gradient-to-r from-sylonow-purple/30 to-sylonow-gold/30 flex items-center justify-center overflow-hidden relative">
-                  {/* Placeholder for founder image */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-70"></div>
-                  
+                <div className="h-48 bg-gradient-to-r from-sylonow-purple/30 to-sylonow-gold/30 flex items-center justify-center relative">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                   <motion.div
-                    className="w-32 h-32 rounded-full bg-sylonow-purple/50 backdrop-blur-sm relative overflow-hidden border-4 border-sylonow-gold/30 z-10"
+                    className="w-32 h-32 rounded-full bg-sylonow-purple/50 backdrop-blur-sm relative overflow-hidden border-4 border-sylonow-gold/30 z-10 flex items-center justify-center"
                     whileHover={{ scale: 1.05 }}
                   >
-                    <div className="absolute inset-0 flex items-center justify-center text-3xl font-bold text-white">
+                    <span className="text-4xl font-bold text-white">
                       {founder.name.charAt(0)}
-                    </div>
+                    </span>
                   </motion.div>
                 </div>
                 
                 <div className="p-6 text-center">
-                  <h3 className="text-xl font-bold mb-1 font-montserrat">{founder.name}</h3>
-                  <p className="text-sylonow-gold mb-4 text-sm font-medium tracking-wider">{founder.role}</p>
-                  
-                  <blockquote className="italic text-gray-300 relative z-10">
+                  <h3 className="text-xl font-bold mb-2 font-montserrat">{founder.name}</h3>
+                  <p className="text-sylonow-gold mb-4 text-sm font-medium">{founder.role}</p>
+                  <blockquote className="italic text-gray-300 relative">
                     <span className="text-5xl absolute -top-6 -left-2 opacity-10">"</span>
                     {founder.quote}
                     <span className="text-5xl absolute -bottom-10 -right-2 opacity-10">"</span>
@@ -191,87 +268,55 @@ const About = () => {
                 </div>
               </motion.div>
             ))}
-          </motion.div>
-        </div>
-      </section>
-      
-      {/* Investor Section */}
-      <section className="py-16 px-6 md:px-10">
-        <div className="max-w-4xl mx-auto">
+          </div>
+        </section>
+
+        {/* Investor Section */}
+        <section className="mb-24">
           <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-            className="text-center mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-3 font-display">
-              Backed By <span className="text-sylonow-gold">Visionary Investor</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+              Backed By <span className="gradient-text">Startup Whisperer</span>
             </h2>
           </motion.div>
-          
+
           <motion.div
-            variants={giftVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover="hover"
-            className="bg-gradient-to-br from-[#2a1a5e]/60 to-[#1a0938]/60 backdrop-blur-sm p-8 rounded-xl border border-purple-500/10 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="bg-black/20 backdrop-blur-md rounded-xl p-8 max-w-3xl mx-auto"
           >
-            <div className="flex items-center justify-center mb-6">
-              <motion.div 
-                className="flex items-center justify-center w-16 h-16 bg-gradient-to-r from-sylonow-purple to-sylonow-gold rounded-full"
-                whileHover={{ scale: 1.05, rotate: 5 }}
-              >
-                <Star className="h-8 w-8 text-white" />
-              </motion.div>
+            <div className="text-center mb-8">
+              <div className="w-20 h-20 bg-gradient-to-r from-sylonow-purple to-sylonow-gold rounded-full flex items-center justify-center mx-auto mb-6">
+                <Star className="h-10 w-10 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold font-montserrat mb-2">{investor.name}</h3>
+              <p className="text-sylonow-gold">{investor.role}</p>
             </div>
-            
-            <blockquote className="text-xl text-center italic text-gray-200 relative z-10 mb-6">
+
+            <blockquote className="text-xl text-center italic text-gray-300 relative mb-8">
               <span className="text-6xl absolute -top-10 -left-2 opacity-10 text-sylonow-gold">"</span>
               {investor.quote}
               <span className="text-6xl absolute -bottom-16 -right-2 opacity-10 text-sylonow-gold">"</span>
             </blockquote>
-            
+
             <div className="text-center">
-              <h3 className="text-2xl font-bold font-montserrat">{investor.name}</h3>
-              <p className="text-sylonow-gold">{investor.role}</p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-      
-      {/* Mission Section */}
-      <section className="py-16 px-6 md:px-10 bg-gradient-to-b from-[#2a1a5e]/50 to-[#1a0938]/50">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 font-display">
-              Our <span className="text-sylonow-gold">Vision</span>
-            </h2>
-            
-            <p className="text-xl text-gray-300 mb-8 font-poppins">
-              We envision a world where every celebration is extraordinary, 
-              where moments of joy are crafted with precision and care, and where 
-              creating unforgettable memories is accessible to everyone.
-            </p>
-            
-            <motion.div
-              className="inline-block"
-              whileHover={{ scale: 1.05 }}
-            >
               <a 
-                href="/" 
+                href="https://www.najilhameed.com" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block px-8 py-3 bg-gradient-to-r from-sylonow-purple to-sylonow-gold rounded-full text-white font-medium hover:shadow-glow transition-all"
               >
-                Back to Home
+                Visit Investor's Website
               </a>
-            </motion.div>
+            </div>
           </motion.div>
-        </div>
-      </section>
-      
+        </section>
+      </div>
       <Footer />
     </div>
   );
