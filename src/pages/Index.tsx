@@ -154,19 +154,19 @@ const Index = () => {
           >
             {/* Heading */}
             <motion.h1 
-              className="hero-heading jersey-15-regular text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-reveal-mobile px-2 sm:px-0"
-              style={{ '--delay': '0.1s', fontWeight: 'normal' } as React.CSSProperties}
+              className="hero-heading jersey-15-regular text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-reveal-mobile px-2 sm:px-0 font-jersey"
+              style={{ '--delay': '0.1s' } as React.CSSProperties}
             >
-              Make Every Moment
-              <span className="gradient-text block mt-2 font-normal">Special</span>
-              <span className="block mt-2 text-xl sm:text-2xl md:text-3xl lg:text-4xl text-sylonow-gold/90 leading-tight jersey-15-regular font-normal">
+              <span className="jersey-15-regular text-4xl md:text-5xl lg:text-6xl xl:text-7xl">Make Every Moment</span>
+              <span className="gradient-text block mt-2 jersey-15-regular text-4xl md:text-5xl lg:text-6xl xl:text-7xl">Special</span>
+              <span className="block mt-2 text-xl sm:text-2xl md:text-3xl lg:text-4xl text-sylonow-gold/90 leading-tight jersey-15-regular">
                 Transform Celebrations with Personal Touch
               </span>
             </motion.h1>
 
             {/* Subtitle */}
             <motion.p 
-              className="hero-subtitle text-base sm:text-lg md:text-xl lg:text-2xl text-reveal-mobile text-gray-300 max-w-2xl mx-auto lg:mx-0 px-4 sm:px-0"
+              className="hero-subtitle text-base sm:text-lg md:text-xl lg:text-2xl text-reveal-mobile text-gray-300 max-w-2xl mx-auto lg:mx-0 px-4 sm:px-0 font-poppins"
               style={{ '--delay': '0.2s' } as React.CSSProperties}
             >
               Experience the joy of giving with our curated surprise boxes, making every celebration unforgettable with personalized touches.
@@ -276,8 +276,8 @@ const Index = () => {
               transition={{ duration: 0.8 }}
               className="text-center mb-12 sm:mb-16"
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold jersey-15-regular mb-3 sm:mb-4">
-                What Makes Us <span className="text-sylonow-gold">Special</span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold jersey-15-regular mb-3 sm:mb-4 font-jersey">
+                What Makes Us <span className="text-sylonow-gold jersey-15-regular">Special</span>
               </h2>
               <p className="text-gray-300 max-w-2xl mx-auto font-poppins text-sm sm:text-base px-4">
                 Creating unforgettable celebration experiences through innovation and personalization.
@@ -297,7 +297,7 @@ const Index = () => {
                 >
                   <div className="absolute w-32 h-32 bg-sylonow-purple/10 rounded-full -bottom-10 -right-10 blur-xl"></div>
                   <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">{feature.icon}</div>
-                  <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 jersey-15-regular">{feature.title}</h3>
+                  <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 jersey-15-regular font-jersey">{feature.title}</h3>
                   <p className="text-gray-300 text-sm sm:text-base font-poppins">{feature.description}</p>
                 </motion.div>
               ))}
