@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import TextRevealAnimation from './TextRevealAnimation';
 
 interface GiftBoxAnimationProps {
   onAnimationComplete: () => void;
@@ -84,7 +83,6 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
   const [isBlurred, setIsBlurred] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [isInteractionDisabled, setIsInteractionDisabled] = useState(false);
-  const [showTextReveal, setShowTextReveal] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   
@@ -165,25 +163,15 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
         setIsBlurred(false);
         setIsInteractionDisabled(false);
         setTimeout(() => {
-          setShowTextReveal(true);
+          setIsAnimationComplete(true);
+          if (onAnimationComplete) {
+            onAnimationComplete();
+          }
         }, 500);
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [isOpened, isAnimationComplete]);
-
-  const handleTextRevealComplete = useCallback(() => {
-    setShowTextReveal(false);
-    setIsAnimationComplete(true);
-    
-    // Remove touch-action restrictions
-    document.documentElement.style.removeProperty('touch-action');
-    document.body.style.removeProperty('touch-action');
-    
-    if (onAnimationComplete) {
-      onAnimationComplete();
-    }
-  }, [onAnimationComplete]);
+  }, [isOpened, isAnimationComplete, onAnimationComplete]);
 
   const handleInteraction = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (isInteractionDisabled || bowDropped) return;
@@ -250,9 +238,6 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
 
           {/* Confetti animation */}
           {showConfetti && confettiParticles}
-
-          {/* Text Reveal Animation */}
-          {showTextReveal && <TextRevealAnimation onComplete={handleTextRevealComplete} />}
 
           {!isOpened ? (
             <div className="fixed inset-0 flex items-center justify-center bg-[#FF7B7B] z-50 overflow-hidden">

@@ -5,6 +5,7 @@ const Footer = () => {
 
   const socialLinks = [
     {
+      icon: <Linkedin className="h-6 w-6" />,
       name: "LinkedIn",
       href: " https://www.linkedin.com/company/sylonow-main/",
     },
