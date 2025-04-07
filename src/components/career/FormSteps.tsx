@@ -1,17 +1,23 @@
-
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface BasicInfoStepProps {
   formData: any;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  handleCheckboxChange: (value: string) => void;
   roles: Record<string, string[]>;
 }
 
-export const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ formData, handleInputChange, roles }) => (
+export const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ 
+  formData, 
+  handleInputChange, 
+  handleCheckboxChange,
+  roles 
+}) => (
   <div className="space-y-4">
     <div className="grid md:grid-cols-2 gap-4">
       <div>
@@ -52,36 +58,37 @@ export const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ formData, handleIn
         required
       />
     </div>
+    
     <div>
-      <Label htmlFor="interestedRole">Which role interests you? *</Label>
-      <select
-        name="interestedRole"
-        id="interestedRole"
-        value={formData.interestedRole}
-        onChange={handleInputChange}
-        className="bg-white/5 border-purple-500/20 w-full rounded-md p-2 text-black"
-        required
-      >
-        <option value="" className="text-gray-500">Select a role</option>
-        {Object.entries(roles).flatMap(([category, positions]) => (
-          <optgroup key={category} label={category.charAt(0).toUpperCase() + category.slice(1)} className="text-black">
-            {positions.map(position => (
-              <option key={position} value={position} className="text-black">{position}</option>
-            ))}
-          </optgroup>
+      <Label className="mb-2 block">Select Teams *</Label>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {roles.main.map((role) => (
+          <div key={role} className="flex items-center space-x-2">
+            <Checkbox
+              id={role}
+              checked={formData.selectedTeams.includes(role)}
+              onCheckedChange={() => handleCheckboxChange(role)}
+            />
+            <Label htmlFor={role}>{role}</Label>
+          </div>
         ))}
-      </select>
+      </div>
     </div>
   </div>
 );
 
-interface AboutYouStepProps {
+interface QuestionsStepProps {
   formData: any;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  handleRadioChange: (id: string, value: string) => void;
 }
 
-export const AboutYouStep: React.FC<AboutYouStepProps> = ({ formData, handleInputChange }) => (
-  <div className="space-y-4">
+export const QuestionsStep: React.FC<QuestionsStepProps> = ({ 
+  formData, 
+  handleInputChange,
+  handleRadioChange 
+}) => (
+  <div className="space-y-6">
     <div>
       <Label htmlFor="description">Describe yourself in ONE powerful sentence *</Label>
       <Textarea
@@ -89,81 +96,27 @@ export const AboutYouStep: React.FC<AboutYouStepProps> = ({ formData, handleInpu
         id="description"
         value={formData.description}
         onChange={handleInputChange}
-        placeholder="Include your passion and talent"
-        className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
+        placeholder="Your powerful one-sentence description"
+        className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500 h-20"
         required
+        maxLength={100}
       />
     </div>
+
     <div>
-      <Label htmlFor="passion">What makes you passionate about joining Sylonow? *</Label>
+      <Label htmlFor="passion">What makes you passionate about joining Sylonow?</Label>
       <Textarea
         name="passion"
         id="passion"
         value={formData.passion}
         onChange={handleInputChange}
+        placeholder="Express your passion (up to 100 words)"
         className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
-        required
+        maxLength={500}
       />
+      <p className="text-xs text-gray-400 mt-1">Optional - Maximum 100 words</p>
     </div>
-    <div>
-      <Label htmlFor="skills">What skills do you have that can help us build something incredible? *</Label>
-      <Textarea
-        name="skills"
-        id="skills"
-        value={formData.skills}
-        onChange={handleInputChange}
-        className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
-        required
-      />
-    </div>
-    <div>
-      <Label htmlFor="motivation">What is the one thing that keeps you motivated every day? *</Label>
-      <Textarea
-        name="motivation"
-        id="motivation"
-        value={formData.motivation}
-        onChange={handleInputChange}
-        className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
-        required
-      />
-    </div>
-  </div>
-);
 
-interface PsychologicalStepProps {
-  formData: any;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  handleRadioChange: (id: string, value: string) => void;
-}
-
-export const PsychologicalStep: React.FC<PsychologicalStepProps> = ({ 
-  formData, 
-  handleInputChange, 
-  handleRadioChange 
-}) => (
-  <div className="space-y-4">
-    <div>
-      <Label htmlFor="lifeChallenge">What is one challenge in your life that you overcame and what did you learn from it? *</Label>
-      <Textarea
-        name="lifeChallenge"
-        id="lifeChallenge"
-        value={formData.lifeChallenge}
-        onChange={handleInputChange}
-        className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
-        required
-      />
-    </div>
-    <div>
-      <Label htmlFor="industryChange">If you could change one thing about the celebration industry, what would it be and why? *</Label>
-      <Textarea
-        name="industryChange"
-        id="industryChange"
-        value={formData.industryChange}
-        onChange={handleInputChange}
-        className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
-        required
-      />
-    </div>
     <div>
       <p className="mb-2">Do you enjoy taking on challenges? *</p>
       <RadioGroup
@@ -181,33 +134,24 @@ export const PsychologicalStep: React.FC<PsychologicalStepProps> = ({
         </div>
       </RadioGroup>
     </div>
-  </div>
-);
 
-interface CommitmentStepProps {
-  formData: any;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  handleRadioChange: (id: string, value: string) => void;
-}
-
-export const CommitmentStep: React.FC<CommitmentStepProps> = ({ 
-  formData, 
-  handleInputChange, 
-  handleRadioChange 
-}) => (
-  <div className="space-y-4">
     <div>
       <Label htmlFor="timeCommitment">How much time can you dedicate to Sylonow per week? *</Label>
       <Input
         name="timeCommitment"
         id="timeCommitment"
+        type="number"
+        min="1"
+        max="168"
         value={formData.timeCommitment}
         onChange={handleInputChange}
-        placeholder="e.g., 20 hours per week"
+        placeholder="Enter hours per week (e.g., 20)"
         className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
         required
       />
+      <p className="text-xs text-gray-400 mt-1">Please enter the number of hours per week</p>
     </div>
+
     <div>
       <Label htmlFor="passionMeaning">What does "passion" mean to you in one sentence? *</Label>
       <Textarea
@@ -215,23 +159,16 @@ export const CommitmentStep: React.FC<CommitmentStepProps> = ({
         id="passionMeaning"
         value={formData.passionMeaning}
         onChange={handleInputChange}
+        placeholder="Define passion in one sentence (25 words max)"
         className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
         required
+        maxLength={150}
       />
+      <p className="text-xs text-gray-400 mt-1">Maximum 25 words</p>
     </div>
+
     <div>
-      <Label htmlFor="innovation">What's one thing you would love to create or innovate at Sylonow? *</Label>
-      <Textarea
-        name="innovation"
-        id="innovation"
-        value={formData.innovation}
-        onChange={handleInputChange}
-        className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
-        required
-      />
-    </div>
-    <div>
-      <p className="mb-2">Are you interested in potential direct entry after completing your education? *</p>
+      <p className="mb-2">Are you interested in potential direct entry to company after completing your education? *</p>
       <RadioGroup
         value={formData.directEntry}
         onValueChange={(value) => handleRadioChange('directEntry', value)}

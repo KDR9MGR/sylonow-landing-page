@@ -102,6 +102,12 @@
   .font-space-grotesk {
     font-family: 'Space Grotesk', sans-serif;
   }
+  
+  .jersey-15-regular {
+    font-family: "Jersey 15", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+  }
 }
 
 @layer components {
@@ -161,6 +167,59 @@
   @keyframes shimmer {
     0% { transform: translateX(-100%) rotate(30deg); }
     100% { transform: translateX(100%) rotate(30deg); }
+  }
+
+  /* Blur Blobs */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
+    animation: float 20s ease-in-out infinite alternate;
+    opacity: 0.15;
+  }
+
+  .blob-1 {
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.8) 0%, rgba(106, 49, 201, 0.4) 100%);
+    width: 50vh;
+    height: 50vh;
+  }
+
+  .blob-2 {
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.7) 0%, rgba(170, 142, 33, 0.3) 100%);
+    width: 40vh;
+    height: 40vh;
+  }
+
+  .blob-3 {
+    background: radial-gradient(circle, rgba(233, 30, 99, 0.6) 0%, rgba(156, 39, 176, 0.3) 100%);
+    width: 35vh;
+    height: 35vh;
+  }
+
+  .blob-4 {
+    background: radial-gradient(circle, rgba(33, 150, 243, 0.5) 0%, rgba(3, 169, 244, 0.2) 100%);
+    width: 45vh;
+    height: 45vh;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.05;
+    }
+    33% {
+      transform: translate(3%, 3%) scale(1.05);
+      opacity: 0.15;
+    }
+    66% {
+      transform: translate(-3%, 2%) scale(0.95);
+      opacity: 0.1;
+    }
+    100% {
+      transform: translate(2%, -3%) scale(1);
+      opacity: 0.05;
+    }
   }
 
   /* 3D Gift Box styles */

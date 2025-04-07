@@ -19,15 +19,9 @@ export type Database = {
           email: string
           full_name: string
           id: string
-          industry_change: string | null
-          innovation: string | null
-          interested_role: string | null
-          life_challenge: string | null
-          motivation: string | null
-          opportunity: string | null
           passion: string | null
           passion_meaning: string | null
-          skills: string | null
+          selected_teams: string[] | null
           time_commitment: string | null
         }
         Insert: {
@@ -39,15 +33,9 @@ export type Database = {
           email: string
           full_name: string
           id?: string
-          industry_change?: string | null
-          innovation?: string | null
-          interested_role?: string | null
-          life_challenge?: string | null
-          motivation?: string | null
-          opportunity?: string | null
           passion?: string | null
           passion_meaning?: string | null
-          skills?: string | null
+          selected_teams?: string[] | null
           time_commitment?: string | null
         }
         Update: {
@@ -59,15 +47,9 @@ export type Database = {
           email?: string
           full_name?: string
           id?: string
-          industry_change?: string | null
-          innovation?: string | null
-          interested_role?: string | null
-          life_challenge?: string | null
-          motivation?: string | null
-          opportunity?: string | null
           passion?: string | null
           passion_meaning?: string | null
-          skills?: string | null
+          selected_teams?: string[] | null
           time_commitment?: string | null
         }
         Relationships: []

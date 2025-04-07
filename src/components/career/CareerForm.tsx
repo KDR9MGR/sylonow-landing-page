@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { ChevronRight, ChevronLeft, Check } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import FormProgress from './FormProgress';
-import { BasicInfoStep, AboutYouStep, PsychologicalStep, CommitmentStep } from './FormSteps';
+import { BasicInfoStep, QuestionsStep } from './FormSteps';
 import { formSteps, roles, initialFormData } from './CareerData';
 
 const CareerForm: React.FC = () => {
@@ -37,11 +36,23 @@ const CareerForm: React.FC = () => {
     }));
   };
 
+  const handleCheckboxChange = (role: string) => {
+    setFormData(prev => {
+      const selectedTeams = prev.selectedTeams.includes(role)
+        ? prev.selectedTeams.filter(item => item !== role)
+        : [...prev.selectedTeams, role];
+      return {
+        ...prev,
+        selectedTeams
+      };
+    });
+  };
+
   const handleNext = () => {
-    if (currentStep === 0 && (!formData.fullName || !formData.contact || !formData.email)) {
+    if (currentStep === 0 && (!formData.fullName || !formData.contact || !formData.email || formData.selectedTeams.length === 0)) {
       toast({
         title: "Required Fields",
-        description: "Please fill in all required fields to continue.",
+        description: "Please fill in all required fields and select at least one team to continue.",
         variant: "destructive",
       });
       return;
@@ -69,24 +80,18 @@ const CareerForm: React.FC = () => {
       contact: 'Contact Number',
       email: 'Email',
       description: 'Description',
-      passion: 'Passion',
-      skills: 'Skills',
-      motivation: 'Motivation',
-      lifeChallenge: 'Life Challenge',
-      industryChange: 'Industry Change',
       timeCommitment: 'Time Commitment',
-      passionMeaning: 'Passion Meaning',
-      innovation: 'Innovation'
+      passionMeaning: 'Passion Meaning'
     };
 
     const emptyFields = Object.entries(requiredFields)
       .filter(([key]) => !formData[key as keyof typeof formData])
       .map(([_, label]) => label);
 
-    if (emptyFields.length > 0) {
+    if (emptyFields.length > 0 || formData.selectedTeams.length === 0) {
       toast({
         title: "Missing Required Fields",
-        description: `Please fill in: ${emptyFields.join(', ')}`,
+        description: `Please fill in: ${emptyFields.join(', ')}${formData.selectedTeams.length === 0 ? ' and select at least one team' : ''}`,
         variant: "destructive",
         duration: 5000,
       });
@@ -101,19 +106,13 @@ const CareerForm: React.FC = () => {
           full_name: formData.fullName,
           contact: formData.contact,
           email: formData.email,
-          interested_role: formData.interestedRole,
+          selected_teams: formData.selectedTeams,
           description: formData.description,
           passion: formData.passion,
-          skills: formData.skills,
           challenges: formData.challenges,
-          motivation: formData.motivation,
-          opportunity: formData.opportunity,
-          life_challenge: formData.lifeChallenge,
-          industry_change: formData.industryChange,
           time_commitment: formData.timeCommitment,
-          direct_entry: formData.directEntry,
           passion_meaning: formData.passionMeaning,
-          innovation: formData.innovation
+          direct_entry: formData.directEntry
         }]);
 
       if (error) {
@@ -123,7 +122,7 @@ const CareerForm: React.FC = () => {
 
       toast({
         title: "Application Submitted Successfully! 🎉",
-        description: "Thank you for applying. We'll review your application and get back to you soon.",
+        description: "Thanks for being part of this program, you will get mail for interview scheduled.",
         duration: 6000,
       });
       
@@ -147,23 +146,31 @@ const CareerForm: React.FC = () => {
     const currentStepContent = (() => {
       switch (currentStep) {
         case 0:
-          return <BasicInfoStep formData={formData} handleInputChange={handleInputChange} roles={roles} />;
+          return (
+            <BasicInfoStep 
+              formData={formData} 
+              handleInputChange={handleInputChange} 
+              handleCheckboxChange={handleCheckboxChange}
+              roles={roles} 
+            />
+          );
         case 1:
-          return <AboutYouStep formData={formData} handleInputChange={handleInputChange} />;
-        case 2:
-          return <PsychologicalStep 
-                   formData={formData} 
-                   handleInputChange={handleInputChange} 
-                   handleRadioChange={handleRadioChange} 
-                 />;
-        case 3:
-          return <CommitmentStep 
-                   formData={formData} 
-                   handleInputChange={handleInputChange} 
-                   handleRadioChange={handleRadioChange} 
-                 />;
+          return (
+            <QuestionsStep 
+              formData={formData} 
+              handleInputChange={handleInputChange} 
+              handleRadioChange={handleRadioChange} 
+            />
+          );
         default:
-          return <BasicInfoStep formData={formData} handleInputChange={handleInputChange} roles={roles} />;
+          return (
+            <BasicInfoStep 
+              formData={formData} 
+              handleInputChange={handleInputChange} 
+              handleCheckboxChange={handleCheckboxChange}
+              roles={roles} 
+            />
+          );
       }
     })();
 

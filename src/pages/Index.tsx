@@ -132,28 +132,34 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#121212] to-[#2a1a5e] overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-[#121212] to-[#2a1a5e] overflow-x-hidden relative">
+      {/* Blurred Blob Elements */}
+      <div className="blob blob-1 top-[10%] right-[5%] opacity-[0.12]"></div>
+      <div className="blob blob-2 bottom-[20%] left-[5%] opacity-[0.08]"></div>
+      <div className="blob blob-3 top-[60%] right-[15%] opacity-[0.06]"></div>
+      <div className="blob blob-4 top-[30%] left-[10%] opacity-[0.05]"></div>
+      
       <div className="sticky top-0 z-50 bg-gradient-to-b from-[#121212]/95 to-[#121212]/80 backdrop-blur-md">
         <Navbar />
       </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-16 relative z-10">
         {/* Hero Section */}
-        <div className="hero-section relative flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+        <div className="hero-section relative flex flex-col items-start lg:flex-row gap-8 lg:gap-12">
           {/* Left Content */}
           <motion.div 
-            className="flex-1 space-y-6 sm:space-y-8 md:space-y-10 text-center lg:text-left relative"
+            className="flex-1 space-y-6 sm:space-y-8 md:space-y-10 text-left lg:text-left relative"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
             {/* Heading */}
             <motion.h1 
-              className="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-reveal-mobile px-2 sm:px-0"
-              style={{ '--delay': '0.1s' } as React.CSSProperties}
+              className="hero-heading jersey-15-regular text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-reveal-mobile px-2 sm:px-0"
+              style={{ '--delay': '0.1s', fontWeight: 'normal' } as React.CSSProperties}
             >
               Make Every Moment
-              <span className="gradient-text block mt-2">Special</span>
-              <span className="block mt-2 text-xl sm:text-2xl md:text-3xl lg:text-4xl text-sylonow-gold/90 leading-tight">
+              <span className="gradient-text block mt-2 font-normal">Special</span>
+              <span className="block mt-2 text-xl sm:text-2xl md:text-3xl lg:text-4xl text-sylonow-gold/90 leading-tight jersey-15-regular font-normal">
                 Transform Celebrations with Personal Touch
               </span>
             </motion.h1>
@@ -168,23 +174,23 @@ const Index = () => {
 
             {/* Mobile: Timer Section */}
             <motion.div 
-              className="hero-timer block lg:hidden text-reveal-mobile w-full mx-auto mb-8"
+              className="hero-timer block lg:hidden text-reveal-mobile w-full"
               style={{ '--delay': '0.3s' } as React.CSSProperties}
             >
-              <div className="max-w-[350px] mx-auto px-2">
+              <div className="mb-8">
                 <CountdownTimer />
               </div>
             </motion.div>
 
             {/* Special Invite Button */}
             <motion.div 
-              className="hero-special-invite text-reveal-mobile relative z-10 w-full mx-auto"
+              className="hero-special-invite text-reveal-mobile relative z-10 w-full"
               style={{ '--delay': '0.4s' } as React.CSSProperties}
             >
-              <div className="max-w-[350px] mx-auto px-2">
-                <Link to="/contact" className="block w-full sm:w-auto">
+              <div className="max-w-[350px] mx-auto px-4">
+                <Link to="/contact" className="block w-full">
                   <Button
-                    className="w-full sm:w-auto bg-gradient-to-r from-sylonow-purple to-sylonow-gold hover:opacity-90 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="w-full bg-gradient-to-r from-sylonow-purple to-sylonow-gold hover:opacity-90 text-white px-6 py-3 rounded-full text-base font-medium shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     Get Special Invite <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
@@ -195,11 +201,9 @@ const Index = () => {
             {/* Desktop: Timer Section */}
             <motion.div 
               className="hero-timer hidden lg:block text-reveal-mobile mt-16"
-              style={{ '--delay': '0.8s' } as React.CSSProperties}
+              style={{ '--delay': '0.3s' } as React.CSSProperties}
             >
-              <div className="max-w-[450px]">
-                <CountdownTimer />
-              </div>
+              <CountdownTimer />
             </motion.div>
           </motion.div>
 
@@ -256,11 +260,15 @@ const Index = () => {
               />
             </div>
           </motion.div>
+
         </div>
 
         {/* Features Section */}
-        <section className="py-16 sm:py-20 px-4 sm:px-6 md:px-10 bg-black/20 backdrop-blur-md mt-16 sm:mt-20">
-          <div className="max-w-6xl mx-auto">
+        <section className="py-16 sm:py-20 px-4 sm:px-6 md:px-10 bg-black/20 backdrop-blur-md mt-16 sm:mt-20 relative rounded-xl">
+          {/* Section Blob */}
+          <div className="blob blob-2 opacity-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+          
+          <div className="max-w-6xl mx-auto relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -268,7 +276,7 @@ const Index = () => {
               transition={{ duration: 0.8 }}
               className="text-center mb-12 sm:mb-16"
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display mb-3 sm:mb-4">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold jersey-15-regular mb-3 sm:mb-4">
                 What Makes Us <span className="text-sylonow-gold">Special</span>
               </h2>
               <p className="text-gray-300 max-w-2xl mx-auto font-poppins text-sm sm:text-base px-4">
@@ -285,10 +293,11 @@ const Index = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.2 }}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  className="bg-gradient-to-br from-[#2a1a5e]/50 to-[#1a0938]/50 backdrop-blur-sm p-6 sm:p-8 rounded-xl border border-purple-500/10"
+                  className="bg-gradient-to-br from-[#2a1a5e]/50 to-[#1a0938]/50 backdrop-blur-sm p-6 sm:p-8 rounded-xl border border-purple-500/10 relative overflow-hidden"
                 >
+                  <div className="absolute w-32 h-32 bg-sylonow-purple/10 rounded-full -bottom-10 -right-10 blur-xl"></div>
                   <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">{feature.icon}</div>
-                  <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 font-montserrat">{feature.title}</h3>
+                  <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 jersey-15-regular">{feature.title}</h3>
                   <p className="text-gray-300 text-sm sm:text-base font-poppins">{feature.description}</p>
                 </motion.div>
               ))}
