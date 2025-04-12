@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
       { label: 'Help Center', href: '/help' },
       { label: 'FAQs', href: '/faqs' },
       { label: 'Contact Support', href: '/contact' },
-      { label: 'System Status', href: '/status' },
+     
     ],
   };
 
