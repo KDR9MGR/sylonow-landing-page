@@ -11,6 +11,13 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Career from "./pages/Career";
 import NotFound from "./pages/NotFound";
+import FAQs from './pages/FAQs';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import CookiePolicy from './pages/CookiePolicy';
+import GDPR from './pages/GDPR';
+import Status from './pages/Status';
+import HelpCenter from './pages/HelpCenter';
 
 const queryClient = new QueryClient();
 
@@ -39,6 +46,14 @@ const App = () => {
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/career" element={<Career />} />
+                    <Route path="/faqs" element={<FAQs />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="/terms-of-service" element={<TermsOfService />} />
+                    <Route path="/cookie-policy" element={<CookiePolicy />} />
+                    <Route path="/gdpr" element={<GDPR />} />
+                    {/* Help Center Routes */}
+                    <Route path="/help" element={<HelpCenter />} />
+                    <Route path="/status" element={<Status />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>

@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import CareerHeader from '@/components/career/CareerHeader';
 import CareerForm from '@/components/career/CareerForm';
 import AvailableRoles from '@/components/career/AvailableRoles';
@@ -30,13 +30,20 @@ const Career = () => {
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://sylonow.com/career" />
       </Helmet>
-      <div className="min-h-screen bg-gradient-to-b from-[#121212] to-[#2a1a5e] text-white">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
         <Navbar />
-        <div className="max-w-6xl mx-auto px-4 pt-20 pb-20">
+        <div className="max-w-6xl mx-auto px-4 pt-20 pb-20 flex-grow">
           <CareerHeader />
-          <CareerForm />
-          <AvailableRoles roles={roles} />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <CareerForm />
+            </div>
+            <div className="lg:col-span-1">
+              <AvailableRoles roles={roles} />
+            </div>
+          </div>
         </div>
+        <Footer />
       </div>
     </>
   );

@@ -6,43 +6,43 @@
 
 @layer base {
   :root {
-    --background: 260 15% 10%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
 
-    --card: 260 15% 15%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
 
-    --popover: 260 15% 12%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
 
     --primary: 262 83% 58%;
-    --primary-foreground: 210 40% 98%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 262 83% 25%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 240 5.9% 90%;
+    --secondary-foreground: 240 5.9% 10%;
 
-    --muted: 260 15% 20%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
 
-    --accent: 270 95% 75%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 260 15% 20%;
-    --input: 260 15% 20%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
     --ring: 262 83% 58%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 260 15% 12%;
-    --sidebar-foreground: 210 40% 98%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 240 10% 3.9%;
     --sidebar-primary: 262 83% 58%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 260 15% 20%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 260 15% 25%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 240 5.9% 90%;
     --sidebar-ring: 262 83% 58%;
   }
 
@@ -82,12 +82,12 @@
 
   /* Updated typography styles */
   h1 {
-    @apply font-montserrat font-bold leading-tight;
+    @apply font-montserrat font-bold leading-tight text-gray-900;
     letter-spacing: -0.02em;
   }
 
   h2, h3, h4, h5, h6 {
-    @apply font-space-grotesk leading-tight;
+    @apply font-space-grotesk leading-tight text-gray-800;
     letter-spacing: -0.01em;
   }
   
@@ -169,36 +169,36 @@
     100% { transform: translateX(100%) rotate(30deg); }
   }
 
-  /* Blur Blobs */
+  /* Updated Blur Blobs for light theme */
   .blob {
     position: absolute;
     border-radius: 50%;
     filter: blur(80px);
     z-index: -1;
     animation: float 20s ease-in-out infinite alternate;
-    opacity: 0.15;
+    opacity: 0.1;
   }
 
   .blob-1 {
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.8) 0%, rgba(106, 49, 201, 0.4) 100%);
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, rgba(106, 49, 201, 0.1) 100%);
     width: 50vh;
     height: 50vh;
   }
 
   .blob-2 {
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.7) 0%, rgba(170, 142, 33, 0.3) 100%);
+    background: radial-gradient(circle, rgba(255, 27, 109, 0.2) 0%, rgba(255, 27, 109, 0.1) 100%);
     width: 40vh;
     height: 40vh;
   }
 
   .blob-3 {
-    background: radial-gradient(circle, rgba(233, 30, 99, 0.6) 0%, rgba(156, 39, 176, 0.3) 100%);
+    background: radial-gradient(circle, rgba(233, 30, 99, 0.15) 0%, rgba(156, 39, 176, 0.1) 100%);
     width: 35vh;
     height: 35vh;
   }
 
   .blob-4 {
-    background: radial-gradient(circle, rgba(33, 150, 243, 0.5) 0%, rgba(3, 169, 244, 0.2) 100%);
+    background: radial-gradient(circle, rgba(33, 150, 243, 0.15) 0%, rgba(3, 169, 244, 0.1) 100%);
     width: 45vh;
     height: 45vh;
   }

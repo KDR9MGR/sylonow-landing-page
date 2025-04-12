@@ -24,6 +24,7 @@ export default {
 				display: ["Playfair Display", ...fontFamily.serif],
 				montserrat: ["Montserrat", ...fontFamily.sans],
 				poppins: ["Poppins", ...fontFamily.sans],
+				jersey: ["Jersey M54", ...fontFamily.sans],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -32,12 +33,14 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				sylonow: {
-					purple: "#8B5CF6",
-					lightpurple: "#A78BFA",
-					darkpurple: "#6D28D9",
-					gold: "#D4AF37",
-					black: "#1E1B30",
-					dark: "#13111E",
+					purple: "#2D1B69",
+					lightpurple: "#8B5CF6",
+					darkpurple: "#1E1B30",
+					gold: "#FF1B6D",
+					black: "#121212",
+					dark: "#0A0A0A",
+					gray: "#666666",
+					lightgray: "#999999",
 				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
@@ -83,13 +86,16 @@ export default {
 				},
 			},
 			boxShadow: {
-				glow: "0 0 15px rgba(139, 92, 246, 0.5)",
-				"glow-lg": "0 0 30px rgba(139, 92, 246, 0.6)",
+				glow: "0 0 15px rgba(255, 27, 109, 0.5)",
+				"glow-lg": "0 0 30px rgba(255, 27, 109, 0.6)",
+				"button": "0 8px 16px rgba(255, 27, 109, 0.25)",
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+				'2xl': '1rem',
+				'3xl': '1.5rem',
 			},
 			keyframes: {
 				'accordion-down': {
@@ -156,6 +162,18 @@ export default {
 					'0%': { transform: 'translateX(-100%) rotate(30deg)' },
 					'100%': { transform: 'translateX(100%) rotate(30deg)' }
 				},
+				'smooth-bounce': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-5px)' }
+				},
+				'text-gradient': {
+					'0%': { backgroundPosition: '0% 50%' },
+					'100%': { backgroundPosition: '100% 50%' }
+				},
+				'button-gradient': {
+					'0%': { backgroundPosition: '0% 50%' },
+					'100%': { backgroundPosition: '200% 50%' }
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -174,7 +192,20 @@ export default {
 				'gift-shine': 'gift-shine 3s linear infinite',
 				'pulse-scale': 'pulse-scale 2s ease-in-out infinite',
 				'shimmer': 'shimmer 3s infinite',
-			}
+				'smooth-bounce': 'smooth-bounce 2s ease-in-out infinite',
+				'text-gradient': 'text-gradient 3s linear infinite',
+				'button-gradient': 'button-gradient 3s linear infinite',
+			},
+			backgroundImage: {
+				'gradient-primary': 'linear-gradient(135deg, #2D1B69 0%, #FF1B6D 100%)',
+				'gradient-button': 'linear-gradient(90deg, #FF1B6D 0%, #2D1B69 50%, #FF1B6D 100%)',
+				'gradient-text': 'linear-gradient(135deg, #FF1B6D 0%, #2D1B69 100%)',
+			},
+			fontSize: {
+				'heading-1': ['3.5rem', { lineHeight: '1.2', letterSpacing: '-0.02em' }],
+				'heading-2': ['2.5rem', { lineHeight: '1.3', letterSpacing: '-0.01em' }],
+				'subtitle': ['1.125rem', { lineHeight: '1.6', letterSpacing: '0' }],
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

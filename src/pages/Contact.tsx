@@ -10,7 +10,7 @@ import { Form, FormField, FormItem, FormControl, FormLabel, FormMessage } from "
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Phone, MapPin, Send, Gift, PartyPopper } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Clock, PartyPopper } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 const formSchema = z.object({
@@ -93,27 +93,47 @@ const Contact = () => {
   };
 
   const contactInfo = [
-    { icon: <Mail className="h-5 w-5" />, label: 'Email', value: 'info@sylonow.com' },
-    
-    { icon: <MapPin className="h-5 w-5" />, label: 'Address', value: 'Bengaluru, Karnataka, India' },
+    { 
+      icon: <Mail className="h-5 w-5" />, 
+      label: 'Email', 
+      value: 'info@sylonow.com',
+      link: 'mailto:info@sylonow.com'
+    },
+    { 
+      icon: <Phone className="h-5 w-5" />, 
+      label: 'Phone', 
+      value: '+91 (800) 123-4567',
+      link: 'tel:+918001234567'
+    },
+    { 
+      icon: <MapPin className="h-5 w-5" />, 
+      label: 'Address', 
+      value: 'Bengaluru, Karnataka, India',
+      link: 'https://maps.google.com/?q=Bengaluru,Karnataka,India'
+    },
+    { 
+      icon: <Clock className="h-5 w-5" />, 
+      label: 'Business Hours', 
+      value: 'Mon - Fri, 9:00 AM - 6:00 PM IST'
+    },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#121212] to-[#2a1a5e] text-white">
+    <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       
       {/* Hero Section */}
-      <section className="pt-20 pb-16 px-6 md:px-10">
+      <section className="pt-24 pb-16 px-6 md:px-10">
         <div className="max-w-5xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 font-montserrat tracking-tight">
-              Get In <span className="text-sylonow-gold">Touch</span>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 font-montserrat tracking-tight text-gray-900">
+              Get In <span className="text-pink-600">Touch</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-12 font-poppins">
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-12 font-poppins">
               Have questions about Sylonow? We'd love to hear from you!
             </p>
           </motion.div>
@@ -121,36 +141,62 @@ const Contact = () => {
       </section>
       
       {/* Contact Form Section */}
-      <section className="pb-20 px-6 md:px-10">
+      <section className="pb-24 px-6 md:px-10">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
             {/* Contact Information */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
+              className="md:sticky md:top-24"
             >
-              <div className="bg-white/5 backdrop-blur-md rounded-xl p-8 border border-purple-500/10 h-full">
-                <h2 className="text-2xl font-bold mb-6 font-montserrat">Contact Information</h2>
+              <div className="bg-gray-50 rounded-2xl p-8">
+                <h2 className="text-2xl font-bold mb-8 font-montserrat text-gray-900">Contact Information</h2>
                 
-                <div className="space-y-6">
+                <div className="space-y-8">
                   {contactInfo.map((item, index) => (
                     <motion.div 
                       key={index}
-                      className="flex items-center gap-4"
+                      className="flex items-center gap-4 group"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 + (index * 0.1) }}
                     >
-                      <div className="w-10 h-10 rounded-full bg-sylonow-purple/20 flex items-center justify-center text-sylonow-gold">
+                      <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-pink-600 shadow-sm">
                         {item.icon}
                       </div>
                       <div>
-                        <p className="text-sm text-gray-400">{item.label}</p>
-                        <p className="text-white font-medium">{item.value}</p>
+                        <p className="text-sm text-gray-500 mb-1">{item.label}</p>
+                        {item.link ? (
+                          <a 
+                            href={item.link}
+                            target={item.link.startsWith('http') ? '_blank' : undefined}
+                            rel={item.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                            className="text-gray-900 font-medium hover:text-pink-600 transition-colors"
+                          >
+                            {item.value}
+                          </a>
+                        ) : (
+                          <p className="text-gray-900 font-medium">{item.value}</p>
+                        )}
                       </div>
                     </motion.div>
                   ))}
+                </div>
+
+                <div className="mt-12 p-6 bg-white rounded-xl shadow-sm">
+                  <h3 className="text-lg font-semibold mb-3 text-gray-900">Need Quick Help?</h3>
+                  <p className="text-gray-600 text-sm mb-4">
+                    Check out our help center for instant answers to common questions.
+                  </p>
+                  <Button 
+                    variant="outline" 
+                    className="w-full bg-white hover:bg-gray-50 text-gray-900 border-gray-200"
+                    onClick={() => window.location.href = '/help'}
+                  >
+                    Visit Help Center
+                  </Button>
                 </div>
               </div>
             </motion.div>
@@ -164,7 +210,7 @@ const Contact = () => {
             >
               {submitted ? (
                 <motion.div 
-                  className="bg-white/5 backdrop-blur-md rounded-xl p-8 border border-purple-500/10 text-center py-16"
+                  className="bg-white rounded-2xl p-12 shadow-sm text-center"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ type: "spring", stiffness: 100, damping: 15 }}
@@ -173,13 +219,13 @@ const Contact = () => {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
                     transition={{ delay: 0.3, duration: 0.5 }}
-                    className="mx-auto w-20 h-20 rounded-full bg-gradient-to-r from-sylonow-purple to-sylonow-gold flex items-center justify-center mb-6"
+                    className="mx-auto w-20 h-20 rounded-full bg-pink-50 flex items-center justify-center mb-6"
                   >
-                    <PartyPopper className="h-10 w-10 text-white" />
+                    <PartyPopper className="h-10 w-10 text-pink-600" />
                   </motion.div>
                   
-                  <h2 className="text-2xl font-bold mb-3 font-montserrat">Message Sent!</h2>
-                  <p className="text-gray-300 mb-6">
+                  <h2 className="text-2xl font-bold mb-3 font-montserrat text-gray-900">Message Sent!</h2>
+                  <p className="text-gray-600 mb-8">
                     Thank you for contacting us. We'll get back to you as soon as possible.
                   </p>
                   
@@ -187,14 +233,14 @@ const Contact = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setSubmitted(false)}
-                    className="bg-sylonow-purple/20 text-sylonow-gold px-6 py-3 rounded-lg font-medium hover:bg-sylonow-purple/30 transition-colors"
+                    className="bg-gray-50 text-gray-900 px-6 py-3 rounded-xl font-medium hover:bg-gray-100 transition-colors"
                   >
                     Send Another Message
                   </motion.button>
                 </motion.div>
               ) : (
-                <div className="bg-white/5 backdrop-blur-md rounded-xl p-8 border border-purple-500/10">
-                  <h2 className="text-2xl font-bold mb-6 font-montserrat">Send Us A Message</h2>
+                <div className="bg-white rounded-2xl p-8 shadow-sm">
+                  <h2 className="text-2xl font-bold mb-8 font-montserrat text-gray-900">Send Us A Message</h2>
                   
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
@@ -209,15 +255,15 @@ const Contact = () => {
                             name="name"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel className="text-white">Name</FormLabel>
+                                <FormLabel className="text-gray-700">Name</FormLabel>
                                 <FormControl>
                                   <Input
                                     placeholder="Your name"
-                                    className="bg-white/5 border-white/10 text-white"
+                                    className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400"
                                     {...field}
                                   />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage className="text-red-500" />
                               </FormItem>
                             )}
                           />
@@ -233,16 +279,16 @@ const Contact = () => {
                             name="email"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel className="text-white">Email</FormLabel>
+                                <FormLabel className="text-gray-700">Email</FormLabel>
                                 <FormControl>
                                   <Input
                                     type="email"
                                     placeholder="Your email"
-                                    className="bg-white/5 border-white/10 text-white"
+                                    className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400"
                                     {...field}
                                   />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage className="text-red-500" />
                               </FormItem>
                             )}
                           />
@@ -259,15 +305,15 @@ const Contact = () => {
                           name="phone"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-white">Phone (Optional)</FormLabel>
+                              <FormLabel className="text-gray-700">Phone (Optional)</FormLabel>
                               <FormControl>
                                 <Input
                                   placeholder="Your phone number"
-                                  className="bg-white/5 border-white/10 text-white"
+                                  className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400"
                                   {...field}
                                 />
                               </FormControl>
-                              <FormMessage />
+                              <FormMessage className="text-red-500" />
                             </FormItem>
                           )}
                         />
@@ -283,15 +329,15 @@ const Contact = () => {
                           name="message"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-white">Message</FormLabel>
+                              <FormLabel className="text-gray-700">Message</FormLabel>
                               <FormControl>
                                 <Textarea
                                   placeholder="Your message"
-                                  className="bg-white/5 border-white/10 text-white min-h-[120px]"
+                                  className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 min-h-[150px] resize-none"
                                   {...field}
                                 />
                               </FormControl>
-                              <FormMessage />
+                              <FormMessage className="text-red-500" />
                             </FormItem>
                           )}
                         />
@@ -301,19 +347,17 @@ const Contact = () => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
                       >
                         <Button 
                           type="submit" 
-                          className="w-full bg-gradient-to-r from-sylonow-purple to-sylonow-gold hover:opacity-90 transition-all py-6 font-medium"
+                          className="w-full bg-pink-600 hover:bg-pink-700 text-white transition-all py-6 text-lg font-medium rounded-xl"
                           disabled={isSubmitting}
                         >
                           {isSubmitting ? (
                             "Sending..."
                           ) : (
                             <span className="flex items-center justify-center gap-2">
-                              Send Message <Send className="h-4 w-4 ml-1" />
+                              Send Message <Send className="h-5 w-5 ml-1" />
                             </span>
                           )}
                         </Button>
@@ -322,10 +366,6 @@ const Contact = () => {
                   </Form>
                 </div>
               )}
-              
-              {/* Decorative gift box elements */}
-              <div className="absolute -top-6 -right-6 w-12 h-12 bg-sylonow-gold/30 rounded-lg rotate-12 hidden md:block"></div>
-              <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-sylonow-purple/30 rounded-lg -rotate-12 hidden md:block"></div>
             </motion.div>
           </div>
         </div>

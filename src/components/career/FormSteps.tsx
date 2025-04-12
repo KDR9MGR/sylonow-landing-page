@@ -18,35 +18,35 @@ export const BasicInfoStep: React.FC<BasicInfoStepProps> = ({
   handleCheckboxChange,
   roles 
 }) => (
-  <div className="space-y-4">
-    <div className="grid md:grid-cols-2 gap-4">
+  <div className="space-y-6">
+    <div className="grid md:grid-cols-2 gap-6">
       <div>
-        <Label htmlFor="fullName">Full Name *</Label>
+        <Label htmlFor="fullName" className="text-gray-700">Full Name *</Label>
         <Input
           name="fullName"
           id="fullName"
           value={formData.fullName}
           onChange={handleInputChange}
           placeholder="Your full name"
-          className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
+          className="mt-1 bg-white border-gray-200 focus:border-pink-500 focus:ring-pink-500"
           required
         />
       </div>
       <div>
-        <Label htmlFor="contact">Contact Number *</Label>
+        <Label htmlFor="contact" className="text-gray-700">Contact Number *</Label>
         <Input
           name="contact"
           id="contact"
           value={formData.contact}
           onChange={handleInputChange}
           placeholder="Your contact number"
-          className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
+          className="mt-1 bg-white border-gray-200 focus:border-pink-500 focus:ring-pink-500"
           required
         />
       </div>
     </div>
     <div>
-      <Label htmlFor="email">Email ID *</Label>
+      <Label htmlFor="email" className="text-gray-700">Email ID *</Label>
       <Input
         name="email"
         id="email"
@@ -54,13 +54,13 @@ export const BasicInfoStep: React.FC<BasicInfoStepProps> = ({
         value={formData.email}
         onChange={handleInputChange}
         placeholder="Your email address"
-        className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
+        className="mt-1 bg-white border-gray-200 focus:border-pink-500 focus:ring-pink-500"
         required
       />
     </div>
     
-    <div>
-      <Label className="mb-2 block">Select Teams *</Label>
+    <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-6 border border-pink-100">
+      <div className="text-gray-700 mb-4 block">Select Teams *</div>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {roles.main.map((role) => (
           <div key={role} className="flex items-center space-x-2">
@@ -68,8 +68,11 @@ export const BasicInfoStep: React.FC<BasicInfoStepProps> = ({
               id={role}
               checked={formData.selectedTeams.includes(role)}
               onCheckedChange={() => handleCheckboxChange(role)}
+              className="text-pink-600 focus:ring-pink-500"
             />
-            <Label htmlFor={role}>{role}</Label>
+            <Label htmlFor={role} className="text-gray-600 cursor-pointer hover:text-pink-600 transition-colors">
+              {role}
+            </Label>
           </div>
         ))}
       </div>
@@ -90,53 +93,54 @@ export const QuestionsStep: React.FC<QuestionsStepProps> = ({
 }) => (
   <div className="space-y-6">
     <div>
-      <Label htmlFor="description">Describe yourself in ONE powerful sentence *</Label>
+      <Label htmlFor="description" className="text-gray-700">Describe yourself in ONE powerful sentence *</Label>
       <Textarea
         name="description"
         id="description"
         value={formData.description}
         onChange={handleInputChange}
         placeholder="Your powerful one-sentence description"
-        className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500 h-20"
+        className="mt-1 bg-white border-gray-200 focus:border-pink-500 focus:ring-pink-500 h-20"
         required
         maxLength={100}
       />
+      <p className="text-xs text-gray-500 mt-1">Maximum 100 characters</p>
     </div>
 
-    <div>
-      <Label htmlFor="passion">What makes you passionate about joining Sylonow?</Label>
+    <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-6 border border-pink-100">
+      <Label htmlFor="passion" className="text-gray-700">What makes you passionate about joining Sylonow?</Label>
       <Textarea
         name="passion"
         id="passion"
         value={formData.passion}
         onChange={handleInputChange}
         placeholder="Express your passion (up to 100 words)"
-        className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
+        className="mt-1 bg-white border-gray-200 focus:border-pink-500 focus:ring-pink-500"
         maxLength={500}
       />
-      <p className="text-xs text-gray-400 mt-1">Optional - Maximum 100 words</p>
+      <p className="text-xs text-gray-500 mt-1">Optional - Maximum 100 words</p>
     </div>
 
     <div>
-      <p className="mb-2">Do you enjoy taking on challenges? *</p>
+      <p className="text-gray-700 mb-2">Do you enjoy taking on challenges? *</p>
       <RadioGroup
         value={formData.challenges}
         onValueChange={(value) => handleRadioChange('challenges', value)}
-        className="flex space-x-4"
+        className="flex space-x-6"
       >
-        <div className="flex items-center space-x-1">
-          <RadioGroupItem value="Yes" id="challenges-yes" />
-          <Label htmlFor="challenges-yes">Yes</Label>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="Yes" id="challenges-yes" className="text-pink-600" />
+          <Label htmlFor="challenges-yes" className="text-gray-600">Yes</Label>
         </div>
-        <div className="flex items-center space-x-1">
-          <RadioGroupItem value="No" id="challenges-no" />
-          <Label htmlFor="challenges-no">No</Label>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="No" id="challenges-no" className="text-pink-600" />
+          <Label htmlFor="challenges-no" className="text-gray-600">No</Label>
         </div>
       </RadioGroup>
     </div>
 
     <div>
-      <Label htmlFor="timeCommitment">How much time can you dedicate to Sylonow per week? *</Label>
+      <Label htmlFor="timeCommitment" className="text-gray-700">How much time can you dedicate to Sylonow per week? *</Label>
       <Input
         name="timeCommitment"
         id="timeCommitment"
@@ -146,41 +150,41 @@ export const QuestionsStep: React.FC<QuestionsStepProps> = ({
         value={formData.timeCommitment}
         onChange={handleInputChange}
         placeholder="Enter hours per week (e.g., 20)"
-        className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
+        className="mt-1 bg-white border-gray-200 focus:border-pink-500 focus:ring-pink-500"
         required
       />
-      <p className="text-xs text-gray-400 mt-1">Please enter the number of hours per week</p>
+      <p className="text-xs text-gray-500 mt-1">Please enter the number of hours per week</p>
     </div>
 
-    <div>
-      <Label htmlFor="passionMeaning">What does "passion" mean to you in one sentence? *</Label>
+    <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-6 border border-pink-100">
+      <Label htmlFor="passionMeaning" className="text-gray-700">What does "passion" mean to you in one sentence? *</Label>
       <Textarea
         name="passionMeaning"
         id="passionMeaning"
         value={formData.passionMeaning}
         onChange={handleInputChange}
         placeholder="Define passion in one sentence (25 words max)"
-        className="bg-white/5 border-purple-500/20 focus:border-purple-500 focus:ring-purple-500"
+        className="mt-1 bg-white border-gray-200 focus:border-pink-500 focus:ring-pink-500"
         required
         maxLength={150}
       />
-      <p className="text-xs text-gray-400 mt-1">Maximum 25 words</p>
+      <p className="text-xs text-gray-500 mt-1">Maximum 25 words</p>
     </div>
 
     <div>
-      <p className="mb-2">Are you interested in potential direct entry to company after completing your education? *</p>
+      <p className="text-gray-700 mb-2">Are you interested in potential direct entry to company after completing your education? *</p>
       <RadioGroup
         value={formData.directEntry}
         onValueChange={(value) => handleRadioChange('directEntry', value)}
-        className="flex space-x-4"
+        className="flex space-x-6"
       >
-        <div className="flex items-center space-x-1">
-          <RadioGroupItem value="Yes" id="direct-yes" />
-          <Label htmlFor="direct-yes">Yes</Label>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="Yes" id="direct-yes" className="text-pink-600" />
+          <Label htmlFor="direct-yes" className="text-gray-600">Yes</Label>
         </div>
-        <div className="flex items-center space-x-1">
-          <RadioGroupItem value="No" id="direct-no" />
-          <Label htmlFor="direct-no">No</Label>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="No" id="direct-no" className="text-pink-600" />
+          <Label htmlFor="direct-no" className="text-gray-600">No</Label>
         </div>
       </RadioGroup>
     </div>

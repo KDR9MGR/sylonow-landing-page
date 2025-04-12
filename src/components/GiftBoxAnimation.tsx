@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import WelcomeTypingAnimation from './WelcomeTypingAnimation';
 
 interface GiftBoxAnimationProps {
   onAnimationComplete: () => void;
@@ -84,6 +85,7 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [isInteractionDisabled, setIsInteractionDisabled] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   
   // Check if device is mobile
@@ -163,15 +165,12 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
         setIsBlurred(false);
         setIsInteractionDisabled(false);
         setTimeout(() => {
-          setIsAnimationComplete(true);
-          if (onAnimationComplete) {
-            onAnimationComplete();
-          }
+          setShowWelcome(true);
         }, 500);
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [isOpened, isAnimationComplete, onAnimationComplete]);
+  }, [isOpened, isAnimationComplete]);
 
   const handleInteraction = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (isInteractionDisabled || bowDropped) return;
@@ -187,6 +186,13 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
       setIsOpened(true);
     }, 1200);
   }, [isInteractionDisabled, bowDropped]);
+
+  const handleWelcomeComplete = useCallback(() => {
+    setIsAnimationComplete(true);
+    if (onAnimationComplete) {
+      onAnimationComplete();
+    }
+  }, [onAnimationComplete]);
 
   // Shimmer animation variants
   const shimmerVariants = {
@@ -238,6 +244,9 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
 
           {/* Confetti animation */}
           {showConfetti && confettiParticles}
+
+          {/* Welcome Animation */}
+          {showWelcome && <WelcomeTypingAnimation onComplete={handleWelcomeComplete} />}
 
           {!isOpened ? (
             <div className="fixed inset-0 flex items-center justify-center bg-[#FF7B7B] z-50 overflow-hidden">

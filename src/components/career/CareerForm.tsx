@@ -1,239 +1,435 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
-import { useToast } from "@/components/ui/use-toast";
-import { ChevronRight, ChevronLeft, Check } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import FormProgress from './FormProgress';
-import { BasicInfoStep, QuestionsStep } from './FormSteps';
-import { formSteps, roles, initialFormData } from './CareerData';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { roles, teams, type TeamType } from './CareerData';
+import { motion } from 'framer-motion';
+import { Check } from 'lucide-react';
 
-const CareerForm: React.FC = () => {
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState(initialFormData);
-  const [progress, setProgress] = useState(0);
+// Get all available roles for validation
+const availableRoles = Object.values(roles).flat();
 
-  useEffect(() => {
-    const progressPercentage = ((currentStep + 1) / formSteps.length) * 100;
-    setProgress(progressPercentage);
-  }, [currentStep]);
+const formSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  phone: z.string().min(10, 'Phone number must be at least 10 digits'),
+  role: z.string().min(1, 'Please select a role'),
+  selectedTeam: z.string().min(1, 'Please select a team'),
+  description: z.string()
+    .min(10, 'Description must be at least 10 characters')
+    .max(100, 'Description must not exceed 100 characters'),
+  passion: z.string().max(500, 'Passion must not exceed 100 words').optional(),
+  challengeAccepter: z.enum(['yes', 'no']),
+  weeklyHours: z.number().min(1, 'Please enter weekly hours'),
+  passionMeaning: z.string()
+    .max(125, 'Passion meaning must not exceed 25 words'),
+  directEntry: z.enum(['yes', 'no'])
+});
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
+type FormData = z.infer<typeof formSchema>;
 
-  const handleRadioChange = (id: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [id]: value
-    }));
-  };
+export default function CareerForm() {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const totalSteps = 4;
 
-  const handleCheckboxChange = (role: string) => {
-    setFormData(prev => {
-      const selectedTeams = prev.selectedTeams.includes(role)
-        ? prev.selectedTeams.filter(item => item !== role)
-        : [...prev.selectedTeams, role];
-      return {
-        ...prev,
-        selectedTeams
-      };
-    });
-  };
-
-  const handleNext = () => {
-    if (currentStep === 0 && (!formData.fullName || !formData.contact || !formData.email || formData.selectedTeams.length === 0)) {
-      toast({
-        title: "Required Fields",
-        description: "Please fill in all required fields and select at least one team to continue.",
-        variant: "destructive",
-      });
-      return;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    watch,
+    trigger
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      challengeAccepter: 'yes',
+      directEntry: 'yes',
+      selectedTeam: ''
     }
+  });
+
+  const validateStep = async () => {
+    let fieldsToValidate: (keyof FormData)[] = [];
     
-    if (currentStep < formSteps.length - 1) {
-      setCurrentStep(currentStep + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    switch (currentStep) {
+      case 1:
+        fieldsToValidate = ['name', 'email', 'phone'];
+        break;
+      case 2:
+        fieldsToValidate = ['role', 'selectedTeam'];
+        break;
+      case 3:
+        fieldsToValidate = ['description', 'passion'];
+        break;
+      case 4:
+        fieldsToValidate = ['challengeAccepter', 'weeklyHours', 'passionMeaning', 'directEntry'];
+        break;
+    }
+
+    const isValid = await trigger(fieldsToValidate);
+    return isValid;
+  };
+
+  const nextStep = async () => {
+    const isValid = await validateStep();
+    if (isValid) {
+      setCurrentStep(prev => Math.min(prev + 1, totalSteps));
     }
   };
 
-  const handlePrevious = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  const prevStep = () => {
+    setCurrentStep(prev => Math.max(prev - 1, 1));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    const requiredFields = {
-      fullName: 'Full Name',
-      contact: 'Contact Number',
-      email: 'Email',
-      description: 'Description',
-      timeCommitment: 'Time Commitment',
-      passionMeaning: 'Passion Meaning'
-    };
-
-    const emptyFields = Object.entries(requiredFields)
-      .filter(([key]) => !formData[key as keyof typeof formData])
-      .map(([_, label]) => label);
-
-    if (emptyFields.length > 0 || formData.selectedTeams.length === 0) {
-      toast({
-        title: "Missing Required Fields",
-        description: `Please fill in: ${emptyFields.join(', ')}${formData.selectedTeams.length === 0 ? ' and select at least one team' : ''}`,
-        variant: "destructive",
-        duration: 5000,
-      });
-      setIsSubmitting(false);
-      return;
-    }
-
+  const onSubmit = async (data: FormData) => {
     try {
+      // Check if user has already submitted an application
+      const { data: existingSubmission } = await supabase
+        .from('career_applications')
+        .select('id')
+        .eq('email', data.email)
+        .single();
+
+      if (existingSubmission) {
+        toast.error('You have already submitted an application.');
+        return;
+      }
+
+      const formattedData = {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        role: data.role,
+        selected_team: data.selectedTeam,
+        description: data.description,
+        passion: data.passion || '',
+        challenge_accepter: data.challengeAccepter,
+        weekly_hours: Number(data.weeklyHours),
+        passion_meaning: data.passionMeaning,
+        direct_entry: data.directEntry
+      };
+
       const { error } = await supabase
-        .from('career_form_submissions')
-        .insert([{
-          full_name: formData.fullName,
-          contact: formData.contact,
-          email: formData.email,
-          selected_teams: formData.selectedTeams,
-          description: formData.description,
-          passion: formData.passion,
-          challenges: formData.challenges,
-          time_commitment: formData.timeCommitment,
-          passion_meaning: formData.passionMeaning,
-          direct_entry: formData.directEntry
-        }]);
+        .from('career_applications')
+        .insert([formattedData]);
 
       if (error) {
-        console.error("Error storing form data:", error);
-        throw new Error(error.message);
+        console.error('Supabase error:', error);
+        throw error;
       }
 
-      toast({
-        title: "Application Submitted Successfully! 🎉",
-        description: "Thanks for being part of this program, you will get mail for interview scheduled.",
-        duration: 6000,
-      });
-      
-      setFormData(initialFormData);
-      setCurrentStep(0);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setIsSubmitted(true);
+      toast.success('Application submitted successfully! You will receive an email about your interview schedule.');
     } catch (error) {
-      console.error("Submission error:", error);
-      toast({
-        title: "Submission Failed",
-        description: "There was an error submitting your application. Please try again or contact us directly at jobs.sylonow@gmail.com",
-        variant: "destructive",
-        duration: 6000,
-      });
-    } finally {
-      setIsSubmitting(false);
+      console.error('Error submitting application:', error);
+      toast.error('Failed to submit application. Please try again.');
     }
   };
 
-  const renderFormStep = () => {
-    const currentStepContent = (() => {
-      switch (currentStep) {
-        case 0:
-          return (
-            <BasicInfoStep 
-              formData={formData} 
-              handleInputChange={handleInputChange} 
-              handleCheckboxChange={handleCheckboxChange}
-              roles={roles} 
-            />
-          );
-        case 1:
-          return (
-            <QuestionsStep 
-              formData={formData} 
-              handleInputChange={handleInputChange} 
-              handleRadioChange={handleRadioChange} 
-            />
-          );
-        default:
-          return (
-            <BasicInfoStep 
-              formData={formData} 
-              handleInputChange={handleInputChange} 
-              handleCheckboxChange={handleCheckboxChange}
-              roles={roles} 
-            />
-          );
-      }
-    })();
+  const renderProgressBar = () => (
+    <div className="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+      <div 
+        className="bg-gradient-to-r from-pink-500 to-purple-500 h-2.5 rounded-full transition-all duration-300"
+        style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+      />
+    </div>
+  );
 
-    return (
-      <motion.div
-        key={currentStep}
-        initial={false}
-        animate={{ opacity: 1, x: 0 }}
-        className="w-full"
-      >
-        {currentStepContent}
-      </motion.div>
-    );
+  const renderStepContent = () => {
+    const fadeIn = {
+      initial: { opacity: 0, x: 20 },
+      animate: { opacity: 1, x: 0 },
+      exit: { opacity: 0, x: -20 }
+    };
+
+    switch (currentStep) {
+      case 1:
+        return (
+          <motion.div {...fadeIn} className="space-y-4">
+            <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
+            <div>
+              <Label htmlFor="name">Full Name *</Label>
+              <Input
+                id="name"
+                {...register('name')}
+                className={errors.name ? 'border-red-500' : ''}
+              />
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="email">Email Address *</Label>
+              <Input
+                id="email"
+                type="email"
+                {...register('email')}
+                className={errors.email ? 'border-red-500' : ''}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="phone">Phone Number *</Label>
+              <Input
+                id="phone"
+                type="tel"
+                {...register('phone')}
+                className={errors.phone ? 'border-red-500' : ''}
+              />
+              {errors.phone && (
+                <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+              )}
+            </div>
+          </motion.div>
+        );
+
+      case 2:
+        return (
+          <motion.div {...fadeIn} className="space-y-4">
+            <h2 className="text-xl font-semibold mb-4">Role Selection</h2>
+            <div>
+              <Label htmlFor="role">Which role interests you? *</Label>
+              <Select onValueChange={(value) => setValue('role', value)}>
+                <SelectTrigger className={errors.role ? 'border-red-500' : ''}>
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
+                <SelectContent>
+                  {(Object.entries(roles) as [string, string[]][]).map(([category, positions]) => (
+                    <div key={category} className="space-y-1">
+                      <SelectItem value={`${category}-group`} disabled className="font-semibold text-gray-500 bg-gray-50">
+                        {category.charAt(0).toUpperCase() + category.slice(1)} Team
+                      </SelectItem>
+                      {positions.map((role) => (
+                        <SelectItem key={`${category}-${role}`} value={role} className="pl-6">
+                          {role}
+                        </SelectItem>
+                      ))}
+                    </div>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.role && (
+                <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>
+              )}
+            </div>
+
+            <div>
+              <Label>Select Team *</Label>
+              <RadioGroup
+                onValueChange={(value) => setValue('selectedTeam', value)}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2"
+              >
+                {teams.map((team) => (
+                  <div key={team} className="flex items-center space-x-2">
+                    <RadioGroupItem value={team} id={team} />
+                    <Label htmlFor={team}>{team}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+              {errors.selectedTeam && (
+                <p className="text-red-500 text-sm mt-1">{errors.selectedTeam.message}</p>
+              )}
+            </div>
+          </motion.div>
+        );
+
+      case 3:
+        return (
+          <motion.div {...fadeIn} className="space-y-4">
+            <h2 className="text-xl font-semibold mb-4">Experience & Passion</h2>
+            <div>
+              <Label htmlFor="description">Describe yourself in ONE powerful sentence *</Label>
+              <Input
+                id="description"
+                {...register('description')}
+                className={errors.description ? 'border-red-500' : ''}
+              />
+              {errors.description && (
+                <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="passion">What makes you passionate about joining Sylonow? (optional)</Label>
+              <Textarea
+                id="passion"
+                {...register('passion')}
+                className={errors.passion ? 'border-red-500' : ''}
+                rows={4}
+              />
+              {errors.passion && (
+                <p className="text-red-500 text-sm mt-1">{errors.passion.message}</p>
+              )}
+            </div>
+          </motion.div>
+        );
+
+      case 4:
+        return (
+          <motion.div {...fadeIn} className="space-y-4">
+            <h2 className="text-xl font-semibold mb-4">Additional Details</h2>
+            <div>
+              <Label>Do you enjoy taking on challenges? *</Label>
+              <RadioGroup
+                defaultValue="yes"
+                onValueChange={(value) => setValue('challengeAccepter', value as 'yes' | 'no')}
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="yes" id="challenge-yes" />
+                    <Label htmlFor="challenge-yes">Yes</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="no" id="challenge-no" />
+                    <Label htmlFor="challenge-no">No</Label>
+                  </div>
+                </div>
+              </RadioGroup>
+            </div>
+
+            <div>
+              <Label htmlFor="weeklyHours">How many hours can you dedicate per week? *</Label>
+              <Input
+                id="weeklyHours"
+                type="number"
+                {...register('weeklyHours', { valueAsNumber: true })}
+                className={errors.weeklyHours ? 'border-red-500' : ''}
+              />
+              {errors.weeklyHours && (
+                <p className="text-red-500 text-sm mt-1">{errors.weeklyHours.message}</p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="passionMeaning">What does "passion" mean to you in one sentence? *</Label>
+              <Input
+                id="passionMeaning"
+                {...register('passionMeaning')}
+                className={errors.passionMeaning ? 'border-red-500' : ''}
+              />
+              {errors.passionMeaning && (
+                <p className="text-red-500 text-sm mt-1">{errors.passionMeaning.message}</p>
+              )}
+            </div>
+
+            <div>
+              <Label>Are you interested in potential direct entry after completing education? *</Label>
+              <RadioGroup
+                defaultValue="yes"
+                onValueChange={(value) => setValue('directEntry', value as 'yes' | 'no')}
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="yes" id="direct-yes" />
+                    <Label htmlFor="direct-yes">Yes</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="no" id="direct-no" />
+                    <Label htmlFor="direct-no">No</Label>
+                  </div>
+                </div>
+              </RadioGroup>
+            </div>
+          </motion.div>
+        );
+
+      default:
+        return null;
+    }
   };
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
-      className="bg-white/5 rounded-xl border border-purple-500/20 overflow-hidden"
-    >
-      <FormProgress 
-        currentStep={currentStep} 
-        formSteps={formSteps} 
-        progress={progress} 
-      />
-      
-      <form onSubmit={handleSubmit} className="p-6">
-        {renderFormStep()}
+  if (isSubmitted) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="flex flex-col items-center justify-center space-y-6 bg-white p-8 rounded-lg shadow-sm"
+      >
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ 
+            type: "spring",
+            stiffness: 260,
+            damping: 20,
+            delay: 0.2 
+          }}
+          className="w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center"
+        >
+          <Check className="w-8 h-8 text-white" />
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="text-center"
+        >
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">Application Submitted!</h3>
+          <p className="text-gray-600">Thank you for your interest in joining our team.</p>
+          <p className="text-gray-600">We will review your application and get back to you soon.</p>
+        </motion.div>
 
-        <div className="flex justify-between mt-8">
-          <Button 
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="text-sm text-gray-500 mt-4"
+        >
+          You will receive an email confirmation shortly.
+        </motion.div>
+      </motion.div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 bg-white p-6 rounded-lg shadow-sm">
+      {renderProgressBar()}
+      {renderStepContent()}
+      
+      <div className="flex justify-between mt-8 pt-4 border-t">
+        {currentStep > 1 && (
+          <Button
             type="button"
-            onClick={handlePrevious}
-            disabled={currentStep === 0}
+            onClick={prevStep}
             variant="outline"
-            className="border-purple-500/30 text-white disabled:opacity-30"
+            className="px-8"
           >
-            <ChevronLeft className="mr-1 h-4 w-4" /> Previous
+            Previous
           </Button>
-          
-          {currentStep < formSteps.length - 1 ? (
-            <Button 
-              type="button"
-              onClick={handleNext}
-              className="bg-gradient-to-r from-sylonow-purple to-sylonow-gold hover:opacity-90"
-            >
-              Next <ChevronRight className="ml-1 h-4 w-4" />
-            </Button>
-          ) : (
-            <Button 
-              type="submit"
-              disabled={isSubmitting}
-              className="bg-gradient-to-r from-sylonow-purple to-sylonow-gold hover:opacity-90"
-            >
-              {isSubmitting ? 'Submitting...' : 'Submit Application'} {!isSubmitting && <Check className="ml-1 h-4 w-4" />}
-            </Button>
-          )}
-        </div>
-      </form>
-    </motion.div>
+        )}
+        
+        {currentStep < totalSteps ? (
+          <Button
+            type="button"
+            onClick={nextStep}
+            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white ml-auto px-8"
+          >
+            Next
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white ml-auto px-8"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Application'}
+          </Button>
+        )}
+      </div>
+    </form>
   );
 };
-
-export default CareerForm;
