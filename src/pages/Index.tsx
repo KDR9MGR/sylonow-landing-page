@@ -293,13 +293,13 @@ const Index = () => {
                 transition={{ duration: 0.8 }}
                 className="text-center mb-12 sm:mb-16"
               >
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold jersey-15-regular mb-3 sm:mb-4 text-gray-900">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-['Poppins'] mb-3 sm:mb-4 text-gray-900">
                   What Makes Us{" "}
-                  <span className="text-sylonow-gold jersey-15-regular">
+                  <span className="text-sylonow-gold font-['Poppins']">
                     Special
                   </span>
                 </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto font-poppins text-sm sm:text-base px-4">
+                <p className="text-gray-600 max-w-2xl mx-auto font-['Poppins'] text-sm sm:text-base px-4">
                   Creating unforgettable celebration experiences through
                   innovation and personalization.
                 </p>

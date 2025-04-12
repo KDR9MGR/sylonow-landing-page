@@ -109,7 +109,7 @@ const Navbar = () => {
                 exit={{ rotate: 90, opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <X className="h-6 w-6" />
+                <X className="h-6 w-6 text-black" />
               </motion.div>
             ) : (
               <motion.div
@@ -119,7 +119,7 @@ const Navbar = () => {
                 exit={{ rotate: -90, opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <Menu className="h-6 w-6" />
+                <Menu className="h-6 w-6 text-black" />
               </motion.div>
             )}
           </AnimatePresence>
