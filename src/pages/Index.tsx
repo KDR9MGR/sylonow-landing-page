@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import { motion, useAnimation, stagger } from "framer-motion";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
-import { Gift, Sparkles, ArrowRight } from "lucide-react";
+import { Gift, Sparkles, ArrowRight, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CountdownTimer from "@/components/CountdownTimer";
 
@@ -114,13 +114,34 @@ const giftBoxes = [
 
 const Index = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 200);
-    return () => clearTimeout(timer);
+
+    const handleScroll = () => {
+      if (window.scrollY > 400) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   const fadeInUpVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -180,9 +201,27 @@ const Index = () => {
         <div className="blob blob-3 top-[60%] right-[15%]"></div>
         <div className="blob blob-4 top-[30%] left-[10%]"></div>
 
-        <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        {/* Sticky Navbar with shadow on scroll */}
+        <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
           <Navbar />
         </div>
+
+        {/* Scroll to Top Button */}
+        <motion.button
+          onClick={scrollToTop}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ 
+            opacity: showScrollTop ? 1 : 0,
+            scale: showScrollTop ? 1 : 0.8,
+            y: showScrollTop ? 0 : 20
+          }}
+          className="fixed bottom-6 right-6 z-50 bg-pink-600 hover:bg-pink-700 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <ArrowUp className="w-5 h-5" />
+        </motion.button>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 lg:pt-20 pb-16 relative z-10">
           {/* Hero Section */}
           <div className="hero-section text-violet-950 relative flex flex-col items-center lg:items-start lg:flex-row gap-8 lg:gap-12 mt-8 sm:mt-12 lg:mt-8">
