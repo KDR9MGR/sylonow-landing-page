@@ -84,7 +84,13 @@ const TermsOfService = () => {
                   <br />
                   Email: legal@sylonow.com
                   <br />
-                  Address: [Your Company Address]
+                  Address: Company Name: Sylonow Launch Date: May 2025
+                  Headquarters: Bengaluru, Karnataka, India Founders:
+                  Sangamesh & Srikanth , gagan Industry: Celebration &
+                  Surprise Services Business Model: B2C & B2B – Platform-based
+                  Service Areas: Launching in Bengaluru, with planned
+                  expansion across India Email: info@sylonow.com Website:
+                  www.sylonow.com Social Media: @sylonow give linkdin page link
                 </p>
               </div>
             </motion.div>
