@@ -69,7 +69,7 @@ const About = () => {
     },
     {
       title: "Service Area",
-      value: "Pan India",
+      value: "Bengaluru, Karnataka",
       icon: <Globe2 className="w-6 h-6" />
     }
   ];

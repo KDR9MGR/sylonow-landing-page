@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Calendar, MapPin, Users, Briefcase, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -10,7 +9,7 @@ const AboutSection = () => {
     { icon: <Users className="h-5 w-5" />, label: 'Founders', value: 'Sangamesh, Srikanth, Gagan' },
     { icon: <Briefcase className="h-5 w-5" />, label: 'Industry', value: 'Celebration & Surprise Services' },
     { icon: <Briefcase className="h-5 w-5" />, label: 'Business Model', value: 'B2C & B2B – Platform-based' },
-    { icon: <Globe className="h-5 w-5" />, label: 'Service Areas', value: 'Launching in Bengaluru, expanding across India' },
+    { icon: <Globe className="h-5 w-5" />, label: 'Service Areas', value: 'Now serving in Bengaluru, and coming soon to other cities across India' },
   ];
 
   const containerVariants = {

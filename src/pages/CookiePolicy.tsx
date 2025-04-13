@@ -1,11 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const CookiePolicy = () => {
   const lastUpdated = "March 15, 2024";
+  const [showBanner, setShowBanner] = useState(true);
+
+  // Check if cookies are already accepted
+  useEffect(() => {
+    const cookiesAccepted = localStorage.getItem('cookiesAccepted');
+    if (cookiesAccepted) {
+      setShowBanner(false);
+    }
+  }, []);
+
+  const handleAcceptAll = () => {
+    localStorage.setItem('cookiesAccepted', 'true');
+    setShowBanner(false);
+  };
+
+  const handleCustomize = () => {
+    // Open customization modal (to be implemented)
+    setShowBanner(false);
+  };
 
   const cookieCategories = [
     {
@@ -141,34 +160,45 @@ const CookiePolicy = () => {
                   Headquarters: Bengaluru, Karnataka, India Founders: Sangamesh
                   & Srikanth , gagan Industry: Celebration & Surprise Services
                   Business Model: B2C & B2B – Platform-based Service Areas:
-                  Launching in Bengaluru, with planned expansion across India
+                  Now serving in Bengaluru, and coming soon to other cities across India
                   Email: info@sylonow.com Website: www.sylonow.com Social Media:
                   @sylonow give linkdin page link
                 </p>
               </div>
 
               {/* Cookie Consent Banner */}
-              <motion.div
-                className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:p-6"
-                initial={{ y: 100 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.5, delay: 1 }}
-              >
-                <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-                  <p className="text-gray-600 text-sm md:text-base">
-                    We use cookies to enhance your experience. By continuing to
-                    visit this site you agree to our use of cookies.
-                  </p>
-                  <div className="flex gap-4">
-                    <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
-                      Customize
-                    </button>
-                    <button className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors">
-                      Accept All
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
+              <AnimatePresence>
+                {showBanner && (
+                  <motion.div
+                    className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:p-6 shadow-lg z-50"
+                    initial={{ y: 100 }}
+                    animate={{ y: 0 }}
+                    exit={{ y: 100 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+                      <p className="text-gray-600 text-sm md:text-base">
+                        We use cookies to enhance your experience. By continuing to
+                        visit this site you agree to our use of cookies.
+                      </p>
+                      <div className="flex gap-4">
+                        <button 
+                          onClick={handleCustomize}
+                          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                        >
+                          Customize
+                        </button>
+                        <button 
+                          onClick={handleAcceptAll}
+                          className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors"
+                        >
+                          Accept All
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </div>
         </main>

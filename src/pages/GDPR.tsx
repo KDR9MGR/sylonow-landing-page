@@ -169,8 +169,8 @@ const GDPR = () => {
                     Headquarters: Bengaluru, Karnataka, India Founders:
                     Sangamesh & Srikanth , gagan Industry: Celebration &
                     Surprise Services Business Model: B2C & B2B – Platform-based
-                    Service Areas: Launching in Bengaluru, with planned
-                    expansion across India Email: info@sylonow.com Website:
+                    Service Areas: Now serving in Bengaluru, and coming soon to other cities across India
+                    Email: info@sylonow.com Website:
                     www.sylonow.com Social Media: @sylonow give linkdin page
                     link
                     <br />
