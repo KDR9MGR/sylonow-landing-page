@@ -6,12 +6,15 @@ import { Heart, Twitter, Linkedin, Facebook, Instagram } from 'lucide-react';
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
+  const handleLinkClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const footerLinks = {
     company: [
       { label: 'About Us', href: '/about' },
       { label: 'Careers', href: '/career' },
       { label: 'Contact', href: '/contact' },
-      { label: 'Blog', href: '/blog' },
     ],
     legal: [
       { label: 'Privacy Policy', href: '/privacy-policy' },
@@ -23,7 +26,6 @@ const Footer: React.FC = () => {
       { label: 'Help Center', href: '/help' },
       { label: 'FAQs', href: '/faqs' },
       { label: 'Contact Support', href: '/contact' },
-     
     ],
   };
 
@@ -38,7 +40,7 @@ const Footer: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           <div>
-            <Link to="/">
+            <Link to="/" onClick={handleLinkClick}>
               <motion.div 
                 whileHover={{ scale: 1.05 }}
                 className="inline-block"
@@ -51,7 +53,8 @@ const Footer: React.FC = () => {
               </motion.div>
             </Link>
             <p className="text-sm text-gray-600 mb-4">
-              Transforming celebrations with AI-powered innovation.
+              {/* write something releted to decoration service provider app */}
+              Sylonow is a decoration service provider app that helps you find the best decoration services for your event.
             </p>
             <div className="flex space-x-4">
               {socialLinks.map(({ Icon, href, label }) => (
@@ -78,7 +81,7 @@ const Footer: React.FC = () => {
               <ul className="space-y-2">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <Link to={link.href}>
+                    <Link to={link.href} onClick={handleLinkClick}>
                       <motion.span
                         whileHover={{ x: 2 }}
                         className="text-sm text-gray-600 hover:text-pink-600 transition-colors cursor-pointer"
@@ -101,7 +104,7 @@ const Footer: React.FC = () => {
               <span>in India</span>
             </div>
             <div className="flex items-center space-x-4 text-sm text-gray-600">
-              <Link to="/legal/accessibility">
+              <Link to="/legal/accessibility" onClick={handleLinkClick}>
                 <motion.span
                   whileHover={{ scale: 1.05 }}
                   className="hover:text-pink-600 transition-colors"
@@ -109,7 +112,7 @@ const Footer: React.FC = () => {
                   Accessibility
                 </motion.span>
               </Link>
-              <Link to="/legal/privacy-policy#do-not-sell">
+              <Link to="/legal/privacy-policy#do-not-sell" onClick={handleLinkClick}>
                 <motion.span
                   whileHover={{ scale: 1.05 }}
                   className="hover:text-pink-600 transition-colors"

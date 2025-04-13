@@ -82,7 +82,6 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
   const [isOpened, setIsOpened] = useState(false);
   const [bowDropped, setBowDropped] = useState(false);
   const [isBlurred, setIsBlurred] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
   const [isInteractionDisabled, setIsInteractionDisabled] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
@@ -158,16 +157,21 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
     }
   }, [isAnimationComplete]);
   
+  const handleWelcomeComplete = useCallback(() => {
+    // Directly set animation complete after welcome typing animation
+    setIsAnimationComplete(true);
+    if (onAnimationComplete) {
+      onAnimationComplete();
+    }
+  }, [onAnimationComplete]);
+
   useEffect(() => {
     if (isOpened && !isAnimationComplete) {
-      setShowConfetti(true);
       const timer = setTimeout(() => {
         setIsBlurred(false);
         setIsInteractionDisabled(false);
-        setTimeout(() => {
-          setShowWelcome(true);
-        }, 500);
-      }, 1500);
+        setShowWelcome(true);
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, [isOpened, isAnimationComplete]);
@@ -178,21 +182,12 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
     setIsInteractionDisabled(true);
     setBowDropped(true);
     
-    // Start blur effect slightly before box opens
-    setTimeout(() => setIsBlurred(true), 800);
+    setTimeout(() => setIsBlurred(true), 300);
     
-    // Start the box opening animation after bow drops
     setTimeout(() => {
       setIsOpened(true);
-    }, 1200);
+    }, 600);
   }, [isInteractionDisabled, bowDropped]);
-
-  const handleWelcomeComplete = useCallback(() => {
-    setIsAnimationComplete(true);
-    if (onAnimationComplete) {
-      onAnimationComplete();
-    }
-  }, [onAnimationComplete]);
 
   // Shimmer animation variants
   const shimmerVariants = {
@@ -231,22 +226,35 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
     <AnimatePresence mode="wait">
       {!isAnimationComplete ? (
         <>
+          {/* Black background layer */}
+          <motion.div
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 bg-black z-30"
+          />
+
           <motion.div
             initial={false}
             animate={{
               backdropFilter: isBlurred ? 'blur(10px)' : 'blur(0px)',
               WebkitBackdropFilter: isBlurred ? 'blur(10px)' : 'blur(0px)',
             }}
-            transition={{ duration: 1, ease: "easeInOut" }}
+            transition={{ duration: 0.5 }}
             className="fixed inset-0 z-40"
             style={{ pointerEvents: isAnimationComplete ? 'none' : 'auto' }}
           />
 
-          {/* Confetti animation */}
-          {showConfetti && confettiParticles}
-
-          {/* Welcome Animation */}
-          {showWelcome && <WelcomeTypingAnimation onComplete={handleWelcomeComplete} />}
+          {/* Welcome Animation with instant visibility */}
+          {showWelcome && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="z-60"
+            >
+              <WelcomeTypingAnimation onComplete={handleWelcomeComplete} />
+            </motion.div>
+          )}
 
           {!isOpened ? (
             <div className="fixed inset-0 flex items-center justify-center bg-[#FF7B7B] z-50 overflow-hidden">
@@ -379,11 +387,11 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
             </div>
           ) : (
             <>
-              {/* Light beams when opened */}
+              {/* Light beams when opened - reduced duration */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: [0, 0.7, 0] }}
-                transition={{ duration: 1.5, times: [0, 0.2, 1] }}
+                transition={{ duration: 0.8, times: [0, 0.2, 1] }}
                 className="fixed inset-0 z-45 pointer-events-none"
                 style={{
                   background: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)',
@@ -391,89 +399,89 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
               />
               
               {isMobile ? (
-                // Mobile Animation (Top/Bottom)
+                // Mobile Animation (Top/Bottom) - faster transitions
                 <>
-                  {/* Top half */}
                   <motion.div
                     initial={{ y: 0, rotateX: 0 }}
                     animate={{ y: '-100%', rotateX: 60 }}
                     transition={{ 
-                      duration: 2,
+                      duration: 1,
                       ease: [0.4, 0, 0.2, 1],
                       rotateX: {
-                        duration: 1.5,
+                        duration: 0.8,
                         ease: "easeOut"
                       }
                     }}
                     style={{
                       transformOrigin: 'bottom',
                       perspective: 1000,
-                      boxShadow: '0 0 30px rgba(255,123,123,0.8)'
+                      boxShadow: '0 0 30px rgba(255,123,123,0.8)',
+                      backgroundColor: '#FF7B7B'
                     }}
-                    className="fixed top-0 left-0 w-full h-1/2 bg-[#FF7B7B] z-50"
+                    className="fixed top-0 left-0 w-full h-1/2 z-50"
                   />
                   
-                  {/* Bottom half */}
                   <motion.div
                     initial={{ y: 0, rotateX: 0 }}
                     animate={{ y: '100%', rotateX: -60 }}
                     transition={{ 
-                      duration: 2,
+                      duration: 1,
                       ease: [0.4, 0, 0.2, 1],
                       rotateX: {
-                        duration: 1.5,
+                        duration: 0.8,
                         ease: "easeOut"
                       }
                     }}
                     style={{
                       transformOrigin: 'top',
                       perspective: 1000,
-                      boxShadow: '0 0 30px rgba(255,123,123,0.8)'
+                      boxShadow: '0 0 30px rgba(255,123,123,0.8)',
+                      backgroundColor: '#FF7B7B'
                     }}
-                    className="fixed bottom-0 left-0 w-full h-1/2 bg-[#FF7B7B] z-50"
+                    className="fixed bottom-0 left-0 w-full h-1/2 z-50"
                   />
                 </>
               ) : (
-                // Desktop Animation (Left/Right)
+                // Desktop Animation (Left/Right) - faster transitions
                 <>
-                  {/* Left half */}
                   <motion.div
                     initial={{ x: 0, rotateY: 0 }}
                     animate={{ x: '-100%', rotateY: -60 }}
                     transition={{ 
-                      duration: 2,
+                      duration: 1,
                       ease: [0.4, 0, 0.2, 1],
                       rotateY: {
-                        duration: 1.5,
+                        duration: 0.8,
                         ease: "easeOut"
                       }
                     }}
                     style={{
                       transformOrigin: 'right',
                       perspective: 1000,
-                      boxShadow: '0 0 30px rgba(255,123,123,0.8)'
+                      boxShadow: '0 0 30px rgba(255,123,123,0.8)',
+                      backgroundColor: '#FF7B7B'
                     }}
-                    className="fixed top-0 left-0 w-1/2 h-full bg-[#FF7B7B] z-50"
+                    className="fixed top-0 left-0 w-1/2 h-full z-50"
                   />
                   
-                  {/* Right half */}
                   <motion.div
                     initial={{ x: 0, rotateY: 0 }}
                     animate={{ x: '100%', rotateY: 60 }}
                     transition={{ 
-                      duration: 2,
+                      duration: 1,
                       ease: [0.4, 0, 0.2, 1],
                       rotateY: {
-                        duration: 1.5,
+                        duration: 0.8,
                         ease: "easeOut"
                       }
                     }}
                     style={{
                       transformOrigin: 'left',
                       perspective: 1000,
-                      boxShadow: '0 0 30px rgba(255,123,123,0.8)'
+                      boxShadow: '0 0 30px rgba(255,123,123,0.8)',
+                      backgroundColor: '#FF7B7B'
                     }}
-                    className="fixed top-0 right-0 w-1/2 h-full bg-[#FF7B7B] z-50"
+                    className="fixed top-0 right-0 w-1/2 h-full z-50"
                   />
                 </>
               )}
@@ -484,7 +492,7 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.5 }}
           className="w-full h-full"
           style={{ pointerEvents: 'none' }}
         />

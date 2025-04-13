@@ -106,7 +106,7 @@ const About = () => {
       <Helmet>
         // ... existing code ...
       </Helmet>
-      <div className="min-h-screen bg-white flex flex-col">
+      <div className="min-h-screen bg-white flex flex-col mt-10">
         <Navbar />
         <div className="flex-grow">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
@@ -245,13 +245,15 @@ const About = () => {
                   >
                     <div className="h-64 relative overflow-hidden">
                       {founder.image ? (
-                        <img 
-                          src={founder.image} 
-                          alt={founder.name}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
+                        <div className="w-48 h-48 mx-auto mt-6 rounded-full overflow-hidden border-4 border-pink-100">
+                          <img 
+                            src={founder.image} 
+                            alt={founder.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-r from-pink-100 to-purple-100 flex items-center justify-center">
+                        <div className="w-48 h-48 mx-auto mt-6 rounded-full bg-gradient-to-r from-pink-100 to-purple-100 flex items-center justify-center">
                           <span className="text-6xl font-bold text-pink-600">
                             {founder.name.charAt(0)}
                           </span>

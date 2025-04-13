@@ -7,23 +7,31 @@ interface WelcomeTypingAnimationProps {
 
 const WelcomeTypingAnimation = ({ onComplete }: WelcomeTypingAnimationProps) => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
   
   const messages = [
-    "Not all gifts comes in wrapped gift box",
-    "Some come in the form of opportunities"
+    { text: "Welcome to ", highlight: "Sylonow" },
+    { text: "Not all gifts come in ", highlight: "wrapped gift boxes" },
+    { text: "Some come in the form of ", highlight: "opportunities" }
   ];
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (currentTextIndex === 0) {
-        setCurrentTextIndex(1);
-      } else {
-        onComplete();
-      }
-    }, 750); // Each text shows for 750ms, total animation time 1.5s
+    const showNextMessage = (index: number) => {
+      setIsVisible(false);
+      setTimeout(() => {
+        setCurrentTextIndex(index);
+        setIsVisible(true);
+      }, 300);
+    };
 
-    return () => clearTimeout(timer);
-  }, [currentTextIndex, onComplete]);
+    const timers = [
+      setTimeout(() => showNextMessage(1), 2000),
+      setTimeout(() => showNextMessage(2), 4000),
+      setTimeout(() => onComplete(), 6000)
+    ];
+
+    return () => timers.forEach(timer => clearTimeout(timer));
+  }, [onComplete]);
 
   return (
     <motion.div
@@ -33,29 +41,43 @@ const WelcomeTypingAnimation = ({ onComplete }: WelcomeTypingAnimationProps) => 
       transition={{ duration: 0.3 }}
       className="fixed inset-0 flex items-center justify-center z-50"
       style={{
-        background: 'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))'
+        backgroundColor: 'black'
       }}
     >
-      <div className="text-center px-4">
-        <AnimatePresence mode="wait">
-          <motion.h1
-            key={currentTextIndex}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="text-3xl md:text-5xl font-bold text-white"
-            style={{
-              textShadow: '0 2px 4px rgba(0,0,0,0.3)',
-              minHeight: '3em',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
+      <div className="text-center px-4 max-w-3xl mx-auto">
+        <motion.div
+          animate={{ 
+            opacity: isVisible ? 1 : 0,
+            y: isVisible ? 0 : 20
+          }}
+          transition={{ 
+            duration: 0.3,
+            ease: "easeOut"
+          }}
+          className="relative"
+        >
+          <div className="pb-4">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-normal md:leading-normal lg:leading-normal tracking-wide">
+              <span>{messages[currentTextIndex].text}</span>
+              <span className="text-pink-500">{messages[currentTextIndex].highlight}</span>
+            </h1>
+          </div>
+          
+          <motion.div
+            className="h-1 bg-pink-500 rounded-full mx-auto mt-4"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: isVisible ? 1 : 0 }}
+            transition={{ 
+              duration: 2,
+              ease: "linear"
             }}
-          >
-            {messages[currentTextIndex]}
-          </motion.h1>
-        </AnimatePresence>
+            style={{ 
+              originX: 0,
+              width: "100%",
+              maxWidth: "200px"
+            }}
+          />
+        </motion.div>
       </div>
     </motion.div>
   );

@@ -65,7 +65,7 @@ const HelpCenter = () => {
         <title>Help Center - Sylonow</title>
         <meta name="description" content="Get help and support for your Sylonow experience. Find answers to common questions and learn how to make the most of our platform." />
       </Helmet>
-      <div className="min-h-screen bg-white flex flex-col">
+      <div className="min-h-screen bg-white flex flex-col mt-10">
         <Navbar />
         <main className="flex-grow">
           <div className="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8">

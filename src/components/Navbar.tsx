@@ -31,10 +31,8 @@ const Navbar = () => {
 
   return (
     <motion.nav 
-      className={`py-4 px-6 md:px-10 flex items-center justify-between fixed w-full top-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white/80 backdrop-blur-lg shadow-lg' 
-          : 'bg-transparent'
+      className={`py-4 px-6 md:px-10 flex items-center justify-between fixed w-full top-0 z-50 transition-all duration-300 bg-white shadow-sm ${
+        isScrolled ? 'shadow-md' : ''
       }`}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -98,7 +96,7 @@ const Navbar = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className={`p-2 rounded-full ${isScrolled ? 'text-gray-700' : 'text-white'}`}
+          className="p-2 rounded-full text-gray-700"
         >
           <AnimatePresence mode="wait">
             {mobileMenuOpen ? (
@@ -109,7 +107,7 @@ const Navbar = () => {
                 exit={{ rotate: 90, opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <X className="h-6 w-6 text-black" />
+                <X className="h-6 w-6 text-gray-700" />
               </motion.div>
             ) : (
               <motion.div
@@ -119,7 +117,7 @@ const Navbar = () => {
                 exit={{ rotate: -90, opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <Menu className="h-6 w-6 text-black" />
+                <Menu className="h-6 w-6 text-gray-700" />
               </motion.div>
             )}
           </AnimatePresence>

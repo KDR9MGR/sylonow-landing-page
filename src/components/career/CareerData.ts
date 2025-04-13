@@ -1,30 +1,34 @@
-export const roles = {
-  technical: [
-    'Software Engineer',
-    'Product Designer',
-    'Research Analyst'
-  ],
-  marketing: [
-    'Marketing Manager',
-    'Content Writer',
-    'Sales Representative'
-  ],
-  operations: [
-    'Customer Support',
-    'Business Analyst'
-  ]
+export type TeamType = {
+  value: string;
+  label: string;
 };
 
-export const teams = [
-  'Management Team',
-  'Research Team',
-  'Creative Team',
-  'Marketing Team',
-  'Technical Team',
-  'Other Team'
-] as const;
-
-export type TeamType = typeof teams[number];
+export const teams: TeamType[] = [
+  {
+    value: 'all_rounder',
+    label: 'All Rounder'
+  },
+  {
+    value: 'development',
+    label: 'Development'
+  },
+  {
+    value: 'design',
+    label: 'Design'
+  },
+  {
+    value: 'marketing',
+    label: 'Marketing'
+  },
+  {
+    value: 'content',
+    label: 'Content Creation'
+  },
+  {
+    value: 'sales',
+    label: 'Sales'
+  }
+];
 
 export const formSteps = [
   { id: 'basic', title: 'Basic Information' },
@@ -50,7 +54,7 @@ export const initialFormData: FormData = {
   email: '',
   phone: '',
   role: '',
-  selectedTeam: 'Management Team',
+  selectedTeam: { value: 'technology', label: 'Technology' },
   description: '',
   passion: '',
   challengeAccepter: 'yes',

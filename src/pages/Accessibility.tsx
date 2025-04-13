@@ -11,7 +11,7 @@ const Accessibility = () => {
         <title>Accessibility Statement - Sylonow</title>
         <meta name="description" content="Learn about Sylonow's commitment to digital accessibility and our WCAG compliance efforts." />
       </Helmet>
-      <div className="min-h-screen bg-white flex flex-col">
+      <div className="min-h-screen bg-white flex flex-col mt-10">
         <Navbar />
         <main className="flex-grow">
           <div className="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8">

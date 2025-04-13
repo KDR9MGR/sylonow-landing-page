@@ -10,19 +10,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { roles, teams, type TeamType } from './CareerData';
+import { teams, type TeamType } from './CareerData';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
-
-// Get all available roles for validation
-const availableRoles = Object.values(roles).flat();
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
   phone: z.string().min(10, 'Phone number must be at least 10 digits'),
-  role: z.string().min(1, 'Please select a role'),
   selectedTeam: z.string().min(1, 'Please select a team'),
+  isAllRounder: z.boolean().optional(),
+  secondaryTeam: z.string().optional(),
   description: z.string()
     .min(10, 'Description must be at least 10 characters')
     .max(100, 'Description must not exceed 100 characters'),
@@ -39,6 +37,8 @@ type FormData = z.infer<typeof formSchema>;
 export default function CareerForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isAllRounder, setIsAllRounder] = useState(false);
+  const [secondaryTeam, setSecondaryTeam] = useState('');
   const totalSteps = 4;
 
   const {
@@ -65,7 +65,7 @@ export default function CareerForm() {
         fieldsToValidate = ['name', 'email', 'phone'];
         break;
       case 2:
-        fieldsToValidate = ['role', 'selectedTeam'];
+        fieldsToValidate = ['selectedTeam'];
         break;
       case 3:
         fieldsToValidate = ['description', 'passion'];
@@ -105,11 +105,10 @@ export default function CareerForm() {
       }
 
       const formattedData = {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        role: data.role,
-        selected_team: data.selectedTeam,
+        ...data,
+        is_all_rounder: isAllRounder,
+        selected_team: isAllRounder ? 'all_rounder' : data.selectedTeam,
+        secondary_team: secondaryTeam,
         description: data.description,
         passion: data.passion || '',
         challenge_accepter: data.challengeAccepter,
@@ -199,50 +198,63 @@ export default function CareerForm() {
       case 2:
         return (
           <motion.div {...fadeIn} className="space-y-4">
-            <h2 className="text-xl font-semibold mb-4">Role Selection</h2>
-            <div>
-              <Label htmlFor="role">Which role interests you? *</Label>
-              <Select onValueChange={(value) => setValue('role', value)}>
-                <SelectTrigger className={errors.role ? 'border-red-500' : ''}>
-                  <SelectValue placeholder="Select a role" />
-                </SelectTrigger>
-                <SelectContent>
-                  {(Object.entries(roles) as [string, string[]][]).map(([category, positions]) => (
-                    <div key={category} className="space-y-1">
-                      <SelectItem value={`${category}-group`} disabled className="font-semibold text-gray-500 bg-gray-50">
-                        {category.charAt(0).toUpperCase() + category.slice(1)} Team
-                      </SelectItem>
-                      {positions.map((role) => (
-                        <SelectItem key={`${category}-${role}`} value={role} className="pl-6">
-                          {role}
-                        </SelectItem>
-                      ))}
-                    </div>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.role && (
-                <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>
-              )}
+            <h2 className="text-xl font-semibold mb-4">Team Selection</h2>
+            
+            {/* All Rounder Checkbox */}
+            <div className="flex items-center space-x-2 mb-4">
+              <input
+                type="checkbox"
+                id="allRounder"
+                checked={isAllRounder}
+                onChange={(e) => {
+                  setIsAllRounder(e.target.checked);
+                  if (e.target.checked) {
+                    setValue('selectedTeam', 'all_rounder');
+                  } else {
+                    setValue('selectedTeam', secondaryTeam || '');
+                  }
+                }}
+                className="h-4 w-4 rounded border-gray-300 text-pink-600 focus:ring-pink-500"
+              />
+              <Label htmlFor="allRounder" className="font-medium">All Rounder</Label>
             </div>
 
-            <div>
-              <Label>Select Team *</Label>
+            {/* Other Teams Radio Buttons */}
+            <div className="space-y-2">
+              <Label>Select Your Team {!isAllRounder && '*'}</Label>
               <RadioGroup
-                onValueChange={(value) => setValue('selectedTeam', value)}
-                className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2"
+                value={secondaryTeam}
+                onValueChange={(value) => {
+                  setSecondaryTeam(value);
+                  setValue('selectedTeam', isAllRounder ? 'all_rounder' : value);
+                  setValue('secondaryTeam', value);
+                }}
+                className="space-y-2"
               >
-                {teams.map((team) => (
-                  <div key={team} className="flex items-center space-x-2">
-                    <RadioGroupItem value={team} id={team} />
-                    <Label htmlFor={team}>{team}</Label>
+                {teams.filter(team => team.value !== 'all_rounder').map((team) => (
+                  <div key={team.value} className="flex items-center space-x-2">
+                    <RadioGroupItem 
+                      value={team.value} 
+                      id={team.value}
+                    />
+                    <Label htmlFor={team.value}>{team.label}</Label>
                   </div>
                 ))}
               </RadioGroup>
-              {errors.selectedTeam && (
-                <p className="text-red-500 text-sm mt-1">{errors.selectedTeam.message}</p>
+              {errors.selectedTeam && !isAllRounder && !secondaryTeam && (
+                <p className="text-red-500 text-sm mt-1">Please select at least one team</p>
               )}
             </div>
+
+            {/* Selected Teams Summary */}
+            {(isAllRounder || secondaryTeam) && (
+              <div className="mt-4 p-3 bg-gray-50 rounded-md">
+                <p className="text-sm text-gray-600">Selected: {[
+                  isAllRounder ? 'All Rounder' : '',
+                  secondaryTeam ? teams.find(t => t.value === secondaryTeam)?.label : ''
+                ].filter(Boolean).join(' + ')}</p>
+              </div>
+            )}
           </motion.div>
         );
 

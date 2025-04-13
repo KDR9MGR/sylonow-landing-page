@@ -5,7 +5,6 @@ import Footer from '@/components/Footer';
 import CareerHeader from '@/components/career/CareerHeader';
 import CareerForm from '@/components/career/CareerForm';
 import AvailableRoles from '@/components/career/AvailableRoles';
-import { roles } from '@/components/career/CareerData';
 
 const Career = () => {
   return (
@@ -34,13 +33,8 @@ const Career = () => {
         <Navbar />
         <div className="max-w-6xl mx-auto px-4 pt-20 pb-20 flex-grow">
           <CareerHeader />
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <CareerForm />
-            </div>
-            <div className="lg:col-span-1">
-              <AvailableRoles roles={roles} />
-            </div>
+          <div className="max-w-3xl mx-auto">
+            <CareerForm />
           </div>
         </div>
         <Footer />
