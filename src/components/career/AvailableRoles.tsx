@@ -71,7 +71,7 @@ const AvailableRoles = () => {
 
       {/* Not For Everyone Section */}
       <motion.div {...fadeInUp} className="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl p-8 mb-12">
-        <h3 className="text-2xl font-bold mb-6">This is NOT for everyone.</h3>
+        <h3 className="text-2xl text-white font-bold mb-6">This is NOT for everyone.</h3>
         <div className="space-y-4">
           <p>This is for the dreamers, the doers, the risk-takers, and the creators.</p>
           <p className="text-red-300">If you want an easy Pay-check, this is NOT for you.</p>

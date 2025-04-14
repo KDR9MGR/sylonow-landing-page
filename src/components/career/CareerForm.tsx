@@ -103,8 +103,8 @@ export default function CareerForm() {
 
       if (existingSubmission) {
         toast.error('You have already submitted an application.');
-      return;
-    }
+        return;
+      }
 
       const formattedData = {
         name: data.name,
@@ -131,8 +131,27 @@ export default function CareerForm() {
         throw error;
       }
 
+      // Send confirmation email via API
+      const emailResponse = await fetch('/api/send-application-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          selectedTeam: data.selectedTeam,
+          isAllRounder,
+          secondaryTeam: isAllRounder ? secondaryTeam : undefined
+        }),
+      });
+
+      if (!emailResponse.ok) {
+        console.error('Failed to send confirmation email');
+      }
+
       setIsSubmitted(true);
-      toast.success('Application submitted successfully! You will receive an email about your interview schedule.');
+      toast.success('Application submitted successfully! You will receive an email confirmation shortly.');
     } catch (error) {
       console.error('Error submitting application:', error);
       toast.error('Failed to submit application. Please try again.');
