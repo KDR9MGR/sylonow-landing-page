@@ -42,16 +42,14 @@ export default function CareerForm() {
   const [isAllRounder, setIsAllRounder] = useState(false);
   const [secondaryTeam, setSecondaryTeam] = useState('');
   const totalSteps = 4;
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting: formStateIsSubmitting },
+    formState: { errors, isSubmitting },
     setValue,
     watch,
-    trigger,
-    reset
+    trigger
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -95,55 +93,49 @@ export default function CareerForm() {
   };
 
   const onSubmit = async (data: FormData) => {
-    setIsSubmitting(true);
     try {
+      // Check if user has already submitted an application
+      const { data: existingSubmission } = await supabase
+        .from('career_applications')
+        .select('id')
+        .eq('email', data.email)
+        .single();
+
+      if (existingSubmission) {
+        toast.error('You have already submitted an application.');
+      return;
+    }
+
       const formattedData = {
         name: data.name,
         email: data.email,
         phone: data.phone,
+        is_all_rounder: isAllRounder,
         selected_team: data.selectedTeam,
         secondary_team: isAllRounder ? secondaryTeam : null,
         description: data.description,
         passion: data.passion || '',
-        challenge_accepter: data.challengeAccepter === 'yes',
+        challenge_accepter: data.challengeAccepter,
         weekly_hours: Number(data.weeklyHours),
         passion_meaning: data.passionMeaning,
-        direct_entry: data.directEntry === 'yes',
-        status: 'pending',
-        created_at: new Date().toISOString()
+        direct_entry: data.directEntry,
+        status: 'pending'
       };
 
-      // Insert into Supabase
-      const { error: supabaseError } = await supabase
-        .from('career_form_submission_new')
+      const { error } = await supabase
+        .from('career_form_submissions_new')
         .insert([formattedData]);
 
-      if (supabaseError) {
-        console.error('Supabase error:', supabaseError);
-        throw supabaseError;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
       }
 
-      // Send emails
-      const emailResponse = await fetch('/api/send-career-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formattedData),
-      });
-
-      if (!emailResponse.ok) {
-        throw new Error('Failed to send confirmation emails');
-      }
-
-      toast.success('Application submitted successfully! Please check your email for confirmation.');
       setIsSubmitted(true);
-      reset();
+      toast.success('Application submitted successfully! You will receive an email about your interview schedule.');
     } catch (error) {
-      console.error('Submission error:', error);
+      console.error('Error submitting application:', error);
       toast.error('Failed to submit application. Please try again.');
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
