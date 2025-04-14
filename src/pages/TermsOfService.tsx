@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 
 const TermsOfService = () => {
-  const lastUpdated = "January 1, 2024";
+  const lastUpdated = "January 1, 2025";
 
   return (
     <>

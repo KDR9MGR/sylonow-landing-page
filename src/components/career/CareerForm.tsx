@@ -132,22 +132,34 @@ export default function CareerForm() {
       }
 
       // Send confirmation email via API
-      const emailResponse = await fetch('/api/send-application-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          selectedTeam: data.selectedTeam,
-          isAllRounder,
-          secondaryTeam: isAllRounder ? secondaryTeam : undefined
-        }),
-      });
+      try {
+        console.log('Sending email to:', data.email);
+        const emailResponse = await fetch('/api/send-application-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: data.name,
+            email: data.email,
+            selectedTeam: data.selectedTeam,
+            isAllRounder,
+            secondaryTeam: isAllRounder ? secondaryTeam : undefined
+          }),
+        });
 
-      if (!emailResponse.ok) {
-        console.error('Failed to send confirmation email');
+        if (!emailResponse.ok) {
+          const errorData = await emailResponse.json();
+          console.error('Email API error:', errorData);
+          throw new Error(`Failed to send email: ${errorData.message || 'Unknown error'}`);
+        }
+
+        const responseData = await emailResponse.json();
+        console.log('Email sent successfully:', responseData);
+      } catch (emailError) {
+        console.error('Email sending error:', emailError);
+        // Don't throw here, we still want to show success for form submission
+        toast.error('Application submitted but failed to send confirmation email. Please check your email address.');
       }
 
       setIsSubmitted(true);

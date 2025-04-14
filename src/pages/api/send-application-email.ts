@@ -1,11 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 
+// Create reusable transporter object using SMTP transport
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // true for 465, false for other ports
   auth: {
     user: process.env.EMAIL_USER || 'jobs.sylonow@gmail.com',
     pass: process.env.EMAIL_PASS || 'Kalkiapplyjobww7'
+  },
+  tls: {
+    rejectUnauthorized: false // Accept self-signed certificates
   }
 });
 
@@ -13,12 +19,19 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.log('API route called with method:', req.method);
+
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
   try {
     const { name, email, selectedTeam, isAllRounder, secondaryTeam } = req.body;
+    console.log('Received request body:', { name, email, selectedTeam, isAllRounder, secondaryTeam });
+
+    if (!name || !email) {
+      return res.status(400).json({ message: 'Name and email are required' });
+    }
 
     const roleText = isAllRounder 
       ? 'Company All-Rounder'
@@ -55,10 +68,29 @@ export default async function handler(
       `
     };
 
-    await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: 'Email sent successfully' });
+    console.log('Attempting to send email with options:', {
+      to: mailOptions.to,
+      subject: mailOptions.subject
+    });
+
+    try {
+      // Verify SMTP connection configuration
+      await transporter.verify();
+      console.log('SMTP connection verified successfully');
+
+      // Send mail
+      const info = await transporter.sendMail(mailOptions);
+      console.log('Email sent successfully:', info.messageId);
+      res.status(200).json({ message: 'Email sent successfully', messageId: info.messageId });
+    } catch (smtpError) {
+      console.error('SMTP Error:', smtpError);
+      throw new Error(`SMTP Error: ${smtpError.message}`);
+    }
   } catch (error) {
-    console.error('Error sending email:', error);
-    res.status(500).json({ message: 'Failed to send email' });
+    console.error('Error in API route:', error);
+    res.status(500).json({ 
+      message: 'Failed to send email',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 } 

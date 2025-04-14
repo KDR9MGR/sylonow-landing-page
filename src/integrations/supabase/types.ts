@@ -54,7 +54,7 @@ export type Database = {
         }
         Relationships: []
       }
-      contact_form_submissions: {
+      contact_form_submission: {
         Row: {
           created_at: string
           email: string

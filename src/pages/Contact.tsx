@@ -57,7 +57,7 @@ const Contact = () => {
     try {
       // Store the data in Supabase
       const { error } = await supabase
-        .from('contact_form_submissions')
+        .from('contact_form_submission')
         .insert([{
           name: values.name,
           email: values.email,
@@ -102,8 +102,8 @@ const Contact = () => {
     { 
       icon: <Phone className="h-5 w-5" />, 
       label: 'Phone', 
-      value: '+91 (800) 123-4567',
-      link: 'tel:+918001234567'
+      value: '+91 9741338102',
+      link: 'tel:+919741338102'
     },
     { 
       icon: <MapPin className="h-5 w-5" />, 
