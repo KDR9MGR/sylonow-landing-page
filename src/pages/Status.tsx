@@ -17,7 +17,7 @@ const Status = () => {
       name: 'Web Application',
       status: 'operational',
       uptime: '99.95%',
-      lastIncident: 'March 1, 2024 - Minor UI glitch',
+      lastIncident: 'May 1, 2024 - Minor UI glitch',
     },
     {
       name: 'Database Services',
@@ -35,7 +35,7 @@ const Status = () => {
       name: 'AI Recommendation Engine',
       status: 'operational',
       uptime: '99.90%',
-      lastIncident: 'March 5, 2024 - Scheduled maintenance',
+      lastIncident: 'May 5, 2024 - Scheduled maintenance',
     },
     {
       name: 'Email Services',
@@ -138,7 +138,7 @@ const Status = () => {
                     <div className="w-2 h-2 rounded-full bg-yellow-500 mt-2"></div>
                     <div>
                       <h3 className="text-lg font-medium text-gray-900">Email Delivery Delays</h3>
-                      <p className="text-gray-600">March 15, 2024 - Ongoing</p>
+                      <p className="text-gray-600">May 15, 2024 - Ongoing</p>
                       <p className="text-gray-600 mt-2">
                         We are currently experiencing delays in email delivery. Our team is working to resolve this issue.
                       </p>
@@ -148,7 +148,7 @@ const Status = () => {
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
                     <div>
                       <h3 className="text-lg font-medium text-gray-900">Scheduled Maintenance Completed</h3>
-                      <p className="text-gray-600">March 5, 2024 - Resolved</p>
+                      <p className="text-gray-600">May 5, 2024 - Resolved</p>
                       <p className="text-gray-600 mt-2">
                         Scheduled maintenance on our AI Recommendation Engine has been completed successfully.
                       </p>

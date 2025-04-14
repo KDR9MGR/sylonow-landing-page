@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Shield, Lock, Eye, Bell, Server, Globe } from 'lucide-react';
 
 const PrivacyPolicy = () => {
-  const lastUpdated = "March 15, 2024";
+  const lastUpdated = "May 15, 2024";
 
   const sections = [
     {

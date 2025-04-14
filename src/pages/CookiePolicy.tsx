@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 
 const CookiePolicy = () => {
-  const lastUpdated = "March 15, 2024";
+  const lastUpdated = "May 15, 2024";
   const [showBanner, setShowBanner] = useState(true);
 
   // Check if cookies are already accepted

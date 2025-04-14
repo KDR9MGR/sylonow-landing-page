@@ -54,7 +54,7 @@ const About = () => {
   const companyInfo = [
     {
       title: "Launch Date",
-      value: "March 2024",
+      value: "May 2024",
       icon: <Calendar className="w-6 h-6" />
     },
     {

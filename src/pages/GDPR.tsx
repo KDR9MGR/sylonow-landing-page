@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 const GDPR = () => {
-  const lastUpdated = "March 15, 2024";
+  const lastUpdated = "May 15, 2024";
 
   const userRights = [
     {

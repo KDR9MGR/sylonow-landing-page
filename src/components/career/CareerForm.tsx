@@ -19,16 +19,18 @@ const formSchema = z.object({
   email: z.string().email('Invalid email address'),
   phone: z.string().min(10, 'Phone number must be at least 10 digits'),
   selectedTeam: z.string().min(1, 'Please select a team'),
-  isAllRounder: z.boolean().optional(),
+  isAllRounder: z.boolean().default(false),
   secondaryTeam: z.string().optional(),
   description: z.string()
     .min(10, 'Description must be at least 10 characters')
     .max(100, 'Description must not exceed 100 characters'),
-  passion: z.string().max(500, 'Passion must not exceed 100 words').optional(),
+  passion: z.string()
+    .max(500, 'Passion statement must not exceed 500 characters')
+    .optional(),
   challengeAccepter: z.enum(['yes', 'no']),
   weeklyHours: z.number().min(1, 'Please enter weekly hours'),
   passionMeaning: z.string()
-    .max(125, 'Passion meaning must not exceed 25 words'),
+    .max(125, 'Passion meaning must not exceed 125 characters'),
   directEntry: z.enum(['yes', 'no'])
 });
 
@@ -40,14 +42,16 @@ export default function CareerForm() {
   const [isAllRounder, setIsAllRounder] = useState(false);
   const [secondaryTeam, setSecondaryTeam] = useState('');
   const totalSteps = 4;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting: formStateIsSubmitting },
     setValue,
     watch,
-    trigger
+    trigger,
+    reset
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -91,46 +95,55 @@ export default function CareerForm() {
   };
 
   const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
     try {
-      // Check if user has already submitted an application
-      const { data: existingSubmission } = await supabase
-        .from('career_applications')
-        .select('id')
-        .eq('email', data.email)
-        .single();
-
-      if (existingSubmission) {
-        toast.error('You have already submitted an application.');
-        return;
-      }
-
       const formattedData = {
-        ...data,
-        is_all_rounder: isAllRounder,
-        selected_team: isAllRounder ? 'all_rounder' : data.selectedTeam,
-        secondary_team: secondaryTeam,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        selected_team: data.selectedTeam,
+        secondary_team: isAllRounder ? secondaryTeam : null,
         description: data.description,
         passion: data.passion || '',
-        challenge_accepter: data.challengeAccepter,
+        challenge_accepter: data.challengeAccepter === 'yes',
         weekly_hours: Number(data.weeklyHours),
         passion_meaning: data.passionMeaning,
-        direct_entry: data.directEntry
+        direct_entry: data.directEntry === 'yes',
+        status: 'pending',
+        created_at: new Date().toISOString()
       };
 
-      const { error } = await supabase
-        .from('career_applications')
+      // Insert into Supabase
+      const { error: supabaseError } = await supabase
+        .from('career_form_submission_new')
         .insert([formattedData]);
 
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+      if (supabaseError) {
+        console.error('Supabase error:', supabaseError);
+        throw supabaseError;
       }
 
+      // Send emails
+      const emailResponse = await fetch('/api/send-career-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formattedData),
+      });
+
+      if (!emailResponse.ok) {
+        throw new Error('Failed to send confirmation emails');
+      }
+
+      toast.success('Application submitted successfully! Please check your email for confirmation.');
       setIsSubmitted(true);
-      toast.success('Application submitted successfully! You will receive an email about your interview schedule.');
+      reset();
     } catch (error) {
-      console.error('Error submitting application:', error);
+      console.error('Submission error:', error);
       toast.error('Failed to submit application. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -150,8 +163,8 @@ export default function CareerForm() {
       exit: { opacity: 0, x: -20 }
     };
 
-    switch (currentStep) {
-      case 1:
+      switch (currentStep) {
+        case 1:
         return (
           <motion.div {...fadeIn} className="space-y-4">
             <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
@@ -195,7 +208,7 @@ export default function CareerForm() {
           </motion.div>
         );
 
-      case 2:
+        case 2:
         return (
           <motion.div {...fadeIn} className="space-y-4">
             <h2 className="text-xl font-semibold mb-4">Team Selection</h2>
@@ -258,7 +271,7 @@ export default function CareerForm() {
           </motion.div>
         );
 
-      case 3:
+        case 3:
         return (
           <motion.div {...fadeIn} className="space-y-4">
             <h2 className="text-xl font-semibold mb-4">Experience & Passion</h2>
@@ -358,9 +371,9 @@ export default function CareerForm() {
           </motion.div>
         );
 
-      default:
+        default:
         return null;
-    }
+      }
   };
 
   if (isSubmitted) {
@@ -414,7 +427,7 @@ export default function CareerForm() {
       
       <div className="flex justify-between mt-8 pt-4 border-t">
         {currentStep > 1 && (
-          <Button
+          <Button 
             type="button"
             onClick={prevStep}
             variant="outline"
@@ -423,25 +436,25 @@ export default function CareerForm() {
             Previous
           </Button>
         )}
-        
+          
         {currentStep < totalSteps ? (
-          <Button
-            type="button"
+            <Button 
+              type="button"
             onClick={nextStep}
             className="bg-gradient-to-r from-pink-500 to-purple-500 text-white ml-auto px-8"
-          >
+            >
             Next
-          </Button>
-        ) : (
-          <Button
-            type="submit"
+            </Button>
+          ) : (
+            <Button 
+              type="submit"
             className="bg-gradient-to-r from-pink-500 to-purple-500 text-white ml-auto px-8"
-            disabled={isSubmitting}
-          >
+              disabled={isSubmitting}
+            >
             {isSubmitting ? 'Submitting...' : 'Submit Application'}
-          </Button>
-        )}
-      </div>
-    </form>
+            </Button>
+          )}
+        </div>
+      </form>
   );
 };
