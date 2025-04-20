@@ -46,6 +46,7 @@
     "@types/next": "^8.0.7",
     "@types/nodemailer": "^6.4.17",
     "@types/react-helmet": "^6.1.11",
+    "@types/uuid": "^10.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
@@ -69,6 +70,7 @@
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "three": "0.159.0",
+    "uuid": "^11.1.0",
     "vaul": "^0.9.3",
     "zod": "^3.23.8"
   },

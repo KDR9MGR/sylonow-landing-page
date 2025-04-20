@@ -1,32 +1,38 @@
 export type TeamType = {
   value: string;
   label: string;
+  isSpecial?: boolean;
 };
 
 export const teams: TeamType[] = [
   {
     value: 'all_rounder',
-    label: 'All Rounder'
+    label: 'Company All-Rounder',
+    isSpecial: true
   },
   {
-    value: 'development',
-    label: 'Development'
+    value: 'technical',
+    label: 'Technical Team'
   },
   {
-    value: 'design',
-    label: 'Design'
+    value: 'management',
+    label: 'Management Team'
   },
   {
-    value: 'marketing',
-    label: 'Marketing'
+    value: 'research_development',
+    label: 'Research & Development Team'
   },
   {
-    value: 'content',
-    label: 'Content Creation'
+    value: 'creative_digital',
+    label: 'Creative & Digital Team'
   },
   {
-    value: 'sales',
-    label: 'Sales'
+    value: 'marketing_advertisement',
+    label: 'Marketing & Advertisement Team'
+  },
+  {
+    value: 'exclusive',
+    label: 'Exclusive Team (Other Roles)'
   }
 ];
 
@@ -54,7 +60,7 @@ export const initialFormData: FormData = {
   email: '',
   phone: '',
   role: '',
-  selectedTeam: { value: 'technology', label: 'Technology' },
+  selectedTeam: { value: 'technical', label: 'Technical Team' },
   description: '',
   passion: '',
   challengeAccepter: 'yes',

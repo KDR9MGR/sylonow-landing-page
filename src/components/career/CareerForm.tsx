@@ -233,63 +233,147 @@ export default function CareerForm() {
 
         case 2:
         return (
-          <motion.div {...fadeIn} className="space-y-4">
+          <motion.div {...fadeIn} className="space-y-6">
             <h2 className="text-xl font-semibold mb-4">Team Selection</h2>
             
-            {/* All Rounder Checkbox */}
-            <div className="flex items-center space-x-2 mb-4">
-              <input
-                type="checkbox"
-                id="allRounder"
-                checked={isAllRounder}
-                onChange={(e) => {
-                  setIsAllRounder(e.target.checked);
-                  if (e.target.checked) {
-                    setValue('selectedTeam', 'all_rounder');
-                  } else {
-                    setValue('selectedTeam', secondaryTeam || '');
-                  }
-                }}
-                className="h-4 w-4 rounded border-gray-300 text-pink-600 focus:ring-pink-500"
-              />
-              <Label htmlFor="allRounder" className="font-medium">All Rounder</Label>
-            </div>
-
-            {/* Other Teams Radio Buttons */}
-            <div className="space-y-2">
-              <Label>Select Your Team {!isAllRounder && '*'}</Label>
-              <RadioGroup
-                value={secondaryTeam}
-                onValueChange={(value) => {
-                  setSecondaryTeam(value);
-                  setValue('selectedTeam', isAllRounder ? 'all_rounder' : value);
-                  setValue('secondaryTeam', value);
-                }}
-                className="space-y-2"
-              >
-                {teams.filter(team => team.value !== 'all_rounder').map((team) => (
-                  <div key={team.value} className="flex items-center space-x-2">
-                    <RadioGroupItem 
-                      value={team.value} 
-                      id={team.value}
-                    />
-                    <Label htmlFor={team.value}>{team.label}</Label>
-                  </div>
+            <div className="space-y-4">
+              <Label className="text-lg font-medium text-gray-900">Select Your Team *</Label>
+              
+              {/* All Rounder Option */}
+              {teams
+                .filter(team => team.isSpecial)
+                .map((team) => (
+                  <motion.div 
+                    key={team.value}
+                    className={`p-6 rounded-xl border-2 transition-all duration-200 cursor-pointer ${
+                      secondaryTeam === team.value 
+                        ? 'border-purple-500 bg-gradient-to-r from-purple-50 to-pink-50'
+                        : 'border-purple-200 hover:border-purple-300 hover:bg-gradient-to-r hover:from-purple-50/50 hover:to-pink-50/50'
+                    }`}
+                    onClick={() => {
+                      setIsAllRounder(true);
+                      setSecondaryTeam(team.value);
+                      setValue('selectedTeam', team.value);
+                    }}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                        secondaryTeam === team.value 
+                          ? 'border-purple-500 bg-purple-500'
+                          : 'border-purple-300'
+                      }`}>
+                        {secondaryTeam === team.value && (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="w-2.5 h-2.5 bg-white rounded-full"
+                          />
+                        )}
+                      </div>
+                      <div>
+                        <Label 
+                          htmlFor={team.value}
+                          className={`font-semibold text-lg ${
+                            secondaryTeam === team.value 
+                              ? 'text-purple-700'
+                              : 'text-purple-600'
+                          }`}
+                        >
+                          {team.label}
+                        </Label>
+                        <p className="text-sm text-purple-600 mt-1">
+                          Select this + one additional role below
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
                 ))}
-              </RadioGroup>
-              {errors.selectedTeam && !isAllRounder && !secondaryTeam && (
-                <p className="text-red-500 text-sm mt-1">Please select at least one team</p>
+
+              {/* Regular Team Options */}
+              <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 ${!isAllRounder && 'opacity-50 pointer-events-none'}`}>
+                <div className="col-span-full">
+                  <Label className="text-lg font-medium text-gray-900">
+                    {isAllRounder ? 'Select Additional Role *' : 'Or Select One Role Below *'}
+                  </Label>
+                </div>
+                {teams
+                  .filter(team => !team.isSpecial)
+                  .map((team) => (
+                    <div 
+                      key={team.value}
+                      className={`p-4 rounded-lg border-2 transition-all duration-200 cursor-pointer ${
+                        team.value === (isAllRounder ? watch('secondaryTeam') : secondaryTeam)
+                          ? 'border-pink-500 bg-pink-50'
+                          : 'border-gray-200 hover:border-pink-300 hover:bg-pink-50/50'
+                      }`}
+                      onClick={() => {
+                        if (isAllRounder) {
+                          setValue('secondaryTeam', team.value);
+                        } else {
+                          setSecondaryTeam(team.value);
+                          setValue('selectedTeam', team.value);
+                          setIsAllRounder(false);
+                        }
+                      }}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                          team.value === (isAllRounder ? watch('secondaryTeam') : secondaryTeam)
+                            ? 'border-pink-500 bg-pink-500'
+                            : 'border-gray-300'
+                        }`}>
+                          {team.value === (isAllRounder ? watch('secondaryTeam') : secondaryTeam) && (
+                            <motion.div
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              className="w-2 h-2 bg-white rounded-full"
+                            />
+                          )}
+                        </div>
+                        <Label 
+                          htmlFor={team.value}
+                          className={`font-medium ${
+                            team.value === (isAllRounder ? watch('secondaryTeam') : secondaryTeam)
+                              ? 'text-pink-700'
+                              : 'text-gray-700'
+                          }`}
+                        >
+                          {team.label}
+                        </Label>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+              {errors.selectedTeam && !secondaryTeam && (
+                <p className="text-red-500 text-sm mt-1">Please select a team</p>
+              )}
+              {isAllRounder && errors.secondaryTeam && !watch('secondaryTeam') && (
+                <p className="text-red-500 text-sm mt-1">Please select an additional role</p>
               )}
             </div>
 
-            {/* Selected Teams Summary */}
-            {(isAllRounder || secondaryTeam) && (
-              <div className="mt-4 p-3 bg-gray-50 rounded-md">
-                <p className="text-sm text-gray-600">Selected: {[
-                  isAllRounder ? 'All Rounder' : '',
-                  secondaryTeam ? teams.find(t => t.value === secondaryTeam)?.label : ''
-                ].filter(Boolean).join(' + ')}</p>
-              </div>
+            {/* Selection Summary */}
+            {secondaryTeam && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-6 p-4 rounded-lg bg-gradient-to-r from-purple-50 to-pink-50"
+              >
+                <p className="text-sm text-gray-700">
+                  Selected: {' '}
+                  <span className="font-semibold text-purple-700">
+                    {teams.find(t => t.value === secondaryTeam)?.label}
+                  </span>
+                  {isAllRounder && watch('secondaryTeam') && (
+                    <>
+                      {' + '}
+                      <span className="font-semibold text-pink-700">
+                        {teams.find(t => t.value === watch('secondaryTeam'))?.label}
+                      </span>
+                    </>
+                  )}
+                </p>
+              </motion.div>
             )}
           </motion.div>
         );
