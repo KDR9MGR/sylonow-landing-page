@@ -246,23 +246,21 @@ export default function CareerForm() {
                   <motion.div 
                     key={team.value}
                     className={`p-6 rounded-xl border-2 transition-all duration-200 cursor-pointer ${
-                      secondaryTeam === team.value 
+                      isAllRounder 
                         ? 'border-purple-500 bg-gradient-to-r from-purple-50 to-pink-50'
                         : 'border-purple-200 hover:border-purple-300 hover:bg-gradient-to-r hover:from-purple-50/50 hover:to-pink-50/50'
                     }`}
                     onClick={() => {
-                      setIsAllRounder(true);
-                      setSecondaryTeam(team.value);
-                      setValue('selectedTeam', team.value);
+                      setIsAllRounder(prev => !prev);
                     }}
                   >
                     <div className="flex items-center space-x-3">
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        secondaryTeam === team.value 
+                        isAllRounder 
                           ? 'border-purple-500 bg-purple-500'
                           : 'border-purple-300'
                       }`}>
-                        {secondaryTeam === team.value && (
+                        {isAllRounder && (
                           <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
@@ -274,7 +272,7 @@ export default function CareerForm() {
                         <Label 
                           htmlFor={team.value}
                           className={`font-semibold text-lg ${
-                            secondaryTeam === team.value 
+                            isAllRounder 
                               ? 'text-purple-700'
                               : 'text-purple-600'
                           }`}
@@ -282,7 +280,7 @@ export default function CareerForm() {
                           {team.label}
                         </Label>
                         <p className="text-sm text-purple-600 mt-1">
-                          Select this + one additional role below
+                          Work across all departments (Optional)
                         </p>
                       </div>
                     </div>
@@ -290,10 +288,10 @@ export default function CareerForm() {
                 ))}
 
               {/* Regular Team Options */}
-              <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 ${!isAllRounder && 'opacity-50 pointer-events-none'}`}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                 <div className="col-span-full">
                   <Label className="text-lg font-medium text-gray-900">
-                    {isAllRounder ? 'Select Additional Role *' : 'Or Select One Role Below *'}
+                    Select Your Role *
                   </Label>
                 </div>
                 {teams
@@ -302,27 +300,22 @@ export default function CareerForm() {
                     <div 
                       key={team.value}
                       className={`p-4 rounded-lg border-2 transition-all duration-200 cursor-pointer ${
-                        team.value === (isAllRounder ? watch('secondaryTeam') : secondaryTeam)
+                        secondaryTeam === team.value
                           ? 'border-pink-500 bg-pink-50'
                           : 'border-gray-200 hover:border-pink-300 hover:bg-pink-50/50'
                       }`}
                       onClick={() => {
-                        if (isAllRounder) {
-                          setValue('secondaryTeam', team.value);
-                        } else {
-                          setSecondaryTeam(team.value);
-                          setValue('selectedTeam', team.value);
-                          setIsAllRounder(false);
-                        }
+                        setSecondaryTeam(team.value);
+                        setValue('selectedTeam', team.value);
                       }}
                     >
                       <div className="flex items-center space-x-3">
                         <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                          team.value === (isAllRounder ? watch('secondaryTeam') : secondaryTeam)
+                          secondaryTeam === team.value
                             ? 'border-pink-500 bg-pink-500'
                             : 'border-gray-300'
                         }`}>
-                          {team.value === (isAllRounder ? watch('secondaryTeam') : secondaryTeam) && (
+                          {secondaryTeam === team.value && (
                             <motion.div
                               initial={{ scale: 0 }}
                               animate={{ scale: 1 }}
@@ -333,7 +326,7 @@ export default function CareerForm() {
                         <Label 
                           htmlFor={team.value}
                           className={`font-medium ${
-                            team.value === (isAllRounder ? watch('secondaryTeam') : secondaryTeam)
+                            secondaryTeam === team.value
                               ? 'text-pink-700'
                               : 'text-gray-700'
                           }`}
@@ -345,15 +338,12 @@ export default function CareerForm() {
                   ))}
               </div>
               {errors.selectedTeam && !secondaryTeam && (
-                <p className="text-red-500 text-sm mt-1">Please select a team</p>
-              )}
-              {isAllRounder && errors.secondaryTeam && !watch('secondaryTeam') && (
-                <p className="text-red-500 text-sm mt-1">Please select an additional role</p>
+                <p className="text-red-500 text-sm mt-1">Please select a role</p>
               )}
             </div>
 
             {/* Selection Summary */}
-            {secondaryTeam && (
+            {(secondaryTeam || isAllRounder) && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -361,14 +351,16 @@ export default function CareerForm() {
               >
                 <p className="text-sm text-gray-700">
                   Selected: {' '}
-                  <span className="font-semibold text-purple-700">
-                    {teams.find(t => t.value === secondaryTeam)?.label}
-                  </span>
-                  {isAllRounder && watch('secondaryTeam') && (
+                  {secondaryTeam && (
+                    <span className="font-semibold text-pink-700">
+                      {teams.find(t => t.value === secondaryTeam)?.label}
+                    </span>
+                  )}
+                  {isAllRounder && (
                     <>
-                      {' + '}
-                      <span className="font-semibold text-pink-700">
-                        {teams.find(t => t.value === watch('secondaryTeam'))?.label}
+                      {secondaryTeam && ' + '}
+                      <span className="font-semibold text-purple-700">
+                        All-Rounder
                       </span>
                     </>
                   )}
