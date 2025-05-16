@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { userPresence } from './lib/userPresence';
+import { visitorTracker } from './lib/visitorTracker';
 import ScrollToTop from './components/ScrollToTop';
 import Index from "./pages/Index";
 import About from "./pages/About";
@@ -24,17 +25,30 @@ import HelpCenter from './pages/HelpCenter';
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [showContent, setShowContent] = useState(false);
+  const [showContent, setShowContent] = useState(() => {
+    const hasSeenAnimation = localStorage.getItem('hasSeenAnimation');
+    const isHomePage = window.location.pathname === '/';
+    
+    // Show content immediately if:
+    // 1. Not on home page AND has seen animation before
+    // 2. Not on home page AND accessing directly
+    return !isHomePage && (hasSeenAnimation || !document.referrer);
+  });
 
   useEffect(() => {
-    console.log('App mounted - initializing user tracking');
+    console.log('App mounted - initializing tracking');
     
     const initializeTracking = async () => {
       try {
+        // Track user presence
         await userPresence.startTracking();
         console.log('User tracking initialized successfully');
+
+        // Track unique visitor
+        await visitorTracker.trackVisit();
+        console.log('Visitor tracking initialized successfully');
       } catch (error) {
-        console.error('Failed to initialize user tracking:', error);
+        console.error('Failed to initialize tracking:', error);
       }
     };
 
@@ -57,7 +71,10 @@ const App = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 1.5 }}
+            transition={{ 
+              duration: 0.8,
+              delay: 0.2 // Reduced delay for better UX
+            }}
             className="min-h-screen bg-background"
           >
             <QueryClientProvider client={queryClient}>
@@ -91,5 +108,5 @@ const App = () => {
     </>
   );
 };
-// /comment 
+
 export default App;

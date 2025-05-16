@@ -86,7 +86,32 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [shouldSkipAnimation, setShouldSkipAnimation] = useState(false);
   
+  // Check if animation should be skipped
+  useEffect(() => {
+    const hasSeenAnimation = localStorage.getItem('hasSeenAnimation');
+    const isHomePage = window.location.pathname === '/';
+    
+    // Only skip animation if:
+    // 1. Not on home page AND has seen animation before
+    // 2. Not on home page AND accessing directly
+    if (!isHomePage && (hasSeenAnimation || !document.referrer)) {
+      setShouldSkipAnimation(true);
+      setIsAnimationComplete(true);
+      if (onAnimationComplete) {
+        onAnimationComplete();
+      }
+    }
+  }, [onAnimationComplete]);
+
+  // Save animation state when completed
+  useEffect(() => {
+    if (isAnimationComplete) {
+      localStorage.setItem('hasSeenAnimation', 'true');
+    }
+  }, [isAnimationComplete]);
+
   // Check if device is mobile
   useEffect(() => {
     const checkMobile = () => {
@@ -224,7 +249,7 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
 
   return (
     <AnimatePresence mode="wait">
-      {!isAnimationComplete ? (
+      {!isAnimationComplete && !shouldSkipAnimation ? (
         <>
           {/* Black background layer */}
           <motion.div
