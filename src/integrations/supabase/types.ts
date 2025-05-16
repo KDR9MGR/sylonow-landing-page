@@ -102,6 +102,51 @@ export type Database = {
         }
         Relationships: []
       }
+      visitors: {
+        Row: {
+          id: string
+          ip_address: string
+          user_agent: string | null
+          referrer: string | null
+          visited_at: string
+          pathname: string
+        }
+        Insert: {
+          id?: string
+          ip_address: string
+          user_agent?: string | null
+          referrer?: string | null
+          visited_at?: string
+          pathname: string
+        }
+        Update: {
+          id?: string
+          ip_address?: string
+          user_agent?: string | null
+          referrer?: string | null
+          visited_at?: string
+          pathname?: string
+        }
+        Relationships: []
+      }
+      visitor_stats: {
+        Row: {
+          id: string
+          total_visitors: number
+          last_updated: string
+        }
+        Insert: {
+          id?: string
+          total_visitors?: number
+          last_updated?: string
+        }
+        Update: {
+          id?: string
+          total_visitors?: number
+          last_updated?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
