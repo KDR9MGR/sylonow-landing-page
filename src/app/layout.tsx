@@ -1,10 +1,10 @@
 export const metadata = {
   metadataBase: new URL('https://www.sylonow.com'),
-  title: 'Sylonow - Make Every Moment Special',
-  description: 'Transform your celebrations with personalized surprise services. Creating unforgettable moments through curated experiences.',
+  title: 'Sylonow – Elevate Every Celebration with the Ultimate App',
+  description: 'Experience unforgettable moments with Sylonow—the premier celebration app that brings your special occasions to life. Launching June 2025.',
   openGraph: {
-    title: 'Sylonow - Make Every Moment Special',
-    description: 'Transform your celebrations with personalized surprise services. Creating unforgettable moments through curated experiences.',
+    title: 'Sylonow – Elevate Every Celebration with the Ultimate App',
+    description: 'Experience unforgettable moments with Sylonow—the premier celebration app that brings your special occasions to life. Launching June 2025.',
     url: 'https://www.sylonow.com',
     siteName: 'Sylonow',
     images: [
@@ -20,8 +20,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sylonow - Make Every Moment Special',
-    description: 'Transform your celebrations with personalized surprise services. Creating unforgettable moments through curated experiences.',
+    title: 'Sylonow – Elevate Every Celebration with the Ultimate App',
+    description: 'Experience unforgettable moments with Sylonow—the premier celebration app that brings your special occasions to life. Launching June 2025.',
     images: ['/og-image.jpg'],
   },
   icons: {
@@ -43,8 +43,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta property="og:title" content="Sylonow - Make Every Moment Special" />
-        <meta property="og:description" content="Transform your celebrations with personalized surprise services. Creating unforgettable moments through curated experiences." />
+        <meta property="og:title" content="Sylonow – Elevate Every Celebration with the Ultimate App" />
+        <meta property="og:description" content="Experience unforgettable moments with Sylonow—the premier celebration app that brings your special occasions to life. Launching June 2025." />
         <meta property="og:image" content="https://www.sylonow.com/og-image.jpg" />
         <meta property="og:url" content="https://www.sylonow.com" />
         <meta name="twitter:card" content="summary_large_image" />

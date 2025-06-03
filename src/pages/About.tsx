@@ -104,7 +104,24 @@ const About = () => {
   return (
     <>
       <Helmet>
-        // ... existing code ...
+        <title>About Sylonow – The Ultimate Celebration App</title>
+        <meta name="description" content="Learn about Sylonow's mission to elevate every celebration. Discover how our premier app brings special occasions to life with unforgettable experiences." />
+        <meta name="keywords" content="about sylonow, celebration app, company story, team, mission, vision" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://sylonow.com/about" />
+        <meta property="og:title" content="About Sylonow – The Ultimate Celebration App" />
+        <meta property="og:description" content="Learn about Sylonow's mission to elevate every celebration. Discover how our premier app brings special occasions to life with unforgettable experiences." />
+        <meta property="og:image" content="/about-og-image.jpg" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://sylonow.com/about" />
+        <meta name="twitter:title" content="About Sylonow – The Ultimate Celebration App" />
+        <meta name="twitter:description" content="Learn about Sylonow's mission to elevate every celebration. Discover how our premier app brings special occasions to life with unforgettable experiences." />
+        <meta name="twitter:image" content="/about-twitter-image.jpg" />
+        
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://sylonow.com/about" />
       </Helmet>
       <div className="min-h-screen bg-white flex flex-col mt-10">
         <Navbar />

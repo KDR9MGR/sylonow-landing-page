@@ -192,7 +192,24 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        // ... existing code ...
+        <title>Sylonow – Elevate Every Celebration with the Ultimate App</title>
+        <meta name="description" content="Experience unforgettable moments with Sylonow—the premier celebration app that brings your special occasions to life. Launching June 2025." />
+        <meta name="keywords" content="celebration app, surprise services, special occasions, party planning, celebration planner, event planner" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://sylonow.com" />
+        <meta property="og:title" content="Sylonow – Elevate Every Celebration with the Ultimate App" />
+        <meta property="og:description" content="Experience unforgettable moments with Sylonow—the premier celebration app that brings your special occasions to life. Launching June 2025." />
+        <meta property="og:image" content="/og-image.jpg" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://sylonow.com" />
+        <meta name="twitter:title" content="Sylonow – Elevate Every Celebration with the Ultimate App" />
+        <meta name="twitter:description" content="Experience unforgettable moments with Sylonow—the premier celebration app that brings your special occasions to life. Launching June 2025." />
+        <meta name="twitter:image" content="/og-image.jpg" />
+        
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://sylonow.com" />
       </Helmet>
       <div className="min-h-screen bg-white overflow-x-hidden relative">
         {/* Blurred Blob Elements */}

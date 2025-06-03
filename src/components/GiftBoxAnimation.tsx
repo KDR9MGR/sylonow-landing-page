@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import WelcomeTypingAnimation from './WelcomeTypingAnimation';
 
 interface GiftBoxAnimationProps {
   onAnimationComplete: () => void;
@@ -84,7 +83,6 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
   const [isBlurred, setIsBlurred] = useState(false);
   const [isInteractionDisabled, setIsInteractionDisabled] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [shouldSkipAnimation, setShouldSkipAnimation] = useState(false);
   
@@ -182,8 +180,8 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
     }
   }, [isAnimationComplete]);
   
-  const handleWelcomeComplete = useCallback(() => {
-    // Directly set animation complete after welcome typing animation
+  const handleAnimationComplete = useCallback(() => {
+    // Directly complete animation without text animation
     setIsAnimationComplete(true);
     if (onAnimationComplete) {
       onAnimationComplete();
@@ -195,11 +193,14 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
       const timer = setTimeout(() => {
         setIsBlurred(false);
         setIsInteractionDisabled(false);
-        setShowWelcome(true);
+        // Complete animation after a short delay (no text animation)
+        setTimeout(() => {
+          handleAnimationComplete();
+        }, 1000); // Give time for the gift box opening animation to finish
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [isOpened, isAnimationComplete]);
+  }, [isOpened, isAnimationComplete, handleAnimationComplete]);
 
   const handleInteraction = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (isInteractionDisabled || bowDropped) return;
@@ -268,18 +269,6 @@ const GiftBoxAnimation = ({ onAnimationComplete }: GiftBoxAnimationProps) => {
             className="fixed inset-0 z-40"
             style={{ pointerEvents: isAnimationComplete ? 'none' : 'auto' }}
           />
-
-          {/* Welcome Animation with instant visibility */}
-          {showWelcome && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              className="z-60"
-            >
-              <WelcomeTypingAnimation onComplete={handleWelcomeComplete} />
-            </motion.div>
-          )}
 
           {!isOpened ? (
             <div className="fixed inset-0 flex items-center justify-center bg-[#FF7B7B] z-50 overflow-hidden">
