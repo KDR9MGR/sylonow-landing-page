@@ -1,5 +1,0 @@
-package com.example.sylonow_app
-
-import io.flutter.embedding.android.FlutterActivity
-
-class MainActivity: FlutterActivity()
