@@ -1,8 +1,14 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "sylonow-surprise-spark",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Sylonow Surprise Spark Landing Page - React TypeScript project",
+  "author": "KDR9MGR Organization",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KDR9MGR/sylonow-landing-page.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
