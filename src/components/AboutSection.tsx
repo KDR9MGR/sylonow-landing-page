@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 const AboutSection = () => {
   const companyDetails = [
-    { icon: <Calendar className="h-5 w-5" />, label: 'Launch Date', value: 'May 2025' },
+    { icon: <Calendar className="h-5 w-5" />, label: 'Launch Date', value: 'July 2025' },
     { icon: <MapPin className="h-5 w-5" />, label: 'Headquarters', value: 'Bengaluru, Karnataka, India' },
     { icon: <Users className="h-5 w-5" />, label: 'Founders', value: 'Sangamesh, Srikanth, Gagan' },
     { icon: <Briefcase className="h-5 w-5" />, label: 'Industry', value: 'Celebration & Surprise Services' },
