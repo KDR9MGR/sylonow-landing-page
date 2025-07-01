@@ -20,6 +20,7 @@ import Blogs from '@/pages/Blogs';
 import BlogPost from '@/pages/BlogPost';
 import BlogEditor from '@/pages/admin/BlogEditor';
 import Contact from '@/pages/Contact';
+import NotFound from '@/pages/NotFound';
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,11 @@ const router = createBrowserRouter([
   {
     path: '/status',
     element: <Status />,
+  },
+  // Catch-all route for 404 errors
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ]);
 

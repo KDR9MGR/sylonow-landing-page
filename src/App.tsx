@@ -12,7 +12,9 @@ import ScrollToTop from './components/ScrollToTop';
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import Career from "./pages/Career";
+import Blogs from "./pages/Blogs";
+import BlogPost from "./pages/BlogPost";
+import BlogEditor from "./pages/admin/BlogEditor";
 import NotFound from "./pages/NotFound";
 import FAQs from './pages/FAQs';
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -87,7 +89,9 @@ const App = () => {
                     <Route path="/" element={<Index />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
-                    <Route path="/career" element={<Career />} />
+                    <Route path="/blogs" element={<Blogs />} />
+                    <Route path="/blogs/:slug" element={<BlogPost />} />
+                    <Route path="/admin/blogs/:id" element={<BlogEditor />} />
                     <Route path="/faqs" element={<FAQs />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/terms-of-service" element={<TermsOfService />} />
