@@ -16,7 +16,9 @@ import HelpCenter from '@/pages/HelpCenter';
 import Status from '@/pages/Status';
 import FAQs from '@/pages/FAQs';
 import About from '@/pages/About';
-import Career from '@/pages/Career';
+import Blogs from '@/pages/Blogs';
+import BlogPost from '@/pages/BlogPost';
+import BlogEditor from '@/pages/admin/BlogEditor';
 import Contact from '@/pages/Contact';
 
 const router = createBrowserRouter([
@@ -30,8 +32,16 @@ const router = createBrowserRouter([
     element: <About />,
   },
   {
-    path: '/career',
-    element: <Career />,  
+    path: '/blogs',
+    element: <Blogs />,
+  },
+  {
+    path: '/blogs/:slug',
+    element: <BlogPost />,
+  },
+  {
+    path: '/admin/blogs/:id',
+    element: <BlogEditor />,
   },
   {
     path: '/contact',
