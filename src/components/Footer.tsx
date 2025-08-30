@@ -46,9 +46,9 @@ const Footer: React.FC = () => {
                 className="inline-block"
               >
                 <img 
-                  src="lovable-uploads/logo.png" 
+                  src="/app_logo_text.svg" 
                   alt="Sylonow Logo" 
-                  className="h-8 mb-4"
+                  className="h-8 w-auto mb-4"
                 />
               </motion.div>
             </Link>

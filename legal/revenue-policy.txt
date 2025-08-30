@@ -1,0 +1,108 @@
+SYLONOW REVENUE & COMMISSION POLICY (EUL)
+For Registered Vendors (Decorators, Cafes, Hybrid Providers)
+
+Effective Date: 26/05/2025
+Governing Law: Applicable laws of India
+
+1. Introduction
+
+This policy outlines the framework under which vendors using the Sylonow platform (Vendor App) earn revenue, pay commissions, and receive payouts. By registering as a vendor, you ("Vendor") agree to abide by the terms of this policy and other agreements entered into with Sylonow Vision Private Limited ("Sylonow", "we", "our", "us").
+
+2. Revenue Distribution
+
+2.1 Total Order Value (TOV):
+Total Order Value is defined as the complete amount paid by the customer for a particular booking on the Sylonow platform, inclusive of GST but exclusive of convenience/service charges and fast delivery fees.
+
+2.2 Vendor Share:
+• Vendors will receive 95% of the TOV (excluding taxes).
+• Sylonow retains 5% as platform commission.
+• In certain high-demand events or strategic campaigns, Sylonow may apply dynamic commissions up to 8% with prior intimation via written communication or in-app notification.
+
+VENDOR EARNINGS: 95% of Total Order Value
+Platform Commission: 5%
+
+3. Additional Charges (Non-Shareable)
+
+3.1 Fast Service Fee:
+If the customer opts for a service that must be executed within 2 hours, a Fast Service Fee is charged.
+• This fee is non-commissionable and retained 100% by Sylonow.
+• The vendor is compensated only based on the TOV.
+
+3.2 Convenience/Platform Fee:
+Any service, platform, or convenience fee applied to the customer invoice is exclusively for system maintenance and customer support.
+• These are not part of Vendor earnings.
+
+4. Vendor Wallet & Payment Schedule
+
+4.1 Earnings Update:
+Once the task is marked completed by the customer or auto-confirmed after 3 hours, the vendor's wallet is credited.
+
+4.2 Withdrawal Timeline:
+• Vendors may raise a withdrawal request any time.
+• Payouts are processed within 3–5 working days through IMPS/NEFT/UPI.
+• Sylonow is not liable for delays caused by incorrect bank details, public holidays, or third-party payment gateways.
+
+5. Taxation & Compliance
+
+5.1 GST Compliance:
+• Vendors must provide a valid GSTIN if applicable.
+• Sylonow shall generate monthly GST-compliant invoices reflecting commission deducted.
+• Vendors are responsible for filing their GST returns based on their income.
+
+5.2 TDS (Tax Deducted at Source):
+• Sylonow may deduct TDS as per Section 194H or other applicable sections of the Income Tax Act.
+• TDS certificates will be issued quarterly as per law.
+
+6. Deductions & Penalties
+
+Violation                                    | Deduction              | Notes
+-------------------------------------------|----------------------|---------------------------
+Late Arrival (>10 min)                     | ₹50                  | Per 10-minute block
+No-show or Unjustified Cancellation        | ₹100–₹500           | Based on damage severity
+Incomplete Service Execution               | Up to 50% of payout withheld | Post investigation
+Misrepresentation or Fraud                 | Termination & legal action | FIR may be filed
+Low Rating (<2 stars repeatedly)          | Visibility reduced   | Reviewed quarterly
+
+7. Order Cancellations
+
+7.1 Customer-Initiated:
+• If the customer cancels more than 5 hours before the event, the vendor receives no payment or penalty.
+• If within 5 hours, vendor receives 60% of the agreed payout, and customer forfeits advance.
+
+7.2 Vendor-Initiated:
+• Cancellations must happen at least 6 hours before event.
+• For any cancellation within 3 hours, ₹100–₹500 is deducted from vendor wallet.
+• Repeated cancellations may lead to blacklisting or permanent removal.
+
+8. Refund Policy Impact on Vendors
+
+• Refunds initiated to the customer (e.g., due to vendor's fault) will result in proportionate deduction from vendor wallet.
+• If wallet has insufficient balance, future payouts will be adjusted.
+
+9. Fraud & Security Breaches
+
+Vendors found engaging in any of the following will face immediate termination and potential legal action:
+• Sharing confidential booking data
+• Accepting direct payments from customers outside the platform
+• Misuse of QR codes or impersonation
+• Theft or damage to property
+
+Sylonow will cooperate with police authorities and may file FIRs under the Indian Penal Code (IPC), if necessary.
+
+10. Dispute Resolution
+
+• Any disputes regarding payment or commissions must be raised within 7 days of the event.
+• Email: info@sylonow.com
+• Call: +91-9480709432
+• Disputes will be resolved within 5 business days.
+
+11. Legal Protections & Limitation of Liability
+
+• Sylonow is not liable for vendor behavior, on-ground execution errors, or theft, and shall not be sued for damages caused by third-party vendors.
+• Vendors agree not to take legal action against Sylonow for delays, cancellations, customer complaints, or payment delays caused by third-party systems.
+• All earnings are subject to verification, audit, and cancellation in case of fraud.
+• The vendor relationship is on a principal-to-principal basis. No employer-employee relationship is implied.
+
+12. Governing Law & Jurisdiction
+
+This Policy shall be governed by the laws of India. Any dispute arising out of or in connection with this Policy shall be subject to the exclusive jurisdiction of the courts in Bangalore, Karnataka, India.

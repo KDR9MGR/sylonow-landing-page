@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Gift, Sparkles, ArrowRight, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import CountdownTimer from "@/components/CountdownTimer";
+
 
 // Text reveal animation component
 const AnimatedText = ({
@@ -277,15 +277,7 @@ const Index = () => {
                 </span>
               </motion.p>
 
-              {/* Mobile: Timer Section */}
-              <motion.div
-                className="hero-timer block lg:hidden text-center w-full mt-6 sm:mt-8"
-                style={{ "--delay": "0.3s" } as React.CSSProperties}
-              >
-                <div className="mb-6 sm:mb-8">
-                  <CountdownTimer />
-                </div>
-              </motion.div>
+
 
               {/* Special Invite Button */}
               <motion.div
@@ -302,13 +294,7 @@ const Index = () => {
                 </div>
               </motion.div>
 
-              {/* Desktop: Timer Section */}
-              <motion.div
-                className="hero-timer hidden lg:block mt-8"
-                style={{ "--delay": "0.3s" } as React.CSSProperties}
-              >
-                <CountdownTimer />
-              </motion.div>
+
             </motion.div>
 
             {/* Right Content - Gift Box */}
@@ -338,82 +324,18 @@ const Index = () => {
             </motion.div>
           </div>
 
-          {/* Features Section */}
-          <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-8 bg-gray-50/50 backdrop-blur-md mt-12 sm:mt-16 lg:mt-20 relative rounded-xl border border-gray-100">
-            {/* Section Content */}
-            <div className="max-w-6xl mx-auto relative z-10">
+          {/* Download Vendor App Section */}
+          <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-8 mt-12 sm:mt-16 lg:mt-20">
+            <div className="max-w-6xl mx-auto text-center">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
-                className="text-center mb-12 sm:mb-16"
               >
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-['Poppins'] mb-3 sm:mb-4 text-gray-900">
-                  What Makes Us{" "}
-                  <span className="text-sylonow-gold font-['Poppins']">
-                    Special
-                  </span>
-                </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto font-['Poppins'] text-sm sm:text-base px-4">
-                  Creating unforgettable celebration experiences through
-                  innovation and personalization.
-                </p>
-              </motion.div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-                {[
-                  {
-                    icon: <Gift className="w-8 h-8 text-pink-600" />,
-                    title: "Personalized Celebrations",
-                    description: "Tailor-made celebration experience designed exactly to your preferences.",
-                  },
-                  {
-                    icon: <Sparkles className="w-8 h-8 text-pink-600" />,
-                    title: "Surprise Element",
-                    description: "Create moments of wonder and delight with our innovative surprise service",
-                  },
-                  {
-                    icon: <Gift className="w-8 h-8 text-pink-600" />,
-                    title: "Seamless Experience",
-                    description: "Tailor-made celebration experience designed exactly to your preferences.",
-                  },
-                ].map((feature, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.2 }}
-                    whileHover={{ y: -5, transition: { duration: 0.3 } }}
-                    className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all"
-                  >
-                    <div className="mb-4">
-                      {feature.icon}
-                    </div>
-                    <h3 className="text-lg font-semibold text-[#1E0E4E] mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-[#1E0E4E]/60 text-sm">
-                      {feature.description}
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="text-center mt-12 sm:mt-16"
-              >
-                <Link to="/about">
-                  <Button
-                    variant="link"
-                    className="text-sylonow-purple hover:text-sylonow-gold transition-colors text-base sm:text-lg font-poppins"
-                  >
-                    Learn more about us <ArrowRight className="ml-2 h-4 w-4" />
+                <Link to="/vendor-app">
+                  <Button className="bg-pink-600 hover:bg-pink-700 text-white px-8 py-4 text-lg font-medium rounded-full transition-all duration-300 hover:scale-105">
+                    Download Vendor App
                   </Button>
                 </Link>
               </motion.div>

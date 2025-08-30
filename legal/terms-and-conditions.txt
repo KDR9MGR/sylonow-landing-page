@@ -1,0 +1,124 @@
+TERMS AND CONDITIONS
+Sylonow Vendor App
+
+Effective Date: [Insert Launch Date]
+Applicable Jurisdiction: India
+Company: Sylonow Vision Private Limited
+
+1. Acceptance of Terms
+
+By registering and using the Sylonow Vendor App ("App"), you ("Vendor") agree to comply with and be bound by these Terms and Conditions, the Privacy Policy, and the Cookies Policy. If you disagree with any part of the terms, you may not use the platform.
+
+2. Definitions
+
+• Sylonow: The celebration and surprise event platform operated by Sylonow Vision Private Limited.
+• Vendor: A service provider who accepts and fulfills orders placed by customers via the Sylonow platform.
+• Customer: A person or entity who books decoration or surprise services.
+• App: The official Sylonow Vendor Application available for Android and iOS.
+
+3. Vendor Responsibilities
+
+Step 1: New Order Notification
+• Vendors receive real-time alerts for new bookings.
+• Vendor must accept/reject within 15 minutes.
+• If rejected or unaccepted, the booking is:
+  ○ Reassigned to another vendor, OR
+  ○ Listed in an open marketplace for others to accept.
+
+Step 2: Order Acceptance & Execution
+• Upon acceptance:
+  ○ Full event details are visible.
+  ○ Vendor must arrive before the scheduled slot.
+  ○ Google Maps navigation is recommended.
+
+Step 3: Security Check via QR Code
+• On arrival:
+  ○ Vendor must scan the customer's QR code for validation.
+  ○ Customer will scan vendor's QR code for cross-verification.
+  ○ No service shall begin without mutual QR verification.
+
+Step 4: Decoration Setup & Completion
+• Perform setup as per booking.
+• Upload Before & After pictures via the app.
+• Mark job status as "Completed" after verification.
+
+Step 5: Payment & Rating
+• Earnings are transferred to the Vendor Wallet upon task completion.
+• Payouts can be withdrawn anytime (subject to wallet balance).
+• Customer provides ratings/reviews, influencing future job opportunities.
+
+4. Payment Structure
+
+• Payment percentages (e.g., customer pays 60% upfront) are not the vendor's responsibility unless explicitly mentioned.
+• Vendors are paid only upon task completion and confirmation.
+• No offline or direct payments to vendors are allowed.
+
+5. Cancellation & Compensation
+
+• If customer cancels less than 5 hours before the scheduled time:
+  ○ No compensation to vendor unless vendor was already at the location with evidence.
+• If vendor cancels after accepting:
+  ○ May result in temporary suspension or permanent ban based on history and severity.
+• Vendors must not cancel accepted orders without valid reasons.
+
+6. Use of App & Account
+
+• Vendors must maintain accurate business profiles.
+• Must not share login credentials or impersonate others.
+• Misuse of the platform, fraudulent claims, or tampering with app functionalities will lead to termination without payment.
+
+7. Liability & Indemnification
+
+• Sylonow is not liable for:
+  ○ Damage/loss to vendor equipment.
+  ○ Any criminal acts or negligence committed by the vendor.
+• Vendor agrees to:
+  ○ Conduct themselves professionally.
+  ○ Be solely responsible for actions during service execution.
+• In case of legal disputes or claims, the vendor shall indemnify Sylonow against any damage, cost, or legal fees incurred.
+
+8. Data Sharing & Privacy
+
+• Vendor's location, rating, and task history may be shared with customers for transparency.
+• Personal data is handled as per our Privacy Policy.
+
+9. Intellectual Property
+
+• All branding, UI/UX, and process flows belong to Sylonow Vision Private Limited.
+• Vendors must not replicate or use proprietary content elsewhere.
+
+10. Compliance & Conduct
+
+• Vendors must comply with:
+  ○ Indian Contract Act, 1872
+  ○ Indian IT Act, 2000
+  ○ Labour laws where applicable.
+• Misconduct such as:
+  ○ Harassment,
+  ○ Abuse,
+  ○ Theft, or
+  ○ Disrespect toward customers
+— will result in a lifetime ban and legal consequences.
+
+11. Termination
+
+• Sylonow may terminate vendor accounts:
+  ○ Upon repeated customer complaints.
+  ○ For breach of these Terms.
+  ○ For system misuse or fraud.
+
+12. Governing Law
+
+• These Terms are governed by the laws of India.
+• All disputes shall be subject to exclusive jurisdiction of Bengaluru courts.
+
+13. Dispute Resolution
+
+• Disputes shall first be resolved through internal grievance redressal.
+• If unresolved, parties may proceed to binding arbitration in Bengaluru, per the Arbitration and Conciliation Act, 1996.
+
+14. Contact Information
+
+For legal notices or complaints:
+Email: info@sylonow.com
+Registered Office: JP Nagar Bengaluru 560078

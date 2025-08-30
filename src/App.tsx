@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import GiftBoxAnimation from './components/GiftBoxAnimation';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,20 +21,15 @@ import CookiePolicy from './pages/CookiePolicy';
 import GDPR from './pages/GDPR';
 import Status from './pages/Status';
 import HelpCenter from './pages/HelpCenter';
+import VendorApp from './pages/VendorApp';
+import VendorCookiesPolicy from './pages/VendorCookiesPolicy';
+import VendorPrivacyPolicy from './pages/VendorPrivacyPolicy';
+import VendorTermsConditions from './pages/VendorTermsConditions';
+import VendorRevenuePolicy from './pages/VendorRevenuePolicy';
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [showContent, setShowContent] = useState(() => {
-    const hasSeenAnimation = localStorage.getItem('hasSeenAnimation');
-    const isHomePage = window.location.pathname === '/';
-    
-    // Show content immediately if:
-    // 1. Not on home page AND has seen animation before
-    // 2. Not on home page AND accessing directly
-    return !isHomePage && (hasSeenAnimation || !document.referrer);
-  });
-
   useEffect(() => {
     console.log('App mounted - initializing tracking');
     
@@ -65,52 +58,42 @@ const App = () => {
   }, []);
 
   return (
-    <>
-      <GiftBoxAnimation onAnimationComplete={() => setShowContent(true)} />
-      
-      <AnimatePresence>
-        {showContent && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ 
-              duration: 0.8,
-              delay: 0.2 // Reduced delay for better UX
-            }}
-            className="min-h-screen bg-background"
-          >
-            <QueryClientProvider client={queryClient}>
-              <TooltipProvider>
-                <Toaster />
-                <Sonner />
-                <BrowserRouter>
-                  <ScrollToTop />
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/blogs" element={<Blogs />} />
-                    <Route path="/blogs/:slug" element={<BlogPost />} />
-                    <Route path="/admin/blogs/:id" element={<BlogEditor />} />
-                    <Route path="/faqs" element={<FAQs />} />
-                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                    <Route path="/terms-of-service" element={<TermsOfService />} />
-                    <Route path="/cookie-policy" element={<CookiePolicy />} />
-                    <Route path="/gdpr" element={<GDPR />} />
-                    {/* Help Center Routes */}
-                    <Route path="/help" element={<HelpCenter />} />
-                    <Route path="/status" element={<Status />} />
-                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-               
-                </BrowserRouter>
-              </TooltipProvider>
-            </QueryClientProvider>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+    <div className="min-h-screen bg-background">
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <ScrollToTop />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/blogs" element={<Blogs />} />
+              <Route path="/blogs/:slug" element={<BlogPost />} />
+              <Route path="/admin/blogs/:id" element={<BlogEditor />} />
+              <Route path="/faqs" element={<FAQs />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/cookie-policy" element={<CookiePolicy />} />
+              <Route path="/gdpr" element={<GDPR />} />
+              {/* Help Center Routes */}
+              <Route path="/help" element={<HelpCenter />} />
+              <Route path="/status" element={<Status />} />
+              <Route path="/vendor-app" element={<VendorApp />} />
+              {/* Vendor Legal Pages */}
+              <Route path="/vendor/cookies-policy" element={<VendorCookiesPolicy />} />
+              <Route path="/vendor/privacy-policy" element={<VendorPrivacyPolicy />} />
+              <Route path="/vendor/terms-conditions" element={<VendorTermsConditions />} />
+              <Route path="/vendor/revenue-policy" element={<VendorRevenuePolicy />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+         
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </div>
   );
 };
 

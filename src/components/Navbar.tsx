@@ -53,9 +53,9 @@ const Navbar = () => {
             whileTap={{ scale: 0.95 }}
           >
             <img 
-              src="/web-logo.png" 
+              src="/app_logo_text.svg" 
               alt="Sylonow Logo" 
-              className="h-12 mr-2"
+              className="h-8 w-auto" 
             />
           </motion.div>
         </Link>
