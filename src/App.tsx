@@ -32,7 +32,7 @@ const queryClient = new QueryClient();
 const App = () => {
   useEffect(() => {
     console.log('App mounted - initializing tracking');
-    
+    //Just a comment 
     const initializeTracking = async () => {
       try {
         // Track user presence
